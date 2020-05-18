@@ -34,20 +34,19 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
-@Component(
-		property = {
+@Component(property = {
 				"id=ModelViz",
 				"name=Model Visualization",
 				"description=Some other Task visualization" })
 public class ModelVizPart implements Visualization {
-	int size;
+	int trackSize;
 	private Text txtSTime;
 	private Text txtStepsize;
 	private Text txtOverhd;
 
 	@PostConstruct
 	public void createVisualization(Amalthea model, Composite parent) throws IOException {
-		createTestControls(model, parent);
+		createSimulationControls(model, parent);
 	}
 
 	@PreDestroy
@@ -55,87 +54,25 @@ public class ModelVizPart implements Visualization {
 		System.out.println("Destroy resources");
 	}
 
-	public Control createControl(Composite parent) {
+	public Control createTimelineControl(Composite parent) {
 		TimelineViewer timelineViewer = new TimelineViewer(parent, SWT.NULL);
 		timelineViewer.setStyleProvider(new StyleProvider(JFaceResources.getResources()));
 		final ITimeline model = (ITimeline) timelineViewer.getInput();
 
 		new TimelineDataBinding(timelineViewer, model, 300);
 
-		createRandomContent(model);
+		createTimelineContent(model);
 
-		size = model.getTracks().size();
+		trackSize = model.getTracks().size();
 
 		return timelineViewer.getControl();
 	}
 
-	private void createRandomContent(ITimeline model) {
-
-//		final ITrack track1 = model.createTrack("Task 1");
-//		final ITrack track2 = model.createTrack("Task 2");
-//		final ITrack track3 = model.createTrack("Task 3");
-//		final ITrack track4 = model.createTrack("Task 4");
-//		final ITrack track5 = model.createTrack("Task 5");
-//		final ITrack track6 = model.createTrack("Task 6");
-//
-//		final ILane taskLane1 = track1.createLane();
-//		final ILane taskLane2 = track2.createLane();
-//		final ILane taskLane3 = track3.createLane();
-//		final ILane taskLane4 = track4.createLane();
-//		final ILane taskLane5 = track5.createLane();
-//		final ILane taskLane6 = track6.createLane();
-//
-//		int compTime = 5;
-//		int period = 5;
-//		int lastPosition = 0;
-//		for (int i = 0; i < 4; i++) {
-//			taskLane1.createEvent("", "task 1", lastPosition, compTime, TimeUnit.MICROSECONDS);
-//			lastPosition += period + compTime;
-//		}
-//
-//		compTime = 2;
-//		period = 2;
-//		lastPosition = 0;
-//		for (int i = 0; i < 10; i++) {
-//			taskLane2.createEvent("", "task 2", lastPosition, compTime, TimeUnit.MICROSECONDS);
-//			lastPosition += period + compTime;
-//		}
-//
-//		compTime = 2;
-//		period = 2;
-//		lastPosition = 0;
-//		for (int i = 0; i < 10; i++) {
-//			taskLane3.createEvent("", "task 3", lastPosition, compTime, TimeUnit.MICROSECONDS);
-//			lastPosition += period + compTime;
-//		}
-//
-//		compTime = 2;
-//		period = 2;
-//		lastPosition = 0;
-//		for (int i = 0; i < 10; i++) {
-//			taskLane4.createEvent("", "task 4", lastPosition, compTime, TimeUnit.MICROSECONDS);
-//			lastPosition += period + compTime;
-//		}
-//
-//		compTime = 2;
-//		period = 2;
-//		lastPosition = 0;
-//		for (int i = 0; i < 10; i++) {
-//			taskLane5.createEvent("", "task 5", lastPosition, compTime, TimeUnit.MICROSECONDS);
-//			lastPosition += period + compTime;
-//		}
-//
-//		compTime = 2;
-//		period = 2;
-//		lastPosition = 0;
-//		for (int i = 0; i < 10; i++) {
-//			taskLane6.createEvent("", "task 6", lastPosition, compTime, TimeUnit.MICROSECONDS);
-//			lastPosition += period + compTime;
-//		}
-
+	private void createTimelineContent(ITimeline model) {
+		// TimeLine contents go here
 	}
 
-	public void createTestControls(Amalthea model, Composite parent) {
+	public void createSimulationControls(Amalthea model, Composite parent) {
 		parent.setLayout(new GridLayout(2, false));
 
 		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -148,7 +85,7 @@ public class ModelVizPart implements Visualization {
 		scrolledComposite_1.setExpandHorizontal(true);
 		scrolledComposite_1.setExpandVertical(true);
 
-		Control control = createControl(scrolledComposite);
+		Control control = createTimelineControl(scrolledComposite);
 
 		Group grpParameters = new Group(scrolledComposite_1, SWT.NONE);
 		grpParameters.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
@@ -265,9 +202,8 @@ public class ModelVizPart implements Visualization {
 		new Label(grpParameters, SWT.NONE);
 		
 		scrolledComposite.setContent(control);
-//		scrolledComposite.setMinSize(control.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		scrolledComposite.setMinSize(-1, size * 70);
-		System.out.println("Size is> " + size);
+		scrolledComposite.setMinSize(-1, trackSize * 70);
+		System.out.println("Size is> " + trackSize);
 		scrolledComposite_1.setContent(grpParameters);
 		scrolledComposite_1.setMinSize(grpParameters.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
