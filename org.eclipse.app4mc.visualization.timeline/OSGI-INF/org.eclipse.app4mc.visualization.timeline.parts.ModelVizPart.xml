@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.app4mc.visualization.timeline.parts.ModelVizPart">
+   <property name="id" value="ModelViz"/>
+   <property name="name" value="Model Visualization"/>
+   <property name="description" value="Some other Task visualization"/>
+   <service>
+      <provide interface="org.eclipse.app4mc.visualization.ui.registry.Visualization"/>
+   </service>
+   <implementation class="org.eclipse.app4mc.visualization.timeline.parts.ModelVizPart"/>
+</scr:component>
