@@ -9,6 +9,7 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.visualization.timeline.utils.Constants;
+import org.eclipse.app4mc.visualization.timeline.utils.SWTResourceManager;
 import org.eclipse.app4mc.visualization.ui.registry.Visualization;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -31,7 +32,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
 import org.osgi.service.component.annotations.Component;
 
 @Component(
