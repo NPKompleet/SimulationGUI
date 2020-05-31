@@ -33,9 +33,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
@@ -48,6 +50,13 @@ public class ModelVizPart implements Visualization {
 	private Text txtSTime;
 	private Text txtStepsize;
 	private Text txtOverhd;
+	
+	private static Listener textListener = new Listener() {
+		public void handleEvent(Event e) {
+			String text = e.text;
+			e.doit = text.chars().allMatch(Character::isDigit);
+			}
+		};
 
 	@PostConstruct
 	public void createVisualization(Amalthea model, Composite parent) throws IOException {
@@ -160,6 +169,7 @@ public class ModelVizPart implements Visualization {
 		txtSTime = new Text(grpParameters, SWT.BORDER);
 		txtSTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		txtSTime.setText("0");
+		txtSTime.addListener(SWT.Verify, textListener);
 
 		Combo cmbSTime = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbSTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -172,6 +182,7 @@ public class ModelVizPart implements Visualization {
 		txtStepsize = new Text(grpParameters, SWT.BORDER);
 		txtStepsize.setText("5");
 		txtStepsize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtStepsize.addListener(SWT.Verify, textListener);
 
 		Combo cmbStepsize = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbStepsize.setItems(Constants.TIME_UNIT_OPTIONS);
@@ -185,6 +196,7 @@ public class ModelVizPart implements Visualization {
 		txtOverhd = new Text(grpParameters, SWT.BORDER);
 		txtOverhd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtOverhd.setText("5");
+		txtOverhd.addListener(SWT.Verify, textListener);
 
 		Combo cmbOverhd = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbOverhd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -214,11 +226,12 @@ public class ModelVizPart implements Visualization {
 
 		ListViewer listViewer = new ListViewer(grpParameters, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		List list = listViewer.getList();
-		list.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gd_list = new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1);
+		gd_list.heightHint = 80;
+		list.setLayoutData(gd_list);
 		listViewer.setLabelProvider(new LabelProvider());
 		listViewer.setContentProvider(ArrayContentProvider.getInstance());
 		listViewer.setInput(model.getSwModel().getTasks().stream().map(x -> x.getName()).collect(Collectors.toList()));
-		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 
 		Button btnLoad = new Button(grpParameters, SWT.NONE);
