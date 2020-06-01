@@ -1,135 +1,73 @@
 package org.eclipse.app4mc.visualization.timeline.utils;
 
 import java.math.BigInteger;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.amalthea.model.TimeUnit;
+import org.eclipse.app4mc.amalthea.model.util.TimeUtil;
 
 public class TimingUtils {
 
-	// Convert period to picoseconds
-	public static Time convertPeriodToPS(Time period) {
-		switch (period.getUnit().getName()) {
-		case "s":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000000000000l)));
-			period.setUnit(TimeUnit.PS);
-			break;
-		case "ms":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000000000)));
-			period.setUnit(TimeUnit.PS);
-			break;
-		case "us":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000000)));
-			period.setUnit(TimeUnit.PS);
-			break;
-		case "ns":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.PS);
-			break;
-		default:
-			break;
-		}
-		return period;
+	/*
+	 * Gets the minimum {@link org.eclipse.app4mc.amalthea.model.TimeUnit} in a list of task periods.
+	 * @param periodList a list of the periods 
+	 * @return the minimum TimeUnit
+	 * 
+	 */
+	public static TimeUnit getMinimumTimeUnit(List<Time> periodList) {
+		return periodList.stream()
+				.map(x -> x.getUnit())
+				.min(Comparator.comparing(TimeUnit::getValue))
+				.orElseThrow(NoSuchElementException::new);
 	}
-
-	// Convert period to nanoseconds
-	public static Time convertPeriodToNS(Time period) {
-		switch (period.getUnit().getName()) {
-		case "s":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000000000)));
-			period.setUnit(TimeUnit.NS);
-			break;
-		case "ms":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000000)));
-			period.setUnit(TimeUnit.NS);
-			break;
-		case "us":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.NS);
-			break;
-		case "ps":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.NS);
-			break;
-		default:
-			break;
-		}
-		return period;
+	
+	/*
+	 * Converts a list of task periods to the desired {@link org.eclipse.app4mc.amalthea.model.TimeUnit}.
+	 * @param periodList a list of the periods
+	 * @param baseUnit the {@link org.eclipse.app4mc.amalthea.model.TimeUnit} to convert each period to.
+	 * @return the list of periods with values converted to the baseUnit
+	 */
+	public static List<Time> getAlignedPeriods(List<Time> periodList, TimeUnit baseUnit) {
+		return periodList.stream()
+				.map(x -> { return TimeUtil.convertToTimeUnit(x, baseUnit);})
+				.collect(Collectors.toList());
 	}
-
-	// Convert period to microseconds
-	public static Time convertPeriodToUS(Time period) {
-		switch (period.getUnit().getName()) {
-		case "s":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000000)));
-			period.setUnit(TimeUnit.US);
-			break;
-		case "ms":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.US);
-			break;
-		case "ns":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.US);
-			break;
-		case "ps":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000000)));
-			period.setUnit(TimeUnit.US);
-			break;
-		default:
-			break;
+	
+	/*
+	 * Calculates the hyperperiod (LCM) of a list of task periods
+	 * @param periodList a list of the periods
+	 * @return the hyperperiod
+	 */
+	public static BigInteger computeHyperPeriod(List<Time> periodList) {
+		BigInteger lcm = periodList.get(0).getValue();
+		for (boolean flag = true; flag;) {
+			for (Time x : periodList) {
+				if (lcm.mod(x.getValue()) != BigInteger.ZERO) {
+					flag = true;
+					break;
+				}
+				flag = false;
+			}
+			lcm = flag ? lcm.add(BigInteger.ONE) : lcm;
 		}
-		return period;
+		return lcm;
 	}
-
-	// Convert period to milliseconds
-	public static Time convertPeriodToMS(Time period) {
-		switch (period.getUnit().getName()) {
-		case "s":
-			period.setValue(period.getValue().multiply(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.MS);
-			break;
-		case "us":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.MS);
-			break;
-		case "ns":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000000)));
-			period.setUnit(TimeUnit.MS);
-			break;
-		case "ps":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000000000)));
-			period.setUnit(TimeUnit.MS);
-			break;
-		default:
-			break;
-		}
-		return period;
+	
+	/*
+	 * A maps that relates an Amalthea {@link org.eclipse.app4mc.amalthea.model.TimeUnit} to its equivalent
+	 * standard Java {@link java.util.concurrent.TimeUnit}
+	 */
+	public static HashMap<TimeUnit, java.util.concurrent.TimeUnit> amaltheaToJavaTimeMap(){
+		HashMap<TimeUnit, java.util.concurrent.TimeUnit> map = new HashMap<>();
+		map.put(TimeUnit.NS, java.util.concurrent.TimeUnit.NANOSECONDS);
+		map.put(TimeUnit.US, java.util.concurrent.TimeUnit.MICROSECONDS);
+		map.put(TimeUnit.MS, java.util.concurrent.TimeUnit.MILLISECONDS);
+		map.put(TimeUnit.S, java.util.concurrent.TimeUnit.SECONDS);
+		return map;
 	}
-
-	// Convert period to seconds
-	public static Time convertPeriodToS(Time period) {
-		switch (period.getUnit().getName()) {
-		case "ms":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000)));
-			period.setUnit(TimeUnit.S);
-			break;
-		case "us":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000000)));
-			period.setUnit(TimeUnit.S);
-			break;
-		case "ns":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000000000)));
-			period.setUnit(TimeUnit.S);
-			break;
-		case "ps":
-			period.setValue(period.getValue().divide(BigInteger.valueOf(1000000000000l)));
-			period.setUnit(TimeUnit.S);
-			break;
-		default:
-			break;
-		}
-		return period;
-	}
-
 }
