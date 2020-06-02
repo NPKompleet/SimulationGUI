@@ -2,6 +2,7 @@ package org.eclipse.app4mc.visualization.timeline.parts;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -178,8 +179,8 @@ public class ModelVizPart implements Visualization {
 		txtSTime.addListener(SWT.Verify, textListener);
 
 		// To be moved to its own method or class
-		java.util.List<Time> periodList = TimingUtils.getPeriodMap(swModel).values().stream()
-				.collect(Collectors.toList());
+		LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
+		java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
 		org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMinimumTimeUnit(periodList);
 		// Align all periods to the same base time unit using the minimum time unit
 		// If minimum unit in the model is in picoseconds, align everything to
@@ -259,7 +260,7 @@ public class ModelVizPart implements Visualization {
 		list.setLayoutData(gd_list);
 		listViewer.setLabelProvider(new LabelProvider());
 		listViewer.setContentProvider(ArrayContentProvider.getInstance());
-		listViewer.setInput(swModel.getTasks().stream().map(x -> x.getName()).collect(Collectors.toList()));
+		listViewer.setInput(taskPeriodMap.keySet().stream().collect(Collectors.toList()));
 		new Label(grpParameters, SWT.NONE);
 
 		Button btnLoad = new Button(grpParameters, SWT.NONE);
