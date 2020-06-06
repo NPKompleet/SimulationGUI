@@ -1,20 +1,36 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
+import java.util.concurrent.TimeUnit;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
+import desmoj.core.simulator.TimeSpan;
 
 public class Processor extends SimProcess {
+	private SimModel model;
 
 	public Processor(Model arg0, String arg1, boolean arg2) {
 		super(arg0, arg1, arg2);
-		// TODO Auto-generated constructor stub
+		this.model = (SimModel) model;
 	}
 
 	@Override
 	public void lifeCycle() throws SuspendExecution {
-		// TODO Auto-generated method stub
+		while (true) {
+			if (model.jobQueue.isEmpty()) {
+				model.processorQueue.insert(this);
+				passivate();
+			} else {
+				Job nextJob = model.jobQueue.first();
+				model.jobQueue.remove(nextJob);
 
+				// Execute the Job
+				hold(new TimeSpan(nextJob.getExecutionTime(), TimeUnit.MINUTES));
+
+				nextJob.activate();
+			}
+		}
 	}
 
 }

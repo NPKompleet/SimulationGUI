@@ -25,10 +25,6 @@ public class Task extends SimProcess {
 		this.model = (SimModel) model;
 	}
 
-	public Task(Model arg0, String arg1, boolean arg2, boolean arg3) {
-		super(arg0, arg1, arg2, arg3);
-	}
-
 	@Override
 	public void lifeCycle() throws SuspendExecution {
 		while (true) {

@@ -20,15 +20,34 @@ public class Job extends SimProcess {
 		this.model = (SimModel) model;
 	}
 
-	public Job(Model arg0, String arg1, boolean arg2) {
-		super(arg0, arg1, arg2);
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void lifeCycle() throws SuspendExecution {
-		// TODO Auto-generated method stub
+		model.jobQueue.insert(this);
 
+		if (!model.processorQueue.isEmpty()) {
+			Processor assignedProcessor = model.processorQueue.first();
+			model.processorQueue.remove(assignedProcessor);
+
+			assignedProcessor.activateAfter(this);
+		}
+
+		passivate();
+	}
+
+	public int getExecutionTime() {
+		return executionTime;
+	}
+
+	public void setExecutionTime(int executionTime) {
+		this.executionTime = executionTime;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getDeadline() {
+		return deadline;
 	}
 
 }
