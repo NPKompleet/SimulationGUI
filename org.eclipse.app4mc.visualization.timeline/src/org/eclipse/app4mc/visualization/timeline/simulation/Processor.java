@@ -12,7 +12,7 @@ public class Processor extends SimProcess {
 
 	public Processor(Model arg0, String arg1, boolean arg2) {
 		super(arg0, arg1, arg2);
-		this.model = (SimModel) model;
+		this.model = (SimModel) arg0;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class Processor extends SimProcess {
 				model.jobQueue.remove(nextJob);
 
 				// Execute the Job
-				hold(new TimeSpan(nextJob.getExecutionTime(), TimeUnit.MINUTES));
+				hold(new TimeSpan(nextJob.getExecutionTime(), TimeUnit.MILLISECONDS));
 
 				nextJob.activate();
 			}

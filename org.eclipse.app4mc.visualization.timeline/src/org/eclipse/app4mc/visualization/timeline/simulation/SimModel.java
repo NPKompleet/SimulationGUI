@@ -1,7 +1,11 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
+import java.util.concurrent.TimeUnit;
+
+import desmoj.core.simulator.Experiment;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.ProcessQueue;
+import desmoj.core.simulator.TimeInstant;
 
 public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
@@ -24,7 +28,7 @@ public class SimModel extends Model {
 
 		Task task1 = new Task("Task1", 2, 6, 10, 0, this);
 		task1.activate();
-		Task task2 = new Task("Task1", 3, 4, 5, 0, this);
+		Task task2 = new Task("Task2", 3, 4, 5, 0, this);
 		task2.activate();
 	}
 
@@ -32,6 +36,18 @@ public class SimModel extends Model {
 	public void init() {
 		jobQueue = new ProcessQueue<Job>(this, "Job Queue", false, true);
 		processorQueue = new ProcessQueue<Processor>(this, "Processor Queue", false, true);
+	}
+
+	public static void main(String[] args) {
+		SimModel model = new SimModel(null, "Simple Sim", true, true);
+		Experiment experiment = new Experiment("SimExperiment");
+		model.connectToExperiment(experiment);
+		experiment.setShowProgressBar(true);
+		experiment.stop(new TimeInstant(20, TimeUnit.MILLISECONDS));
+		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(20, TimeUnit.MILLISECONDS));
+		experiment.start();
+		experiment.report();
+		experiment.finish();
 	}
 
 }

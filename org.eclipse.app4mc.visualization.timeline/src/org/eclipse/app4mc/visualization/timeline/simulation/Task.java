@@ -28,7 +28,7 @@ public class Task extends SimProcess {
 	@Override
 	public void lifeCycle() throws SuspendExecution {
 		while (true) {
-			Job job = new Job(this, name, executionTime, deadline, model);
+			Job job = new Job(this, name + "_job", executionTime, deadline, model);
 			job.activateAfter(this);
 			hold(new TimeSpan(period, TimeUnit.MILLISECONDS));
 		}
