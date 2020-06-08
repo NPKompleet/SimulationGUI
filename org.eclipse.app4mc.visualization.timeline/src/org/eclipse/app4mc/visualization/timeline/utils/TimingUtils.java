@@ -18,6 +18,13 @@ import org.eclipse.app4mc.amalthea.model.util.TimeUtil;
 
 public class TimingUtils {
 
+	private static Comparator<TimeUnit> timeUnitComparator = new Comparator<TimeUnit>() {
+		@Override
+		public int compare(TimeUnit a, TimeUnit b) {
+			return timeToConstantMap().get(a) - timeToConstantMap().get(b);
+		}
+	};
+
 	/**
 	 * Gets the minimum {@link org.eclipse.app4mc.amalthea.model.TimeUnit} in a list
 	 * of task periods.
@@ -27,7 +34,20 @@ public class TimingUtils {
 	 * 
 	 */
 	public static TimeUnit getMinimumTimeUnit(List<Time> periodList) {
-		return periodList.stream().map(x -> x.getUnit()).min(Comparator.comparing(TimeUnit::getValue))
+		return periodList.stream().map(x -> x.getUnit()).min(timeUnitComparator)
+				.orElseThrow(NoSuchElementException::new);
+	}
+
+	/**
+	 * Gets the maximum {@link org.eclipse.app4mc.amalthea.model.TimeUnit} in a list
+	 * of task periods.
+	 * 
+	 * @param periodList A list of the periods
+	 * @return The maximum TimeUnit
+	 * 
+	 */
+	public static TimeUnit getMaximumTimeUnit(List<Time> periodList) {
+		return periodList.stream().map(x -> x.getUnit()).max(timeUnitComparator)
 				.orElseThrow(NoSuchElementException::new);
 	}
 
@@ -93,10 +113,11 @@ public class TimingUtils {
 	 */
 	public static HashMap<TimeUnit, Integer> timeToConstantMap() {
 		HashMap<TimeUnit, Integer> map = new HashMap<>();
-		map.put(TimeUnit.NS, 3);
-		map.put(TimeUnit.US, 2);
-		map.put(TimeUnit.MS, 1);
-		map.put(TimeUnit.S, 0);
+		map.put(TimeUnit.PS, -1);
+		map.put(TimeUnit.NS, 0);
+		map.put(TimeUnit.US, 1);
+		map.put(TimeUnit.MS, 2);
+		map.put(TimeUnit.S, 3);
 		return map;
 	}
 

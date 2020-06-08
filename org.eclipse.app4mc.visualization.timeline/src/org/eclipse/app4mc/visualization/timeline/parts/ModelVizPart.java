@@ -280,7 +280,8 @@ public class ModelVizPart implements Visualization {
 				// To be moved to its own method or class
 				LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
 				java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
-				org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMinimumTimeUnit(periodList);
+				org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMaximumTimeUnit(periodList);
+				System.out.println(unit.getLiteral());
 				// Align all periods to the same base time unit using the minimum time unit
 				// If minimum unit in the model is in picoseconds, align everything to
 				// nanoseconds instead
