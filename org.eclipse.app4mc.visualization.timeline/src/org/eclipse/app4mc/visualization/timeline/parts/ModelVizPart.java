@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -52,6 +53,8 @@ public class ModelVizPart implements Visualization {
 	private Text txtSTime;
 	private Text txtStepsize;
 	private Text txtOverhd;
+	Combo cmbSTime;
+	ListViewer listViewer;
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -128,7 +131,6 @@ public class ModelVizPart implements Visualization {
 	}
 
 	public void createSimulationControls(Amalthea model, Composite parent) {
-		SWModel swModel = model.getSwModel();
 		parent.setLayout(new GridLayout(2, false));
 
 		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -178,32 +180,10 @@ public class ModelVizPart implements Visualization {
 //		txtSTime.setText("0");
 		txtSTime.addListener(SWT.Verify, textListener);
 
-		// To be moved to its own method or class
-		LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
-		java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
-		org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMinimumTimeUnit(periodList);
-		// Align all periods to the same base time unit using the minimum time unit
-		// If minimum unit in the model is in picoseconds, align everything to
-		// nanoseconds instead
-		// and change the unit to nanoseconds.
-		// Reason: Java and the Timeline widget uses the minimum time unit of
-		// nanoseconds.
-		periodList = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS
-				? TimingUtils.getAlignedPeriods(periodList, org.eclipse.app4mc.amalthea.model.TimeUnit.NS)
-				: TimingUtils.getAlignedPeriods(periodList, unit);
-		BigInteger hyperperiod = TimingUtils.computeHyperPeriod(periodList);
-		unit = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS ? org.eclipse.app4mc.amalthea.model.TimeUnit.NS
-				: unit;
-		int index = TimingUtils.timeToConstantMap().get(unit);
-
-		txtSTime.setText(hyperperiod.toString());
-
-		Combo cmbSTime = new Combo(grpParameters, SWT.READ_ONLY);
+		cmbSTime = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbSTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		cmbSTime.setItems(Constants.TIME_UNIT_OPTIONS);
 //		cmbSTime.select(2);
-
-		cmbSTime.select(index);
 
 		Label lblStepSize = new Label(grpParameters, SWT.NONE);
 		lblStepSize.setText("Stepsize:");
@@ -253,15 +233,16 @@ public class ModelVizPart implements Visualization {
 		Label lblCoretasks = new Label(grpParameters, SWT.NONE);
 		lblCoretasks.setText("Core/Tasks:");
 
-		ListViewer listViewer = new ListViewer(grpParameters, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		listViewer = new ListViewer(grpParameters, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		List list = listViewer.getList();
 		GridData gd_list = new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1);
 		gd_list.heightHint = 80;
 		list.setLayoutData(gd_list);
 		listViewer.setLabelProvider(new LabelProvider());
 		listViewer.setContentProvider(ArrayContentProvider.getInstance());
-		listViewer.setInput(taskPeriodMap.keySet().stream().collect(Collectors.toList()));
 		new Label(grpParameters, SWT.NONE);
+
+		updateWidgetData(model);
 
 		Button btnLoad = new Button(grpParameters, SWT.NONE);
 		btnLoad.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -288,6 +269,38 @@ public class ModelVizPart implements Visualization {
 		System.out.println("Size is> " + trackSize);
 		scrolledComposite_1.setContent(grpParameters);
 		scrolledComposite_1.setMinSize(grpParameters.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+	}
+
+	private void updateWidgetData(Amalthea model) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				SWModel swModel = model.getSwModel();
+				// To be moved to its own method or class
+				LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
+				java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
+				org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMinimumTimeUnit(periodList);
+				// Align all periods to the same base time unit using the minimum time unit
+				// If minimum unit in the model is in picoseconds, align everything to
+				// nanoseconds instead
+				// and change the unit to nanoseconds.
+				// Reason: Java and the Timeline widget uses the minimum time unit of
+				// nanoseconds.
+				periodList = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS
+						? TimingUtils.getAlignedPeriods(periodList, org.eclipse.app4mc.amalthea.model.TimeUnit.NS)
+						: TimingUtils.getAlignedPeriods(periodList, unit);
+				BigInteger hyperperiod = TimingUtils.computeHyperPeriod(periodList);
+				unit = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS
+						? org.eclipse.app4mc.amalthea.model.TimeUnit.NS
+						: unit;
+				int index = TimingUtils.timeToConstantMap().get(unit);
+
+				txtSTime.setText(hyperperiod.toString());
+				cmbSTime.select(index);
+				listViewer.setInput(taskPeriodMap.keySet().stream().collect(Collectors.toList()));
+			}
+		});
 
 	}
 
