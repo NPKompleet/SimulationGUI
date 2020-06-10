@@ -177,26 +177,26 @@ public class ModelVizPart implements Visualization {
 
 		txtSTime = new Text(grpParameters, SWT.BORDER);
 		txtSTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-//		txtSTime.setText("0");
+		txtSTime.setText(Constants.DEFAULT_SIM_TIME);
 		txtSTime.addListener(SWT.Verify, textListener);
 
 		cmbSTime = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbSTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		cmbSTime.setItems(Constants.TIME_UNIT_OPTIONS);
-//		cmbSTime.select(2);
+		cmbSTime.select(Constants.DEFAULT_UNIT_INDEX);
 
 		Label lblStepSize = new Label(grpParameters, SWT.NONE);
 		lblStepSize.setText("Stepsize:");
 
 		txtStepsize = new Text(grpParameters, SWT.BORDER);
-		txtStepsize.setText("5");
+		txtStepsize.setText(Constants.DEFAULT_STEP_SIZE);
 		txtStepsize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtStepsize.addListener(SWT.Verify, textListener);
 
 		Combo cmbStepsize = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbStepsize.setItems(Constants.TIME_UNIT_OPTIONS);
 		cmbStepsize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		cmbStepsize.select(2);
+		cmbStepsize.select(Constants.DEFAULT_UNIT_INDEX);
 
 		Label lblOverhead = new Label(grpParameters, SWT.NONE);
 		lblOverhead.setToolTipText("Scheduling Overhead");
@@ -204,7 +204,7 @@ public class ModelVizPart implements Visualization {
 
 		txtOverhd = new Text(grpParameters, SWT.BORDER);
 		txtOverhd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtOverhd.setText("5");
+		txtOverhd.setText(Constants.DEFAULT_OVERHEAD);
 		txtOverhd.addListener(SWT.Verify, textListener);
 
 		Combo cmbOverhd = new Combo(grpParameters, SWT.READ_ONLY);
@@ -219,7 +219,7 @@ public class ModelVizPart implements Visualization {
 		Combo cmbETM = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbETM.setItems(Constants.ETM_OPTIONS);
 		cmbETM.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		cmbETM.select(2);
+		cmbETM.select(Constants.DEFAULT_ETM_INDEX);
 
 		Label lblPreemption = new Label(grpParameters, SWT.NONE);
 		lblPreemption.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -228,7 +228,7 @@ public class ModelVizPart implements Visualization {
 		Combo cmbPreemptn = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbPreemptn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		cmbPreemptn.setItems(Constants.PREEMPTION_OPTIONS);
-		cmbPreemptn.select(2);
+		cmbPreemptn.select(Constants.DEFAULT_PREEMPTN_INDEX);
 
 		Label lblCoretasks = new Label(grpParameters, SWT.NONE);
 		lblCoretasks.setText("Core/Tasks:");
@@ -281,7 +281,6 @@ public class ModelVizPart implements Visualization {
 				LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
 				java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
 				org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMaximumTimeUnit(periodList);
-				System.out.println(unit.getLiteral());
 				// Align all periods to the same base time unit using the minimum time unit
 				// If minimum unit in the model is in picoseconds, align everything to
 				// nanoseconds instead
