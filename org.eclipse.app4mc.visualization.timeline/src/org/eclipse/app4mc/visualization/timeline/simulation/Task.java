@@ -29,11 +29,15 @@ public class Task extends SimProcess {
 	public void lifeCycle() throws SuspendExecution {
 
 		hold(new TimeSpan(offset, TimeUnit.MILLISECONDS));
+		// Deadline for first job
+		deadline += offset;
 
 		while (true) {
 			Job job = new Job(this, name + "_job", executionTime, deadline, model);
 			job.activateAfter(this);
 			hold(new TimeSpan(period, TimeUnit.MILLISECONDS));
+			// Use absolute deadline for subsequent jobs
+			deadline += period;
 		}
 	}
 
