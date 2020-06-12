@@ -22,8 +22,7 @@ public class Processor extends SimProcess {
 				model.processorQueue.insert(this);
 				passivate();
 			} else {
-				Job nextJob = model.jobQueue.first();
-				model.jobQueue.remove(nextJob);
+				Job nextJob = model.jobQueue.pollFirst();
 
 				// Execute the Job
 				hold(new TimeSpan(nextJob.getExecutionTime(), TimeUnit.MILLISECONDS));

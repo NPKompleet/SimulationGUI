@@ -1,5 +1,6 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 import desmoj.core.simulator.Experiment;
@@ -9,7 +10,7 @@ import desmoj.core.simulator.TimeInstant;
 
 public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
-	protected ProcessQueue<Job> jobQueue;
+	protected LinkedBlockingDeque<Job> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
 
 	public SimModel(Model arg0, String arg1, boolean arg2, boolean arg3) {
@@ -34,8 +35,8 @@ public class SimModel extends Model {
 
 	@Override
 	public void init() {
-		jobQueue = new ProcessQueue<Job>(this, "Job Queue", false, true);
-		processorQueue = new ProcessQueue<Processor>(this, "Processor Queue", false, true);
+		jobQueue = new LinkedBlockingDeque<Job>();
+		processorQueue = new ProcessQueue<Processor>(this, "Processor Queue", false, false);
 	}
 
 	public static void main(String[] args) {

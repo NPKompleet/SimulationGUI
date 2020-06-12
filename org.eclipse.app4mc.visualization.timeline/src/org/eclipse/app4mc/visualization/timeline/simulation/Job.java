@@ -12,7 +12,7 @@ public class Job extends SimProcess {
 	String name;
 
 	public Job(Task task, String name, int executionTime, int deadline, Model model) {
-		super(model, name, false);
+		super(model, name, true);
 		this.task = task;
 		this.name = name;
 		this.executionTime = executionTime;
@@ -22,7 +22,7 @@ public class Job extends SimProcess {
 
 	@Override
 	public void lifeCycle() throws SuspendExecution {
-		model.jobQueue.insert(this);
+		model.jobQueue.addLast(this);
 
 		if (!model.processorQueue.isEmpty()) {
 			Processor assignedProcessor = model.processorQueue.first();
