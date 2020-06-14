@@ -13,10 +13,10 @@ public class Scheduler {
 	 * @param jobQueue A LinkedBlockingDeque that contains {@link Job} elements
 	 * @see #getComparator()
 	 */
-	public final void schedule(LinkedBlockingDeque<Job> jobQueue) {
+	public final LinkedBlockingDeque<Job> schedule(LinkedBlockingDeque<Job> jobQueue) {
 		List<Job> jobList = jobQueue.stream().sorted(getComparator().thenComparing(Job::getActivationTime))
 				.collect(Collectors.toList());
-		jobQueue = new LinkedBlockingDeque<Job>(jobList);
+		return new LinkedBlockingDeque<Job>(jobList);
 	}
 
 	/**

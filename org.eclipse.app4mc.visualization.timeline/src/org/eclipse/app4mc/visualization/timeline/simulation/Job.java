@@ -35,6 +35,10 @@ public class Job extends SimProcess {
 			model.processorQueue.remove(assignedProcessor);
 
 			assignedProcessor.activate();
+		} else {
+			if (model.processor.checkIsPriority(this)) {
+				model.processor.interrupt(model.priorityJobCode);
+			}
 		}
 
 		passivate();

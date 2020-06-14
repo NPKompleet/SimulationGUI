@@ -4,6 +4,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 import desmoj.core.simulator.Experiment;
+import desmoj.core.simulator.InterruptCode;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.ProcessQueue;
 import desmoj.core.simulator.TimeInstant;
@@ -14,6 +15,8 @@ public class SimModel extends Model {
 	protected ProcessQueue<Processor> processorQueue;
 	protected int schedulerOverhead = 0;
 	protected boolean doSchedule = false;
+	protected Processor processor;
+	protected InterruptCode priorityJobCode;
 
 	public SimModel(Model model, String name, boolean showInReport, boolean showInTrace) {
 		super(model, name, showInReport, showInTrace);
@@ -26,19 +29,22 @@ public class SimModel extends Model {
 
 	@Override
 	public void doInitialSchedules() {
-		Processor processor = new Processor(this, "Processor", true);
+		processor = new Processor(this, "Processor", true);
 		processor.activate();
 
-		Task task1 = new Task("Task1", 2, 6, 10, 0, this);
+		Task task1 = new Task("Task1", 9, 9, 10, 0, this);
 		task1.activate();
 		Task task2 = new Task("Task2", 3, 4, 5, 0, this);
 		task2.activate();
+		Task task3 = new Task("Task3", 3, 3, 4, 5, this);
+		task3.activate();
 	}
 
 	@Override
 	public void init() {
 		jobQueue = new LinkedBlockingDeque<Job>();
 		processorQueue = new ProcessQueue<Processor>(this, "Processor Queue", false, false);
+		priorityJobCode = new InterruptCode("priority job arrived");
 	}
 
 	public static void main(String[] args) {
@@ -47,8 +53,8 @@ public class SimModel extends Model {
 		model.connectToExperiment(experiment);
 		Experiment.setReferenceUnit(TimeUnit.MILLISECONDS);
 		experiment.setShowProgressBar(true);
-		experiment.stop(new TimeInstant(20));
-		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(20));
+		experiment.stop(new TimeInstant(30));
+		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
 		experiment.start();
 		experiment.report();
 		experiment.finish();

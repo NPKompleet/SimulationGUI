@@ -1,5 +1,8 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
@@ -8,6 +11,8 @@ import desmoj.core.simulator.TimeSpan;
 public class Processor extends SimProcess {
 	private SimModel model;
 	private Scheduler scheduler;
+	Job currentJob;
+	protected boolean isBusy;
 
 	public Processor(Model model, String name, boolean showInTrace) {
 		super(model, name, showInTrace);
@@ -20,21 +25,40 @@ public class Processor extends SimProcess {
 		while (true) {
 			if (model.jobQueue.isEmpty()) {
 				model.processorQueue.insert(this);
+				isBusy = false;
 				passivate();
 			} else {
 				if (model.doSchedule) {
-					scheduler.schedule(model.jobQueue);
+					model.jobQueue = scheduler.schedule(model.jobQueue);
 					model.setNextSchedule(false);
+					hold(new TimeSpan(model.schedulerOverhead));
 					sendTraceNote("A Schedule!!!");
 				}
-				Job nextJob = model.jobQueue.pollFirst();
+				isBusy = true;
+				currentJob = model.jobQueue.pollFirst();
 
 				// Execute the Job
-				hold(new TimeSpan(nextJob.getExecutionTime()));
+				hold(new TimeSpan(currentJob.getExecutionTime()));
 
-				nextJob.activate();
+				if (isInterrupted()) {
+					sendTraceNote("interrupted!!");
+					// Still need to implement calculating remaining execution time
+					model.jobQueue.addFirst(currentJob);
+					model.jobQueue = scheduler.schedule(model.jobQueue);
+					this.clearInterruptCode();
+				} else {
+					currentJob.activate();
+					isBusy = false;
+				}
 			}
 		}
+	}
+
+	public boolean checkIsPriority(Job job) {
+		if (currentJob != null && job == Stream.of(job, currentJob).min(scheduler.getComparator())
+				.orElseThrow(NoSuchElementException::new))
+			return true;
+		return false;
 	}
 
 }
