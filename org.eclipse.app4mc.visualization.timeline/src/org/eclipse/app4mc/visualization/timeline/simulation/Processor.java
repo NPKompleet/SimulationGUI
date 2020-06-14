@@ -7,10 +7,12 @@ import desmoj.core.simulator.TimeSpan;
 
 public class Processor extends SimProcess {
 	private SimModel model;
+	private Scheduler scheduler;
 
 	public Processor(Model model, String name, boolean showInTrace) {
 		super(model, name, showInTrace);
 		this.model = (SimModel) model;
+		this.scheduler = new Scheduler();
 	}
 
 	@Override
@@ -20,6 +22,11 @@ public class Processor extends SimProcess {
 				model.processorQueue.insert(this);
 				passivate();
 			} else {
+				if (model.doSchedule) {
+					scheduler.schedule(model.jobQueue);
+					model.setNextSchedule(false);
+					sendTraceNote("A Schedule!!!");
+				}
 				Job nextJob = model.jobQueue.pollFirst();
 
 				// Execute the Job

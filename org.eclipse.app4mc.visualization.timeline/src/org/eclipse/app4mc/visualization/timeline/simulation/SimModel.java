@@ -13,6 +13,7 @@ public class SimModel extends Model {
 	protected LinkedBlockingDeque<Job> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
 	protected int schedulerOverhead = 0;
+	protected boolean doSchedule = false;
 
 	public SimModel(Model model, String name, boolean showInReport, boolean showInTrace) {
 		super(model, name, showInReport, showInTrace);
@@ -53,4 +54,7 @@ public class SimModel extends Model {
 		experiment.finish();
 	}
 
+	protected synchronized void setNextSchedule(boolean state) {
+		doSchedule = state;
+	}
 }
