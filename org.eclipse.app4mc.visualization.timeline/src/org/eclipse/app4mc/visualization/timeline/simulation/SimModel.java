@@ -13,8 +13,8 @@ public class SimModel extends Model {
 	protected LinkedBlockingDeque<Job> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
 
-	public SimModel(Model arg0, String arg1, boolean arg2, boolean arg3) {
-		super(arg0, arg1, arg2, arg3);
+	public SimModel(Model model, String name, boolean showInReport, boolean showInTrace) {
+		super(model, name, showInReport, showInTrace);
 	}
 
 	@Override

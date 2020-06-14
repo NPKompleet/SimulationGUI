@@ -8,9 +8,9 @@ import desmoj.core.simulator.TimeSpan;
 public class Processor extends SimProcess {
 	private SimModel model;
 
-	public Processor(Model arg0, String arg1, boolean arg2) {
-		super(arg0, arg1, arg2);
-		this.model = (SimModel) arg0;
+	public Processor(Model model, String name, boolean showInTrace) {
+		super(model, name, showInTrace);
+		this.model = (SimModel) model;
 	}
 
 	@Override
