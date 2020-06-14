@@ -6,14 +6,16 @@ import desmoj.core.simulator.SimProcess;
 
 public class Job extends SimProcess {
 	private Task parentTask;
+	private int activationTime;
 	private int executionTime;
 	private int absoluteDeadline;
 	private SimModel model;
 	String name;
 
-	public Job(Task parentTask, String name, int executionTime, int deadline, Model model) {
+	public Job(Task parentTask, String name, int activationTime, int executionTime, int deadline, Model model) {
 		super(model, name, true);
 		this.parentTask = parentTask;
+		this.activationTime = activationTime;
 		this.name = name;
 		this.executionTime = executionTime;
 		this.absoluteDeadline = deadline;
@@ -52,6 +54,10 @@ public class Job extends SimProcess {
 
 	public Task getParentTask() {
 		return parentTask;
+	}
+
+	public int getActivationTime() {
+		return activationTime;
 	}
 
 }

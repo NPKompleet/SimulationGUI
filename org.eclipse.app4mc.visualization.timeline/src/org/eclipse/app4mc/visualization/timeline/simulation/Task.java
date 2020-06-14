@@ -27,13 +27,16 @@ public class Task extends SimProcess {
 	public void lifeCycle() throws SuspendExecution {
 
 		hold(new TimeSpan(offset));
+		// Activation time for first job
+		int activationTime = offset;
 		// Deadline for first job
 		deadline += offset;
 
 		while (true) {
-			Job job = new Job(this, name + "_job", executionTime, deadline, model);
+			Job job = new Job(this, name + "_job", activationTime, executionTime, deadline, model);
 			job.activate();
 			hold(new TimeSpan(period));
+			activationTime += period;
 			// Use absolute deadline for subsequent jobs
 			deadline += period;
 		}

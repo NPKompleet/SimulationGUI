@@ -12,6 +12,7 @@ public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
 	protected LinkedBlockingDeque<Job> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
+	protected int schedulerOverhead = 0;
 
 	public SimModel(Model model, String name, boolean showInReport, boolean showInTrace) {
 		super(model, name, showInReport, showInTrace);
