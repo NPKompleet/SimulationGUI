@@ -1,0 +1,63 @@
+<HTML><HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Author" CONTENT="Tim Lechler">
+<META NAME="GENERATOR" CONTENT="DESMO-J 2.5.1e">
+<TITLE>.\SimExperiment_trace.html</TITLE></HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000EE" VLINK="#551A8B" ALINK="#FF0000">
+<A NAME="top"></A><br>
+<DIV align=center><H3>SimExperiment - Trace</H3></DIV>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<TR VALIGN=TOP><TD><B><DIV align=left>model</DIV></B></TD><TD><B><DIV align=left>time</DIV></B></TD><TD><B><DIV align=left>event</DIV></B></TD><TD><B><DIV align=left>entity</DIV></B></TD><TD><B><DIV align=left>action(s)</DIV></B></TD></TR>
+<TR VALIGN=TOP><TD>Simple Sim</TD><TD>0.0000</TD><TD>----</TD><TD>----</TD><TD>initially Trace switched on</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>initially schedules 'TraceOff#1' at 0.0200</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>initially activates 'Processor#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Processor#1'</TD><TD>starts</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task1#1'</TD><TD>activates 'Task1_job#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2#1'</TD><TD>activates 'Task2_job#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task1_job#1'</TD><TD>starts</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>activates 'Processor#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#1'</TD><TD>starts</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Processor#1'</TD><TD>holds for 0.0020 until 0.0020</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD>0.0020</TD><TD> </TD><TD> </TD><TD>activates 'Task1_job#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>holds for 0.0030 until 0.0050</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task1_job#1'</TD><TD>terminates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD>0.0050</TD><TD> </TD><TD>'Task2#1'</TD><TD>activates 'Task2_job#2' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Processor#1'</TD><TD>activates 'Task2_job#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#2'</TD><TD>starts</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>activates 'Processor#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#1'</TD><TD>terminates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Processor#1'</TD><TD>holds for 0.0030 until 0.0080</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD>0.0080</TD><TD> </TD><TD> </TD><TD>activates 'Task2_job#2' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#2'</TD><TD>terminates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD>0.0100</TD><TD> </TD><TD>'Task1#1'</TD><TD>activates 'Task1_job#2' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2#1'</TD><TD>activates 'Task2_job#3' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task1_job#2'</TD><TD>starts</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>activates 'Processor#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#3'</TD><TD>starts</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Processor#1'</TD><TD>holds for 0.0020 until 0.0120</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD>0.0120</TD><TD> </TD><TD> </TD><TD>activates 'Task1_job#2' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>holds for 0.0030 until 0.0150</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task1_job#2'</TD><TD>terminates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD>0.0150</TD><TD> </TD><TD>'Task2#1'</TD><TD>activates 'Task2_job#4' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Processor#1'</TD><TD>activates 'Task2_job#3' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#4'</TD><TD>starts</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>activates 'Processor#1' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#3'</TD><TD>terminates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Processor#1'</TD><TD>holds for 0.0030 until 0.0180</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD>0.0180</TD><TD> </TD><TD> </TD><TD>activates 'Task2_job#4' now</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD> </TD><TD>passivates</TD></TR>
+<TR VALIGN=TOP><TD> </TD><TD> </TD><TD> </TD><TD>'Task2_job#4'</TD><TD>terminates</TD></TR>
+</TABLE><P>
+<FONT SIZE=-1><A HREF=#top>top</A></FONT><P>
+<FONT SIZE=-2>created using <A HREF=http://www.desmoj.de>DESMO-J</A> Version 2.5.1e at Sun Jun 14 18:00:45 CEST 2020 - DESMO-J is licensed under <A HREF=http://www.apache.org/licenses/LICENSE-2.0>Apache License, Version 2.0</A></FONT>
+</BODY></HTML>

@@ -1,7 +1,5 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
-import java.util.concurrent.TimeUnit;
-
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
@@ -28,14 +26,14 @@ public class Task extends SimProcess {
 	@Override
 	public void lifeCycle() throws SuspendExecution {
 
-		hold(new TimeSpan(offset, TimeUnit.MILLISECONDS));
+		hold(new TimeSpan(offset));
 		// Deadline for first job
 		deadline += offset;
 
 		while (true) {
 			Job job = new Job(this, name + "_job", executionTime, deadline, model);
-			job.activateAfter(this);
-			hold(new TimeSpan(period, TimeUnit.MILLISECONDS));
+			job.activate();
+			hold(new TimeSpan(period));
 			// Use absolute deadline for subsequent jobs
 			deadline += period;
 		}

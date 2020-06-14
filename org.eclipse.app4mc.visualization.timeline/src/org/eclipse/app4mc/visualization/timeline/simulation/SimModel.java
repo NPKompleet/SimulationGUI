@@ -43,9 +43,10 @@ public class SimModel extends Model {
 		SimModel model = new SimModel(null, "Simple Sim", true, true);
 		Experiment experiment = new Experiment("SimExperiment");
 		model.connectToExperiment(experiment);
+		Experiment.setReferenceUnit(TimeUnit.MILLISECONDS);
 		experiment.setShowProgressBar(true);
-		experiment.stop(new TimeInstant(20, TimeUnit.MILLISECONDS));
-		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(20, TimeUnit.MILLISECONDS));
+		experiment.stop(new TimeInstant(20));
+		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(20));
 		experiment.start();
 		experiment.report();
 		experiment.finish();

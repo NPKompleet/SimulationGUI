@@ -28,7 +28,7 @@ public class Job extends SimProcess {
 			Processor assignedProcessor = model.processorQueue.first();
 			model.processorQueue.remove(assignedProcessor);
 
-			assignedProcessor.activateAfter(this);
+			assignedProcessor.activate();
 		}
 
 		passivate();

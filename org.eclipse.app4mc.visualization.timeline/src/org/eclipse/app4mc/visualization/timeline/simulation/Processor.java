@@ -1,7 +1,5 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
-import java.util.concurrent.TimeUnit;
-
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
@@ -25,7 +23,7 @@ public class Processor extends SimProcess {
 				Job nextJob = model.jobQueue.pollFirst();
 
 				// Execute the Job
-				hold(new TimeSpan(nextJob.getExecutionTime(), TimeUnit.MILLISECONDS));
+				hold(new TimeSpan(nextJob.getExecutionTime()));
 
 				nextJob.activate();
 			}
