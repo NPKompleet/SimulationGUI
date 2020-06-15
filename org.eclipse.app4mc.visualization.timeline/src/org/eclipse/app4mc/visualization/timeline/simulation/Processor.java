@@ -6,6 +6,8 @@ import java.util.stream.Stream;
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
+import desmoj.core.simulator.TimeInstant;
+import desmoj.core.simulator.TimeOperations;
 import desmoj.core.simulator.TimeSpan;
 
 public class Processor extends SimProcess {
@@ -36,13 +38,23 @@ public class Processor extends SimProcess {
 				}
 				isBusy = true;
 				currentJob = model.jobQueue.pollFirst();
+				TimeInstant startTime = presentTime();
 
 				// Execute the Job
-				hold(new TimeSpan(currentJob.getExecutionTime()));
+				TimeSpan executionTime = new TimeSpan(currentJob.getExecutionTime());
+				hold(executionTime);
 
+				// If processor is interrupted by job of higher priority,
+				// set the execution time of the current running job to the difference
+				// between the initial execution time and the amount of time the processor
+				// has executed the job. Then put job in the head of job queue and
+				// reschedule all jobs in the job queue.
 				if (isInterrupted()) {
-					sendTraceNote("interrupted!!");
-					// Still need to implement calculating remaining execution time
+					sendTraceNote("interrupted!! " + currentJob.getQuotedName() + " " + startTime + " "
+							+ model.presentTime());
+					executionTime = TimeOperations.diff(executionTime, TimeOperations.diff(presentTime(), startTime));
+					sendTraceNote("interrupted!! exe " + executionTime);
+					currentJob.setExecutionTime((int) (executionTime.getTimeAsDouble()));
 					model.jobQueue.addFirst(currentJob);
 					model.jobQueue = scheduler.schedule(model.jobQueue);
 					this.clearInterruptCode();

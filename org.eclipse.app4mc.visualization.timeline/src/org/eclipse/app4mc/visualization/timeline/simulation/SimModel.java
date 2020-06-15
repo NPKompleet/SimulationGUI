@@ -1,7 +1,6 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
 
 import desmoj.core.simulator.Experiment;
 import desmoj.core.simulator.InterruptCode;
@@ -17,6 +16,7 @@ public class SimModel extends Model {
 	protected boolean doSchedule = false;
 	protected Processor processor;
 	protected InterruptCode priorityJobCode;
+	protected String preemptiveness = "PREEMPTIVE";
 
 	public SimModel(Model model, String name, boolean showInReport, boolean showInTrace) {
 		super(model, name, showInReport, showInTrace);
@@ -47,11 +47,14 @@ public class SimModel extends Model {
 		priorityJobCode = new InterruptCode("priority job arrived");
 	}
 
+	protected synchronized void setNextSchedule(boolean state) {
+		doSchedule = state;
+	}
+
 	public static void main(String[] args) {
 		SimModel model = new SimModel(null, "Simple Sim", true, true);
 		Experiment experiment = new Experiment("SimExperiment");
 		model.connectToExperiment(experiment);
-		Experiment.setReferenceUnit(TimeUnit.MILLISECONDS);
 		experiment.setShowProgressBar(true);
 		experiment.stop(new TimeInstant(30));
 		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
@@ -60,7 +63,4 @@ public class SimModel extends Model {
 		experiment.finish();
 	}
 
-	protected synchronized void setNextSchedule(boolean state) {
-		doSchedule = state;
-	}
 }

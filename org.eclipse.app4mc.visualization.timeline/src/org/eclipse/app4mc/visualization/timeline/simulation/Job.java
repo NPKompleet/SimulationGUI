@@ -10,7 +10,7 @@ public class Job extends SimProcess {
 	private int executionTime;
 	private int absoluteDeadline;
 	private SimModel model;
-	String name;
+	private String name;
 
 	public Job(Task parentTask, String name, int activationTime, int executionTime, int deadline, Model model) {
 		super(model, name, true);
@@ -36,7 +36,7 @@ public class Job extends SimProcess {
 
 			assignedProcessor.activate();
 		} else {
-			if (model.processor.checkIsPriority(this)) {
+			if (model.preemptiveness.equals("PREEMPTIVE") && model.processor.checkIsPriority(this)) {
 				model.processor.interrupt(model.priorityJobCode);
 			}
 		}
