@@ -2,6 +2,8 @@ package org.eclipse.app4mc.visualization.timeline.simulation;
 
 import java.util.concurrent.LinkedBlockingDeque;
 
+import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
+
 import desmoj.core.simulator.Experiment;
 import desmoj.core.simulator.InterruptCode;
 import desmoj.core.simulator.Model;
@@ -29,7 +31,7 @@ public class SimModel extends Model {
 
 	@Override
 	public void doInitialSchedules() {
-		processor = new Processor(this, "Processor", true);
+		processor = new Processor(this, "Processor", true, new EDFScheduler());
 		processor.activate();
 
 		Task task1 = new Task("Task1", 9, 9, 10, 0, this);

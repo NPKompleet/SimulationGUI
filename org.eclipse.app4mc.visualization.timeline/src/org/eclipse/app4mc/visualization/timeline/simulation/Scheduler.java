@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
-public class Scheduler {
+public abstract class Scheduler {
 
 	/**
 	 * Sorts the contents the jobQueue according to the implemented comparator
@@ -24,7 +24,5 @@ public class Scheduler {
 	 * 
 	 * @return A comparator that can be used to schedule jobs
 	 */
-	public Comparator<Job> getComparator() {
-		return (a, b) -> a.getAbsoluteDeadline() - b.getAbsoluteDeadline();
-	}
+	public abstract Comparator<Job> getComparator();
 }

@@ -42,4 +42,8 @@ public class Task extends SimProcess {
 		}
 	}
 
+	public int getPeriod() {
+		return period;
+	}
+
 }

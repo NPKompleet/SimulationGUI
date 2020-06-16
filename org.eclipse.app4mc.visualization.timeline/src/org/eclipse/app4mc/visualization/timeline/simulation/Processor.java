@@ -16,10 +16,10 @@ public class Processor extends SimProcess {
 	Job currentJob;
 	protected boolean isBusy;
 
-	public Processor(Model model, String name, boolean showInTrace) {
+	public Processor(Model model, String name, boolean showInTrace, Scheduler scheduler) {
 		super(model, name, showInTrace);
 		this.model = (SimModel) model;
-		this.scheduler = new Scheduler();
+		this.scheduler = scheduler;
 	}
 
 	@Override
