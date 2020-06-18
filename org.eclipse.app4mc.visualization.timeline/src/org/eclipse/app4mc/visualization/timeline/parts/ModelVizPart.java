@@ -161,7 +161,7 @@ public class ModelVizPart implements Visualization {
 		new Label(grpParameters, SWT.NONE);
 
 		Button btnRms = new Button(grpParameters, SWT.RADIO);
-		btnRms.setText("RMS");
+		btnRms.setText("RM");
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 
@@ -231,7 +231,7 @@ public class ModelVizPart implements Visualization {
 		cmbPreemptn.select(Constants.DEFAULT_PREEMPTN_INDEX);
 
 		Label lblCoretasks = new Label(grpParameters, SWT.NONE);
-		lblCoretasks.setText("Core/Tasks:");
+		lblCoretasks.setText("Tasks:");
 
 		listViewer = new ListViewer(grpParameters, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		List list = listViewer.getList();
@@ -246,7 +246,7 @@ public class ModelVizPart implements Visualization {
 
 		Button btnLoad = new Button(grpParameters, SWT.NONE);
 		btnLoad.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnLoad.setText("Load");
+		btnLoad.setText("Filter");
 
 		Button btnSimulate = new Button(grpParameters, SWT.NONE);
 		btnSimulate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));

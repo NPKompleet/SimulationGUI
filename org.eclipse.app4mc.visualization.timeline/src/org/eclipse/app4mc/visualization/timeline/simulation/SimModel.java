@@ -4,11 +4,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
 
-import desmoj.core.simulator.Experiment;
 import desmoj.core.simulator.InterruptCode;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.ProcessQueue;
-import desmoj.core.simulator.TimeInstant;
 
 public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
@@ -53,16 +51,16 @@ public class SimModel extends Model {
 		doSchedule = state;
 	}
 
-	public static void main(String[] args) {
-		SimModel model = new SimModel(null, "Simple Sim", true, true);
-		Experiment experiment = new Experiment("SimExperiment");
-		model.connectToExperiment(experiment);
-		experiment.setShowProgressBar(true);
-		experiment.stop(new TimeInstant(30));
-		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
-		experiment.start();
-		experiment.report();
-		experiment.finish();
-	}
+//	public static void main(String[] args) {
+//		SimModel model = new SimModel(null, "Simple Sim", true, true);
+//		Experiment experiment = new Experiment("SimExperiment");
+//		model.connectToExperiment(experiment);
+//		experiment.setShowProgressBar(true);
+//		experiment.stop(new TimeInstant(30));
+//		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
+//		experiment.start();
+//		experiment.report();
+//		experiment.finish();
+//	}
 
 }
