@@ -247,6 +247,12 @@ public class ModelVizPart implements Visualization {
 		Button btnLoad = new Button(grpParameters, SWT.NONE);
 		btnLoad.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnLoad.setText("Filter");
+		btnLoad.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				new FilterDialog(parent.getShell()).open();
+			}
+		});
 
 		Button btnSimulate = new Button(grpParameters, SWT.NONE);
 		btnSimulate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
