@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
-@Component(property = { "id=ModelViz", "name=Model Visualization", "description=Some other Task visualization" })
+@Component(property = { "id=SimView", "name=Model Visualization", "description=Task visualization" })
 public class SimViewPart implements Visualization, ISimView {
 	int trackSize;
 	private Text txtSTime;

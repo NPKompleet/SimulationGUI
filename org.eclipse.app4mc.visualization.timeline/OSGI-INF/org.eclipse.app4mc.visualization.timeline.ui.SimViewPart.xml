@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.app4mc.visualization.timeline.ui.SimViewPart">
-   <property name="id" value="ModelViz"/>
+   <property name="id" value="SimView"/>
    <property name="name" value="Model Visualization"/>
-   <property name="description" value="Some other Task visualization"/>
+   <property name="description" value="Task visualization"/>
    <service>
       <provide interface="org.eclipse.app4mc.visualization.ui.registry.Visualization"/>
       <provide interface="org.eclipse.app4mc.visualization.timeline.ui.ISimView"/>
