@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.jface;bundle-version="3.18.0",
  desmoj;bundle-version="2.5.1",
  org.eclipse.e4.core.di;bundle-version="1.7.500",
  javax.inject;bundle-version="1.0.0"
-Service-Component: OSGI-INF/org.eclipse.app4mc.visualization.timeline.parts.ModelVizPart.xml
+Service-Component: OSGI-INF/org.eclipse.app4mc.visualization.timeline.ui.SimViewPart.xml
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  swing2swt.jar

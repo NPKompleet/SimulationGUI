@@ -1,4 +1,4 @@
-package org.eclipse.app4mc.visualization.timeline.parts;
+package org.eclipse.app4mc.visualization.timeline.ui;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;

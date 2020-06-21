@@ -1,28 +1,21 @@
-package org.eclipse.app4mc.visualization.timeline.parts;
+package org.eclipse.app4mc.visualization.timeline.ui;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.app4mc.amalthea.model.Amalthea;
-import org.eclipse.app4mc.amalthea.model.SWModel;
-import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.DownArrowAntFigure;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.UpArrowAntFigure;
 import org.eclipse.app4mc.visualization.timeline.utils.Constants;
 import org.eclipse.app4mc.visualization.timeline.utils.SWTResourceManager;
-import org.eclipse.app4mc.visualization.timeline.utils.TimingUtils;
 import org.eclipse.app4mc.visualization.ui.registry.Visualization;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
-import org.eclipse.nebula.widgets.timeline.ITimeline;
 import org.eclipse.nebula.widgets.timeline.ITimelineEvent;
 import org.eclipse.nebula.widgets.timeline.ITimelineFactory;
 import org.eclipse.nebula.widgets.timeline.TimelineComposite;
@@ -48,13 +41,14 @@ import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
 @Component(property = { "id=ModelViz", "name=Model Visualization", "description=Some other Task visualization" })
-public class ModelVizPart implements Visualization {
+public class SimViewPart implements Visualization, ISimView {
 	int trackSize;
 	private Text txtSTime;
 	private Text txtStepsize;
 	private Text txtOverhd;
 	Combo cmbSTime;
 	ListViewer listViewer;
+	Controller controller;
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -111,23 +105,10 @@ public class ModelVizPart implements Visualization {
 		control.getRootFigure().addAnnotationFigure(lane2, antFigure4);
 		control.getRootFigure().addAnnotationFigure(lane2, antFigure5);
 		control.getRootFigure().zoom(0.000001, 0);
-//		control.getRootFigure().createCursor(200);
 
 		trackSize = 2;
 
-//		final ITimeline model = (ITimeline) timelineViewer.getInput();
-//
-//		new TimelineDataBinding(timelineViewer, model, 300);
-//
-//		createTimelineContent(model);
-//
-//		trackSize = model.getTracks().size();
-
 		return timelineViewer.getControl();
-	}
-
-	private void createTimelineContent(ITimeline model) {
-		// TimeLine contents go here
 	}
 
 	public void createSimulationControls(Amalthea model, Composite parent) {
@@ -282,32 +263,25 @@ public class ModelVizPart implements Visualization {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				SWModel swModel = model.getSwModel();
-				// To be moved to its own method or class
-				LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
-				java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
-				org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMaximumTimeUnit(periodList);
-				// Align all periods to the same base time unit using the minimum time unit
-				// If minimum unit in the model is in picoseconds, align everything to
-				// nanoseconds instead
-				// and change the unit to nanoseconds.
-				// Reason: Java and the Timeline widget uses the minimum time unit of
-				// nanoseconds.
-				periodList = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS
-						? TimingUtils.getAlignedPeriods(periodList, org.eclipse.app4mc.amalthea.model.TimeUnit.NS)
-						: TimingUtils.getAlignedPeriods(periodList, unit);
-				BigInteger hyperperiod = TimingUtils.computeHyperPeriod(periodList);
-				unit = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS
-						? org.eclipse.app4mc.amalthea.model.TimeUnit.NS
-						: unit;
-				int index = TimingUtils.timeToConstantMap().get(unit);
-
-				txtSTime.setText(hyperperiod.toString());
-				cmbSTime.select(index);
-				listViewer.setInput(taskPeriodMap.keySet().stream().collect(Collectors.toList()));
+				controller = new Controller(model, SimViewPart.this);
+				controller.populateView();
 			}
 		});
+	}
 
+	@Override
+	public void setSimTimeValue(String value) {
+		txtSTime.setText(value);
+	}
+
+	@Override
+	public void setSimTimeUnitIndex(int index) {
+		cmbSTime.select(index);
+	}
+
+	@Override
+	public void setPeriodicTasks(java.util.List<String> taskList) {
+		listViewer.setInput(taskList);
 	}
 
 }
