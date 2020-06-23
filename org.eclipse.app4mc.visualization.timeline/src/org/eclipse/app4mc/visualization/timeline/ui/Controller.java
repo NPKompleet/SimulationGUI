@@ -4,16 +4,11 @@ import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
-import javax.inject.Singleton;
-
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.amalthea.model.SWModel;
 import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.visualization.timeline.utils.TimingUtils;
-import org.eclipse.e4.core.di.annotations.Creatable;
 
-@Creatable
-@Singleton
 public class Controller {
 	Amalthea model;
 	ISimView viewer;
@@ -29,10 +24,10 @@ public class Controller {
 		LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
 		java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
 		org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMaximumTimeUnit(periodList);
-		// Align all periods to the same base time unit using the minimum time unit
-		// If minimum unit in the model is in picoseconds, align everything to
-		// nanoseconds instead
-		// and change the unit to nanoseconds.
+
+		// Align all periods to the same base time unit using the maximum time unit
+		// If maximum unit in the model is in picoseconds, align everything to
+		// nanoseconds instead and change the unit to nanoseconds.
 		// Reason: Java and the Timeline widget uses the minimum time unit of
 		// nanoseconds.
 		periodList = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS

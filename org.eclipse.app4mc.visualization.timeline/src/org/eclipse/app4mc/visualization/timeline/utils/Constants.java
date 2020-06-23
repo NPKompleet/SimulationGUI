@@ -17,5 +17,6 @@ public class Constants {
 	public static final int DEFAULT_UNIT_INDEX = 2;
 
 	public static final int DEFAULT_ETM_INDEX = 2;
+
 	public static final int DEFAULT_PREEMPTN_INDEX = 2;
 }

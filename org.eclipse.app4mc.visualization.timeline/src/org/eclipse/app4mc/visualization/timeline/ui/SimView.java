@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
 @Component(property = { "id=SimView", "name=Model Visualization", "description=Task visualization" })
-public class SimViewPart implements Visualization, ISimView {
+public class SimView implements Visualization, ISimView {
 	int trackSize;
 	private Text txtSTime;
 	private Text txtStepsize;
@@ -263,7 +263,7 @@ public class SimViewPart implements Visualization, ISimView {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				controller = new Controller(model, SimViewPart.this);
+				controller = new Controller(model, SimView.this);
 				controller.populateView();
 			}
 		});
