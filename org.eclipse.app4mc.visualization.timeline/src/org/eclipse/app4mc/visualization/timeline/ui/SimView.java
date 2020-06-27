@@ -12,6 +12,11 @@ import org.eclipse.app4mc.visualization.timeline.annotationfigure.UpArrowAntFigu
 import org.eclipse.app4mc.visualization.timeline.utils.Constants;
 import org.eclipse.app4mc.visualization.timeline.utils.SWTResourceManager;
 import org.eclipse.app4mc.visualization.ui.registry.Visualization;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.typed.PojoProperties;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.SelectObservableValue;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -43,12 +48,20 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = { "id=SimView", "name=Model Visualization", "description=Model visualization" })
 public class SimView implements Visualization, ISimView {
 	int trackSize;
-	private Text txtSTime;
+	private Button btnEdf;
+	private Button btnRms;
+	private Button btnDefault;
+	private Text txtSimTime;
 	private Text txtStepsize;
 	private Text txtOverhd;
-	Combo cmbSTime;
-	ListViewer listViewer;
-	Controller controller;
+	private Combo cmbSTimeUnit;
+	private Combo cmbStepsizeUnit;
+	private Combo cmbOverhdUnit;
+	private Combo cmbETM;
+	private Combo cmbPreemptn;
+	private ListViewer listViewer;
+	private Controller controller;
+	private SimViewParameters simViewParams;
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -59,12 +72,13 @@ public class SimView implements Visualization, ISimView {
 
 	@PostConstruct
 	public void createVisualization(Amalthea model, Composite parent) throws IOException {
+		controller = new Controller(model, SimView.this);
+		simViewParams = new SimViewParameters();
 		createSimulationControls(model, parent);
 	}
 
 	@PreDestroy
 	public void dispose() {
-		System.out.println("Destroy resources");
 	}
 
 	public Control createTimelineControl(Composite parent) {
@@ -112,7 +126,6 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	public void createSimulationControls(Amalthea model, Composite parent) {
-		controller = new Controller(model, SimView.this);
 		parent.setLayout(new GridLayout(2, false));
 
 		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -137,19 +150,19 @@ public class SimView implements Visualization, ISimView {
 		lblAlgorithm.setToolTipText("Scheduling Strategy");
 		lblAlgorithm.setText("Strategy:");
 
-		Button btnEdf = new Button(grpParameters, SWT.RADIO);
+		btnEdf = new Button(grpParameters, SWT.RADIO);
 		btnEdf.setText("EDF");
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 
-		Button btnRms = new Button(grpParameters, SWT.RADIO);
+		btnRms = new Button(grpParameters, SWT.RADIO);
 		btnRms.setText("RM");
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 
-		Button btnDefault = new Button(grpParameters, SWT.RADIO);
+		btnDefault = new Button(grpParameters, SWT.RADIO);
 		btnDefault.setSelection(true);
-		btnDefault.setText("DEFAULT");
+		btnDefault.setText(Constants.DEFAULT_STRATEGY);
 		new Label(grpParameters, SWT.NONE);
 
 		Label lblSimTime = new Label(grpParameters, SWT.NONE);
@@ -157,15 +170,15 @@ public class SimView implements Visualization, ISimView {
 		lblSimTime.setBounds(0, 0, 55, 15);
 		lblSimTime.setText("Sim Time:");
 
-		txtSTime = new Text(grpParameters, SWT.BORDER);
-		txtSTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		txtSTime.setText(Constants.DEFAULT_SIM_TIME);
-		txtSTime.addListener(SWT.Verify, textListener);
+		txtSimTime = new Text(grpParameters, SWT.BORDER);
+		txtSimTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		txtSimTime.setText(Constants.DEFAULT_SIM_TIME);
+		txtSimTime.addListener(SWT.Verify, textListener);
 
-		cmbSTime = new Combo(grpParameters, SWT.READ_ONLY);
-		cmbSTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		cmbSTime.setItems(Constants.TIME_UNIT_OPTIONS);
-		cmbSTime.select(Constants.DEFAULT_UNIT_INDEX);
+		cmbSTimeUnit = new Combo(grpParameters, SWT.READ_ONLY);
+		cmbSTimeUnit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		cmbSTimeUnit.setItems(Constants.TIME_UNIT_OPTIONS);
+		cmbSTimeUnit.select(Constants.DEFAULT_UNIT_INDEX);
 
 		Label lblStepSize = new Label(grpParameters, SWT.NONE);
 		lblStepSize.setText("Stepsize:");
@@ -175,10 +188,10 @@ public class SimView implements Visualization, ISimView {
 		txtStepsize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtStepsize.addListener(SWT.Verify, textListener);
 
-		Combo cmbStepsize = new Combo(grpParameters, SWT.READ_ONLY);
-		cmbStepsize.setItems(Constants.TIME_UNIT_OPTIONS);
-		cmbStepsize.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		cmbStepsize.select(Constants.DEFAULT_UNIT_INDEX);
+		cmbStepsizeUnit = new Combo(grpParameters, SWT.READ_ONLY);
+		cmbStepsizeUnit.setItems(Constants.TIME_UNIT_OPTIONS);
+		cmbStepsizeUnit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		cmbStepsizeUnit.select(Constants.DEFAULT_UNIT_INDEX);
 
 		Label lblOverhead = new Label(grpParameters, SWT.NONE);
 		lblOverhead.setToolTipText("Scheduling Overhead");
@@ -189,16 +202,16 @@ public class SimView implements Visualization, ISimView {
 		txtOverhd.setText(Constants.DEFAULT_OVERHEAD);
 		txtOverhd.addListener(SWT.Verify, textListener);
 
-		Combo cmbOverhd = new Combo(grpParameters, SWT.READ_ONLY);
-		cmbOverhd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		cmbOverhd.setItems(Constants.TIME_UNIT_OPTIONS);
-		cmbOverhd.select(2);
+		cmbOverhdUnit = new Combo(grpParameters, SWT.READ_ONLY);
+		cmbOverhdUnit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		cmbOverhdUnit.setItems(Constants.TIME_UNIT_OPTIONS);
+		cmbOverhdUnit.select(2);
 
 		Label lblETM = new Label(grpParameters, SWT.NONE);
 		lblETM.setToolTipText("Execution Time Model");
 		lblETM.setText("ETM:");
 
-		Combo cmbETM = new Combo(grpParameters, SWT.READ_ONLY);
+		cmbETM = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbETM.setItems(Constants.ETM_OPTIONS);
 		cmbETM.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		cmbETM.select(Constants.DEFAULT_ETM_INDEX);
@@ -207,7 +220,7 @@ public class SimView implements Visualization, ISimView {
 		lblPreemption.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblPreemption.setText("Preemption:");
 
-		Combo cmbPreemptn = new Combo(grpParameters, SWT.READ_ONLY);
+		cmbPreemptn = new Combo(grpParameters, SWT.READ_ONLY);
 		cmbPreemptn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		cmbPreemptn.setItems(Constants.PREEMPTION_OPTIONS);
 		cmbPreemptn.select(Constants.DEFAULT_PREEMPTN_INDEX);
@@ -264,6 +277,59 @@ public class SimView implements Visualization, ISimView {
 		scrolledComposite_1.setContent(grpParameters);
 		scrolledComposite_1.setMinSize(grpParameters.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
+		createDataBinding();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void createDataBinding() {
+		DataBindingContext dBindCtx = new DataBindingContext();
+
+		// Data binding for scheduling strategy
+		SelectObservableValue selectedRadioButtonObservable = new SelectObservableValue();
+		selectedRadioButtonObservable.addOption(btnEdf.getText(), WidgetProperties.buttonSelection().observe(btnEdf));
+		selectedRadioButtonObservable.addOption(btnRms.getText(), WidgetProperties.buttonSelection().observe(btnRms));
+		selectedRadioButtonObservable.addOption(btnDefault.getText(),
+				WidgetProperties.buttonSelection().observe(btnDefault));
+		IObservableValue modelObservableValue = PojoProperties.value(SimViewParameters.class, "strategy")
+				.observe(simViewParams);
+		dBindCtx.bindValue(selectedRadioButtonObservable, modelObservableValue);
+
+		// Data binding for simulation time value and unit
+		IObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(txtSimTime);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "simTime").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
+
+		targetObservableValue = WidgetProperties.comboSelection().observe(cmbSTimeUnit);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "simTimeUnit").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
+
+		// Data binding for step size value and unit
+		targetObservableValue = WidgetProperties.text(SWT.Modify).observe(txtStepsize);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "stepSize").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
+
+		targetObservableValue = WidgetProperties.comboSelection().observe(cmbStepsizeUnit);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "stepSizeUnit").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
+
+		// Data binding for scheduler overhead value and unit
+		targetObservableValue = WidgetProperties.text(SWT.Modify).observe(txtOverhd);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "overhead").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
+
+		targetObservableValue = WidgetProperties.comboSelection().observe(cmbOverhdUnit);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "overheadUnit").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
+
+		// Data binding for ETM
+		targetObservableValue = WidgetProperties.comboSelection().observe(cmbETM);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "etm").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
+
+		// Data binding for preemption
+		targetObservableValue = WidgetProperties.comboSelection().observe(cmbETM);
+		modelObservableValue = PojoProperties.value(SimViewParameters.class, "preemption").observe(simViewParams);
+		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
 	}
 
 	private void updateWidgetData(Amalthea model) {
@@ -276,17 +342,20 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	private void startSimulation() {
-
+		System.out.println("Sim Param> " + simViewParams.getSimTime());
+		System.out.println("Sim Param> " + simViewParams.getSimTimeUnit());
+		System.out.println("Sim Param> " + simViewParams.getStrategy());
+		System.out.println("Sim Param> " + simViewParams.getOverheadUnit());
 	}
 
 	@Override
 	public void setSimTimeValue(String value) {
-		txtSTime.setText(value);
+		txtSimTime.setText(value);
 	}
 
 	@Override
 	public void setSimTimeUnitIndex(int index) {
-		cmbSTime.select(index);
+		cmbSTimeUnit.select(index);
 	}
 
 	@Override

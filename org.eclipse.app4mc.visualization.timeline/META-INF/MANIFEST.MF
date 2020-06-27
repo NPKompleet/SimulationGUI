@@ -12,7 +12,11 @@ Import-Package: org.eclipse.app4mc.amalthea.model,
 Require-Bundle: org.eclipse.jface;bundle-version="3.18.0",
  org.eclipse.draw2d;bundle-version="3.10.100",
  org.eclipse.nebula.widgets.timeline,
- desmoj;bundle-version="2.5.1"
+ desmoj;bundle-version="2.5.1",
+ org.eclipse.jface.databinding;bundle-version="1.9.200",
+ org.eclipse.core.databinding;bundle-version="1.7.700",
+ org.eclipse.core.databinding.property;bundle-version="1.7.200",
+ org.eclipse.core.databinding.beans;bundle-version="1.6.0"
 Service-Component: OSGI-INF/org.eclipse.app4mc.visualization.timeline.ui.SimView.xml
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
