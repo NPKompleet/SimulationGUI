@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
-@Component(property = { "id=SimView", "name=Model Visualization", "description=Task visualization" })
+@Component(property = { "id=SimView", "name=Model Visualization", "description=Model visualization" })
 public class SimView implements Visualization, ISimView {
 	int trackSize;
 	private Text txtSTime;
@@ -112,6 +112,7 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	public void createSimulationControls(Amalthea model, Composite parent) {
+		controller = new Controller(model, SimView.this);
 		parent.setLayout(new GridLayout(2, false));
 
 		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -225,10 +226,10 @@ public class SimView implements Visualization, ISimView {
 
 		updateWidgetData(model);
 
-		Button btnLoad = new Button(grpParameters, SWT.NONE);
-		btnLoad.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnLoad.setText("Filter");
-		btnLoad.addListener(SWT.Selection, new Listener() {
+		Button btnFilter = new Button(grpParameters, SWT.NONE);
+		btnFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnFilter.setText("Filter");
+		btnFilter.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
 				new FilterDialog(parent.getShell()).open();
@@ -238,6 +239,12 @@ public class SimView implements Visualization, ISimView {
 		Button btnSimulate = new Button(grpParameters, SWT.NONE);
 		btnSimulate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnSimulate.setText("Simulate");
+		btnSimulate.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				startSimulation();
+			}
+		});
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
@@ -263,10 +270,13 @@ public class SimView implements Visualization, ISimView {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				controller = new Controller(model, SimView.this);
 				controller.populateView();
 			}
 		});
+	}
+
+	private void startSimulation() {
+
 	}
 
 	@Override

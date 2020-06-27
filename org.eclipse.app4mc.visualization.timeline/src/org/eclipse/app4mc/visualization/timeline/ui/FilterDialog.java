@@ -5,6 +5,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -41,6 +43,19 @@ public class FilterDialog extends Dialog {
 		item5.setText("Item5");
 		TreeItem item6 = new TreeItem(item5, SWT.NULL);
 		item6.setText("Item6");
+
+		Composite buttonComp = new Composite(container, SWT.NONE);
+		buttonComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		RowLayout rLayout = new RowLayout();
+		rLayout.marginBottom = 10;
+		buttonComp.setLayout(rLayout);
+
+		Button selectAllButton = new Button(buttonComp, SWT.PUSH);
+		selectAllButton.setText("Select All");
+
+		Button deSelAllButton = new Button(buttonComp, SWT.PUSH);
+		deSelAllButton.setText("Deselect All");
+
 		return container;
 	}
 
@@ -58,7 +73,7 @@ public class FilterDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(350, 250);
+		return new Point(400, 250);
 	}
 
 }
