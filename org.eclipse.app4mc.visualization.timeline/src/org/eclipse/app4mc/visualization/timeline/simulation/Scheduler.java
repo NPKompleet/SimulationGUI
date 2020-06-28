@@ -10,13 +10,13 @@ public abstract class Scheduler {
 	/**
 	 * Sorts the contents the jobQueue according to the implemented comparator
 	 * 
-	 * @param jobQueue A LinkedBlockingDeque that contains {@link Job} elements
+	 * @param jobQueue A LinkedBlockingDeque that contains {@link SimJob} elements
 	 * @see #getComparator()
 	 */
-	public final LinkedBlockingDeque<Job> schedule(LinkedBlockingDeque<Job> jobQueue) {
-		List<Job> jobList = jobQueue.stream().sorted(getComparator().thenComparing(Job::getActivationTime))
+	public final LinkedBlockingDeque<SimJob> schedule(LinkedBlockingDeque<SimJob> jobQueue) {
+		List<SimJob> jobList = jobQueue.stream().sorted(getComparator().thenComparing(SimJob::getActivationTime))
 				.collect(Collectors.toList());
-		return new LinkedBlockingDeque<Job>(jobList);
+		return new LinkedBlockingDeque<SimJob>(jobList);
 	}
 
 	/**
@@ -24,5 +24,5 @@ public abstract class Scheduler {
 	 * 
 	 * @return A comparator that can be used to schedule jobs
 	 */
-	public abstract Comparator<Job> getComparator();
+	public abstract Comparator<SimJob> getComparator();
 }

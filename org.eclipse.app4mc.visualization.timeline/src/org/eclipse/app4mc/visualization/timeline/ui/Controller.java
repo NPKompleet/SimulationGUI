@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.amalthea.model.SWModel;
 import org.eclipse.app4mc.amalthea.model.Time;
+import org.eclipse.app4mc.amalthea.model.TimeUnit;
 import org.eclipse.app4mc.visualization.timeline.utils.TimingUtils;
 
 public class Controller {
@@ -36,11 +37,36 @@ public class Controller {
 		BigInteger hyperperiod = TimingUtils.computeHyperPeriod(periodList);
 		unit = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS ? org.eclipse.app4mc.amalthea.model.TimeUnit.NS
 				: unit;
-		int index = TimingUtils.timeToConstantMap().get(unit);
+		int index = TimingUtils.TIME_TO_CONSTANT_MAP.get(unit);
 
 		viewer.setSimTimeValue(hyperperiod.toString());
 		viewer.setSimTimeUnitIndex(index);
 		viewer.setPeriodicTasks(taskPeriodMap.keySet().stream().collect(Collectors.toList()));
 	}
 
+	private TimeUnit getTimeUnitFromString(String unitString) {
+		return TimingUtils.TIME_UNIT_STRING_TO_TIME_MAP.get(unitString);
+	}
+
+	public void startSimulation(SimViewParameters simParams) {
+		String strategy = simParams.getStrategy();
+		int simTimeValue = Integer.valueOf(simParams.getSimTime());
+		TimeUnit simTimeUnit = getTimeUnitFromString(simParams.getSimTimeUnit());
+
+		// The simulation time unit is the reference time unit
+		// the time unit for all other values will be converted to that
+		// if they are different
+		int stepSizeValue = Integer.valueOf(simParams.getStepSize());
+		TimeUnit stepSizeUnit = getTimeUnitFromString(simParams.getStepSizeUnit());
+		if (stepSizeUnit != simTimeUnit)
+			stepSizeValue = TimingUtils.convertTimeUnit(stepSizeValue, stepSizeUnit, simTimeUnit).intValue();
+		int overheadValue = Integer.valueOf(simParams.getOverhead());
+		TimeUnit overheadUnit = getTimeUnitFromString(simParams.getOverheadUnit());
+		if (overheadUnit != simTimeUnit)
+			stepSizeValue = TimingUtils.convertTimeUnit(overheadValue, overheadUnit, simTimeUnit).intValue();
+
+		String etmValue = simParams.getEtm();
+		String preemption = simParams.getPreemption();
+
+	}
 }

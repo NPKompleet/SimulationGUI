@@ -5,9 +5,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.eclipse.app4mc.amalthea.model.AmaltheaFactory;
 import org.eclipse.app4mc.amalthea.model.PeriodicStimulus;
 import org.eclipse.app4mc.amalthea.model.SWModel;
 import org.eclipse.app4mc.amalthea.model.Stimulus;
@@ -18,10 +20,16 @@ import org.eclipse.app4mc.amalthea.model.util.TimeUtil;
 
 public class TimingUtils {
 
+	public static final Map<TimeUnit, java.util.concurrent.TimeUnit> AMALTHEA_TO_JAVA_TIME_MAP = getAmaltheaToJavaTimeMap();
+
+	public static final Map<TimeUnit, Integer> TIME_TO_CONSTANT_MAP = getTimeToConstantMap();
+
+	public static final Map<String, TimeUnit> TIME_UNIT_STRING_TO_TIME_MAP = getTimeUnitStringToTimeMap();
+
 	private static Comparator<TimeUnit> timeUnitComparator = new Comparator<TimeUnit>() {
 		@Override
 		public int compare(TimeUnit a, TimeUnit b) {
-			return timeToConstantMap().get(a) - timeToConstantMap().get(b);
+			return getTimeToConstantMap().get(a) - getTimeToConstantMap().get(b);
 		}
 	};
 
@@ -88,40 +96,6 @@ public class TimingUtils {
 	}
 
 	/**
-	 * A map that relates an Amalthea
-	 * {@link org.eclipse.app4mc.amalthea.model.TimeUnit} to its equivalent standard
-	 * Java {@link java.util.concurrent.TimeUnit}
-	 * 
-	 * @return The map of Amalthea to Java time units
-	 */
-	public static HashMap<TimeUnit, java.util.concurrent.TimeUnit> amaltheaToJavaTimeMap() {
-		HashMap<TimeUnit, java.util.concurrent.TimeUnit> map = new HashMap<>();
-		map.put(TimeUnit.NS, java.util.concurrent.TimeUnit.NANOSECONDS);
-		map.put(TimeUnit.US, java.util.concurrent.TimeUnit.MICROSECONDS);
-		map.put(TimeUnit.MS, java.util.concurrent.TimeUnit.MILLISECONDS);
-		map.put(TimeUnit.S, java.util.concurrent.TimeUnit.SECONDS);
-		return map;
-	}
-
-	/**
-	 * A map that relates a {@link TimeUnit} to assigned integer constants. These
-	 * constants match the index of the corresponding string in
-	 * {@value Constants#TIME_UNIT_OPTIONS}
-	 * 
-	 * @return The map of Java time units to constants
-	 * @see Constants#TIME_UNIT_OPTIONS
-	 */
-	public static HashMap<TimeUnit, Integer> timeToConstantMap() {
-		HashMap<TimeUnit, Integer> map = new HashMap<>();
-		map.put(TimeUnit.PS, -1);
-		map.put(TimeUnit.NS, 0);
-		map.put(TimeUnit.US, 1);
-		map.put(TimeUnit.MS, 2);
-		map.put(TimeUnit.S, 3);
-		return map;
-	}
-
-	/**
 	 * Gets a mapping of periodic tasks to their period
 	 * 
 	 * @param model An Amalthea {@link org.eclipse.app4mc.amalthea.model.SWModel} to
@@ -142,4 +116,70 @@ public class TimingUtils {
 		}
 		return taskListMap;
 	}
+
+	/**
+	 * Converts time from one time unit to another.
+	 * 
+	 * @param value   The initial time value.
+	 * @param oldUnit The initial unit of time to covert from.
+	 * @param newUnit The desired unit of time to be converted to.
+	 * @return the desired time value
+	 */
+	public static BigInteger convertTimeUnit(int value, TimeUnit oldUnit, TimeUnit newUnit) {
+		Time time = AmaltheaFactory.eINSTANCE.createTime();
+		time.setValue(BigInteger.valueOf(value));
+		time.setUnit(oldUnit);
+		Time newTime = TimeUtil.convertToTimeUnit(time, newUnit);
+		return newTime.getValue();
+	}
+
+	/**
+	 * A map that relates an Amalthea
+	 * {@link org.eclipse.app4mc.amalthea.model.TimeUnit} to its equivalent standard
+	 * Java {@link java.util.concurrent.TimeUnit}
+	 * 
+	 * @return The map of Amalthea to Java time units
+	 */
+	private static HashMap<TimeUnit, java.util.concurrent.TimeUnit> getAmaltheaToJavaTimeMap() {
+		HashMap<TimeUnit, java.util.concurrent.TimeUnit> map = new HashMap<>();
+		map.put(TimeUnit.NS, java.util.concurrent.TimeUnit.NANOSECONDS);
+		map.put(TimeUnit.US, java.util.concurrent.TimeUnit.MICROSECONDS);
+		map.put(TimeUnit.MS, java.util.concurrent.TimeUnit.MILLISECONDS);
+		map.put(TimeUnit.S, java.util.concurrent.TimeUnit.SECONDS);
+		return map;
+	}
+
+	/**
+	 * A map that relates a {@link TimeUnit} to assigned integer constants. These
+	 * constants match the index of the corresponding string in
+	 * {@value Constants#TIME_UNIT_OPTIONS}
+	 * 
+	 * @return The map of Java time units to constants
+	 * @see Constants#TIME_UNIT_OPTIONS
+	 */
+	private static HashMap<TimeUnit, Integer> getTimeToConstantMap() {
+		HashMap<TimeUnit, Integer> map = new HashMap<>();
+		map.put(TimeUnit.NS, 0);
+		map.put(TimeUnit.US, 1);
+		map.put(TimeUnit.MS, 2);
+		map.put(TimeUnit.S, 3);
+		return map;
+	}
+
+	/**
+	 * Create a map of String literals of time units to the equivalent
+	 * {@link TimeUnit}. Relies on {@link Constants#TIME_UNIT_OPTIONS}.
+	 * 
+	 * @return The map
+	 * @see Constants#TIME_UNIT_OPTIONS
+	 */
+	private static HashMap<String, TimeUnit> getTimeUnitStringToTimeMap() {
+		HashMap<String, TimeUnit> map = new HashMap<>();
+		map.put(Constants.TIME_UNIT_OPTIONS[0], TimeUnit.NS);
+		map.put(Constants.TIME_UNIT_OPTIONS[1], TimeUnit.US);
+		map.put(Constants.TIME_UNIT_OPTIONS[2], TimeUnit.MS);
+		map.put(Constants.TIME_UNIT_OPTIONS[3], TimeUnit.S);
+		return map;
+	}
+
 }

@@ -1,15 +1,22 @@
 package org.eclipse.app4mc.visualization.timeline.utils;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.amalthea.model.PeriodicStimulus;
+import org.eclipse.app4mc.amalthea.model.Process;
+import org.eclipse.app4mc.amalthea.model.ProcessingUnit;
 import org.eclipse.app4mc.amalthea.model.SWModel;
 import org.eclipse.app4mc.amalthea.model.Stimulus;
 import org.eclipse.app4mc.amalthea.model.Task;
 import org.eclipse.app4mc.amalthea.model.Time;
+import org.eclipse.app4mc.amalthea.model.util.DeploymentUtil;
+import org.eclipse.app4mc.amalthea.model.util.HardwareUtil;
 
 public class TaskUtil {
 
@@ -28,6 +35,19 @@ public class TaskUtil {
 			}
 		}
 		return (LinkedHashMap<String, BigInteger>) taskListMap;
+	}
+
+	public List<ProcessingUnit> getProcessorsFromModel(Amalthea model) {
+		return HardwareUtil.getAllProcessingUnitsForProcessingUnitDefinition(model, null);
+	}
+
+	public Map<String, Set<Process>> getAlmatheaProcessorToTaskMap(List<ProcessingUnit> processorList, Amalthea model) {
+		Map<String, Set<Process>> processorToTaskMap = new HashMap<>();
+		for (ProcessingUnit core : processorList) {
+			Set<Process> set = DeploymentUtil.getProcessesMappedToCore(core, model);
+			processorToTaskMap.put(core.getUniqueName(), set);
+		}
+		return processorToTaskMap;
 	}
 
 	public static BigInteger calcLCM(List<BigInteger> periodList) {

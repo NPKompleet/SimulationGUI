@@ -5,7 +5,7 @@ import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
 import desmoj.core.simulator.TimeSpan;
 
-public class Task extends SimProcess {
+public class SimTask extends SimProcess {
 	String name;
 	private int executionTime;
 	private int deadline;
@@ -13,7 +13,7 @@ public class Task extends SimProcess {
 	private int offset;
 	private SimModel model;
 
-	public Task(String name, int executionTime, int deadline, int period, int offset, Model model) {
+	public SimTask(String name, int executionTime, int deadline, int period, int offset, Model model) {
 		super(model, name, false);
 		this.name = name;
 		this.executionTime = executionTime;
@@ -33,7 +33,7 @@ public class Task extends SimProcess {
 		deadline += offset;
 
 		while (true) {
-			Job job = new Job(this, name + "_job", activationTime, executionTime, deadline, model);
+			SimJob job = new SimJob(this, name + "_job", activationTime, executionTime, deadline, model);
 			job.activate();
 			hold(new TimeSpan(period));
 			activationTime += period;

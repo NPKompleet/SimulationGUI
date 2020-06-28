@@ -4,15 +4,15 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
 
-public class Job extends SimProcess {
-	private Task parentTask;
+public class SimJob extends SimProcess {
+	private SimTask parentTask;
 	private int activationTime;
 	private int executionTime;
 	private int absoluteDeadline;
 	private SimModel model;
 	private String name;
 
-	public Job(Task parentTask, String name, int activationTime, int executionTime, int deadline, Model model) {
+	public SimJob(SimTask parentTask, String name, int activationTime, int executionTime, int deadline, Model model) {
 		super(model, name, true);
 		this.parentTask = parentTask;
 		this.activationTime = activationTime;
@@ -60,7 +60,7 @@ public class Job extends SimProcess {
 		return absoluteDeadline;
 	}
 
-	public Task getParentTask() {
+	public SimTask getParentTask() {
 		return parentTask;
 	}
 

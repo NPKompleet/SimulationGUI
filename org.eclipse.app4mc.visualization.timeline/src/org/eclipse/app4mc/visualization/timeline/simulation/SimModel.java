@@ -10,7 +10,7 @@ import desmoj.core.simulator.ProcessQueue;
 
 public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
-	protected LinkedBlockingDeque<Job> jobQueue;
+	protected LinkedBlockingDeque<SimJob> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
 	protected int schedulerOverhead = 0;
 	protected boolean doSchedule = false;
@@ -32,17 +32,17 @@ public class SimModel extends Model {
 		processor = new Processor(this, "Processor", true, new EDFScheduler());
 		processor.activate();
 
-		Task task1 = new Task("Task1", 9, 9, 10, 0, this);
+		SimTask task1 = new SimTask("Task1", 9, 9, 10, 0, this);
 		task1.activate();
-		Task task2 = new Task("Task2", 3, 4, 5, 0, this);
+		SimTask task2 = new SimTask("Task2", 3, 4, 5, 0, this);
 		task2.activate();
-		Task task3 = new Task("Task3", 3, 3, 4, 5, this);
+		SimTask task3 = new SimTask("Task3", 3, 3, 4, 5, this);
 		task3.activate();
 	}
 
 	@Override
 	public void init() {
-		jobQueue = new LinkedBlockingDeque<Job>();
+		jobQueue = new LinkedBlockingDeque<SimJob>();
 		processorQueue = new ProcessQueue<Processor>(this, "Processor Queue", false, false);
 		priorityJobCode = new InterruptCode("priority job arrived");
 	}

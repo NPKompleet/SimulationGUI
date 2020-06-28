@@ -342,10 +342,7 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	private void startSimulation() {
-		System.out.println("Sim Param> " + simViewParams.getSimTime());
-		System.out.println("Sim Param> " + simViewParams.getSimTimeUnit());
-		System.out.println("Sim Param> " + simViewParams.getStrategy());
-		System.out.println("Sim Param> " + simViewParams.getOverheadUnit());
+		controller.startSimulation(simViewParams);
 	}
 
 	@Override

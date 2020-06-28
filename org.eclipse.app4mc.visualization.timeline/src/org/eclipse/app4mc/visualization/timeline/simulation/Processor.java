@@ -13,7 +13,7 @@ import desmoj.core.simulator.TimeSpan;
 public class Processor extends SimProcess {
 	private SimModel model;
 	private Scheduler scheduler;
-	Job currentJob;
+	SimJob currentJob;
 	protected boolean isBusy;
 
 	public Processor(Model model, String name, boolean showInTrace, Scheduler scheduler) {
@@ -66,7 +66,7 @@ public class Processor extends SimProcess {
 		}
 	}
 
-	public boolean checkIsPriority(Job job) {
+	public boolean checkIsPriority(SimJob job) {
 		if (currentJob != null && job == Stream.of(job, currentJob).min(scheduler.getComparator())
 				.orElseThrow(NoSuchElementException::new))
 			return true;
