@@ -29,7 +29,7 @@ public class TimingUtils {
 	private static Comparator<TimeUnit> timeUnitComparator = new Comparator<TimeUnit>() {
 		@Override
 		public int compare(TimeUnit a, TimeUnit b) {
-			return getTimeToConstantMap().get(a) - getTimeToConstantMap().get(b);
+			return TIME_TO_CONSTANT_MAP.get(a) - TIME_TO_CONSTANT_MAP.get(b);
 		}
 	};
 

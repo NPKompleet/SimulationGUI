@@ -1,53 +1,70 @@
 package org.eclipse.app4mc.visualization.timeline.utils;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.amalthea.model.PeriodicStimulus;
 import org.eclipse.app4mc.amalthea.model.Process;
 import org.eclipse.app4mc.amalthea.model.ProcessingUnit;
-import org.eclipse.app4mc.amalthea.model.SWModel;
-import org.eclipse.app4mc.amalthea.model.Stimulus;
 import org.eclipse.app4mc.amalthea.model.Task;
-import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.amalthea.model.util.DeploymentUtil;
 import org.eclipse.app4mc.amalthea.model.util.HardwareUtil;
 
 public class TaskUtil {
 
-	public static LinkedHashMap<String, BigInteger> generateTaskData(SWModel model) {
-		Map<String, BigInteger> taskListMap = new LinkedHashMap<>();
-
-		List<Task> taskList = model.getTasks();
-		for (Task task : taskList) {
-			Stimulus stimuli = task.getStimuli().get(0);
-
-			if (stimuli instanceof PeriodicStimulus) {
-				Time period = ((PeriodicStimulus) stimuli).getRecurrence();
-//				period = alignPeriodToMS(period);
-				System.out.println("Period " + period);
-				taskListMap.put(task.getName(), period.getValue());
-			}
-		}
-		return (LinkedHashMap<String, BigInteger>) taskListMap;
-	}
-
+	/**
+	 * Gets all the processing unit in an Amalthea model.
+	 * 
+	 * @param model The model to get the information from.
+	 * @return A list of all the processing units in the model.
+	 */
 	public List<ProcessingUnit> getProcessorsFromModel(Amalthea model) {
 		return HardwareUtil.getAllProcessingUnitsForProcessingUnitDefinition(model, null);
 	}
 
-	public Map<String, Set<Process>> getAlmatheaProcessorToTaskMap(List<ProcessingUnit> processorList, Amalthea model) {
-		Map<String, Set<Process>> processorToTaskMap = new HashMap<>();
+	/**
+	 * Gets a {@link LinkeHashMap} of processing unit names to Tasks assigned to it
+	 * from a model.
+	 * <p>
+	 * <b>Note:</b> It only returns periodic tasks for now.
+	 * </p>
+	 * 
+	 * @param processorList A list of the processors.
+	 * @param model         The Amalthea model to get the task mapping from.
+	 * @return A LinkedHashMap of processing unit names to periodic tasks.
+	 */
+	public LinkedHashMap<String, List<Task>> getAlmatheaProcessorToTaskMap(List<ProcessingUnit> processorList,
+			Amalthea model) {
+		LinkedHashMap<String, List<Task>> processorToTaskMap = new LinkedHashMap<>();
 		for (ProcessingUnit core : processorList) {
 			Set<Process> set = DeploymentUtil.getProcessesMappedToCore(core, model);
-			processorToTaskMap.put(core.getUniqueName(), set);
+			List<Task> taskProcessList = set.stream().filter(p -> p instanceof Task).map(t -> (Task) t)
+					.filter(t -> t.getStimuli().get(0) instanceof PeriodicStimulus).collect(Collectors.toList());
+			processorToTaskMap.put(core.getUniqueName(), taskProcessList);
 		}
 		return processorToTaskMap;
+	}
+
+	/**
+	 * This method works just like {@link #getAlmatheaProcessorToTaskMap} except
+	 * that it returns a list of task names instead.
+	 * 
+	 * @param map A LinkedHashMap that contains a mapping of processors to periodic
+	 *            tasks assigned to them.
+	 * @return A LinkedHashMap of processors names to the names of tasks mapped to
+	 *         them in the model.
+	 */
+	public LinkedHashMap<String, List<String>> getProcessNameToTaskNameMap(LinkedHashMap<String, List<Task>> map) {
+		LinkedHashMap<String, List<String>> processorNameToTaskNameList = new LinkedHashMap<>();
+		map.forEach((key, value) -> {
+			List<String> taskNameList = value.stream().map(t -> t.getUniqueName()).collect(Collectors.toList());
+			processorNameToTaskNameList.put(key, taskNameList);
+		});
+		return processorNameToTaskNameList;
 	}
 
 	public static BigInteger calcLCM(List<BigInteger> periodList) {

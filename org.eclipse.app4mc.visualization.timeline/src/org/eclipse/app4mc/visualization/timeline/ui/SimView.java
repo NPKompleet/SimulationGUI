@@ -327,7 +327,7 @@ public class SimView implements Visualization, ISimView {
 		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
 
 		// Data binding for preemption
-		targetObservableValue = WidgetProperties.comboSelection().observe(cmbETM);
+		targetObservableValue = WidgetProperties.comboSelection().observe(cmbPreemptn);
 		modelObservableValue = PojoProperties.value(SimViewParameters.class, "preemption").observe(simViewParams);
 		dBindCtx.bindValue(targetObservableValue, modelObservableValue);
 	}
