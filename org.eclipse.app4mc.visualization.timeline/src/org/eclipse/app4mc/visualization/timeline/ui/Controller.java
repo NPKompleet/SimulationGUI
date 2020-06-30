@@ -2,17 +2,21 @@ package org.eclipse.app4mc.visualization.timeline.ui;
 
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.amalthea.model.SWModel;
+import org.eclipse.app4mc.amalthea.model.Task;
 import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.amalthea.model.TimeUnit;
+import org.eclipse.app4mc.visualization.timeline.utils.TaskUtil;
 import org.eclipse.app4mc.visualization.timeline.utils.TimingUtils;
 
 public class Controller {
 	Amalthea model;
 	ISimView viewer;
+	private LinkedHashMap<String, List<String>> filterData;
 
 	public Controller(Amalthea model, ISimView viewer) {
 		this.model = model;
@@ -68,5 +72,14 @@ public class Controller {
 		String etmValue = simParams.getEtm();
 		String preemption = simParams.getPreemption();
 
+		LinkedHashMap<String, List<Task>> processorToTaskMap = TaskUtil.getAlmatheaProcessorToTaskMap(model);
+		filterData = TaskUtil.getProcessNameToTaskNameMap(processorToTaskMap);
+		System.out.println(filterData.size());
+		viewer.enableFiltering();
 	}
+
+	public LinkedHashMap<String, List<String>> getFilterData() {
+		return filterData;
+	}
+
 }

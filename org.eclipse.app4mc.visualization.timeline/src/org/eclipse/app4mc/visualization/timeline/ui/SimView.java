@@ -62,6 +62,7 @@ public class SimView implements Visualization, ISimView {
 	private ListViewer listViewer;
 	private Controller controller;
 	private SimViewParameters simViewParams;
+	private Button btnFilter;
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -239,13 +240,14 @@ public class SimView implements Visualization, ISimView {
 
 		updateWidgetData(model);
 
-		Button btnFilter = new Button(grpParameters, SWT.NONE);
+		btnFilter = new Button(grpParameters, SWT.NONE);
 		btnFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnFilter.setText("Filter");
+		btnFilter.setEnabled(false);
 		btnFilter.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
-				new FilterDialog(parent.getShell()).open();
+				new FilterDialog(controller, parent.getShell()).open();
 			}
 		});
 
@@ -358,6 +360,11 @@ public class SimView implements Visualization, ISimView {
 	@Override
 	public void setPeriodicTasks(java.util.List<String> taskList) {
 		listViewer.setInput(taskList);
+	}
+
+	@Override
+	public void enableFiltering() {
+		btnFilter.setEnabled(true);
 	}
 
 }

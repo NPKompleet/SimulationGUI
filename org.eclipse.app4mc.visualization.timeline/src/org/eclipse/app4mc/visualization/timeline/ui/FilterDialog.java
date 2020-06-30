@@ -1,5 +1,8 @@
 package org.eclipse.app4mc.visualization.timeline.ui;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -9,15 +12,19 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 public class FilterDialog extends Dialog {
+	Map<String, List<String>> dataMap;
 
-	protected FilterDialog(Shell parentShell) {
+	protected FilterDialog(Controller controller, Shell parentShell) {
 		super(parentShell);
+		this.dataMap = controller.getFilterData();
 	}
 
 	@Override
@@ -31,18 +38,17 @@ public class FilterDialog extends Dialog {
 		text.setText("Select the cores/tasks whose simulation you want to view:");
 		Tree tree = new Tree(container, SWT.CHECK | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		TreeItem item1 = new TreeItem(tree, SWT.NULL);
-		item1.setText("Item1");
-		TreeItem item2 = new TreeItem(tree, SWT.NULL);
-		item2.setText("Item2");
-		TreeItem item3 = new TreeItem(tree, SWT.NULL);
-		item3.setText("Item3");
-		TreeItem item4 = new TreeItem(tree, SWT.NULL);
-		item4.setText("Item4");
-		TreeItem item5 = new TreeItem(tree, SWT.NULL);
-		item5.setText("Item5");
-		TreeItem item6 = new TreeItem(item5, SWT.NULL);
-		item6.setText("Item6");
+
+		for (Map.Entry<String, List<String>> entry : dataMap.entrySet()) {
+			TreeItem coreItem = new TreeItem(tree, SWT.NULL);
+			coreItem.setText(entry.getKey());
+			coreItem.setChecked(true);
+			for (String task : entry.getValue()) {
+				TreeItem taskItem = new TreeItem(coreItem, SWT.NULL);
+				taskItem.setText(task);
+				taskItem.setChecked(true);
+			}
+		}
 
 		Composite buttonComp = new Composite(container, SWT.NONE);
 		buttonComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
@@ -50,11 +56,23 @@ public class FilterDialog extends Dialog {
 		rLayout.marginBottom = 10;
 		buttonComp.setLayout(rLayout);
 
-		Button selectAllButton = new Button(buttonComp, SWT.PUSH);
+		Button selectAllButton = new Button(buttonComp, SWT.NONE);
 		selectAllButton.setText("Select All");
+		selectAllButton.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				tree.selectAll();
+			}
+		});
 
-		Button deSelAllButton = new Button(buttonComp, SWT.PUSH);
+		Button deSelAllButton = new Button(buttonComp, SWT.NONE);
 		deSelAllButton.setText("Deselect All");
+		deSelAllButton.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				tree.deselectAll();
+			}
+		});
 
 		return container;
 	}

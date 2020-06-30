@@ -8,4 +8,6 @@ public interface ISimView {
 	public void setSimTimeUnitIndex(int index);
 
 	public void setPeriodicTasks(List<String> taskList);
+
+	public void enableFiltering();
 }

@@ -22,8 +22,8 @@ public class TaskUtil {
 	 * @param model The model to get the information from.
 	 * @return A list of all the processing units in the model.
 	 */
-	public List<ProcessingUnit> getProcessorsFromModel(Amalthea model) {
-		return HardwareUtil.getAllProcessingUnitsForProcessingUnitDefinition(model, null);
+	private static List<ProcessingUnit> getProcessorsFromModel(Amalthea model) {
+		return HardwareUtil.getModulesFromHwModel(ProcessingUnit.class, model);
 	}
 
 	/**
@@ -32,19 +32,21 @@ public class TaskUtil {
 	 * <p>
 	 * <b>Note:</b> It only returns periodic tasks for now.
 	 * </p>
-	 * 
-	 * @param processorList A list of the processors.
-	 * @param model         The Amalthea model to get the task mapping from.
+	 *
+	 * @param model The Amalthea model to get the task mapping from.
 	 * @return A LinkedHashMap of processing unit names to periodic tasks.
 	 */
-	public LinkedHashMap<String, List<Task>> getAlmatheaProcessorToTaskMap(List<ProcessingUnit> processorList,
-			Amalthea model) {
+	public static LinkedHashMap<String, List<Task>> getAlmatheaProcessorToTaskMap(Amalthea model) {
+		List<ProcessingUnit> processorList = getProcessorsFromModel(model);
 		LinkedHashMap<String, List<Task>> processorToTaskMap = new LinkedHashMap<>();
+
 		for (ProcessingUnit core : processorList) {
 			Set<Process> set = DeploymentUtil.getProcessesMappedToCore(core, model);
 			List<Task> taskProcessList = set.stream().filter(p -> p instanceof Task).map(t -> (Task) t)
 					.filter(t -> t.getStimuli().get(0) instanceof PeriodicStimulus).collect(Collectors.toList());
-			processorToTaskMap.put(core.getUniqueName(), taskProcessList);
+			// Only add entry is list is not empty
+			if (!taskProcessList.isEmpty())
+				processorToTaskMap.put(core.getName(), taskProcessList);
 		}
 		return processorToTaskMap;
 	}
@@ -58,10 +60,11 @@ public class TaskUtil {
 	 * @return A LinkedHashMap of processors names to the names of tasks mapped to
 	 *         them in the model.
 	 */
-	public LinkedHashMap<String, List<String>> getProcessNameToTaskNameMap(LinkedHashMap<String, List<Task>> map) {
+	public static LinkedHashMap<String, List<String>> getProcessNameToTaskNameMap(
+			LinkedHashMap<String, List<Task>> map) {
 		LinkedHashMap<String, List<String>> processorNameToTaskNameList = new LinkedHashMap<>();
 		map.forEach((key, value) -> {
-			List<String> taskNameList = value.stream().map(t -> t.getUniqueName()).collect(Collectors.toList());
+			List<String> taskNameList = value.stream().map(t -> t.getName()).collect(Collectors.toList());
 			processorNameToTaskNameList.put(key, taskNameList);
 		});
 		return processorNameToTaskNameList;
