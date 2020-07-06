@@ -1,4 +1,4 @@
-package org.eclipse.app4mc.visualization.timeline.utils.test;
+package org.eclipse.app4mc.visualization.timeline.unittest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
