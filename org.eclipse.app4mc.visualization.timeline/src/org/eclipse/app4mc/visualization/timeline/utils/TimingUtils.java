@@ -77,10 +77,17 @@ public class TimingUtils {
 	/**
 	 * Calculates the hyperperiod (LCM) of a list of task periods
 	 * 
-	 * @param periodList A list of the periods
-	 * @return The hyperperiod
+	 * @param periodList A list of the periods.
+	 * @return The hyperperiod.
+	 * @throws UnalignedPeriodException
+	 * @throws {@link                   UnalignedPeriodException} if the periods in
+	 *                                  the list have different time units.
 	 */
-	public static BigInteger computeHyperPeriod(List<Time> periodList) {
+	public static BigInteger computeHyperPeriod(List<Time> periodList) throws UnalignedPeriodException {
+		TimeUnit unit = periodList.get(0).getUnit();
+		if (periodList.stream().anyMatch(x -> x.getUnit() != unit)) {
+			throw new UnalignedPeriodException();
+		}
 		BigInteger lcm = periodList.get(0).getValue();
 		for (boolean flag = true; flag;) {
 			for (Time x : periodList) {

@@ -12,6 +12,7 @@ import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.amalthea.model.TimeUnit;
 import org.eclipse.app4mc.visualization.timeline.utils.TaskUtil;
 import org.eclipse.app4mc.visualization.timeline.utils.TimingUtils;
+import org.eclipse.app4mc.visualization.timeline.utils.UnalignedPeriodException;
 
 public class Controller {
 	Amalthea model;
@@ -38,7 +39,12 @@ public class Controller {
 		periodList = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS
 				? TimingUtils.getAlignedPeriods(periodList, org.eclipse.app4mc.amalthea.model.TimeUnit.NS)
 				: TimingUtils.getAlignedPeriods(periodList, unit);
-		BigInteger hyperperiod = TimingUtils.computeHyperPeriod(periodList);
+		BigInteger hyperperiod = null;
+		try {
+			hyperperiod = TimingUtils.computeHyperPeriod(periodList);
+		} catch (UnalignedPeriodException e) {
+			e.printStackTrace();
+		}
 		unit = unit == org.eclipse.app4mc.amalthea.model.TimeUnit.PS ? org.eclipse.app4mc.amalthea.model.TimeUnit.NS
 				: unit;
 		int index = TimingUtils.TIME_TO_CONSTANT_MAP.get(unit);
