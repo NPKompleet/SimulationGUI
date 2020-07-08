@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<am:Amalthea xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:am="http://app4mc.eclipse.org/amalthea/0.9.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <swModel>
+    <tasks xmi:id="Task_10MS?type=Task" name="Task_10MS" stimuli="Timer_10MS?type=PeriodicStimulus" preemption="preemptive" multipleTaskActivationLimit="10">
+      <activityGraph>
+        <items xsi:type="am:Group" name="CallSequence" ordered="true">
+          <items xsi:type="am:RunnableCall" runnable="CheckPlausability?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakeActuatorMonitor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="DiagnosisArbiter?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="VehicleStateMonitor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakeForceCalculation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakeSafetyMonitor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="ABSCalculation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakeForceActuation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="CaliperPositionCalculation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakeActuator?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="StopLightActuator?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakePedalSensorDiagnosis?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakePedalSensorTranslation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BrakePedalSensorVoter?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="DecelerationSensorDiagnosis?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="DecelerationSensorTranslation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="VehicleSpeedSensorDiagnosis?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="DecelerationSensorVoter?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="VehicleSpeedSensorVoter?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="VehicleSpeedSensorTranslation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="WheelSpeedSensorTranslation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="WheelSpeedSensorDiagnosis?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="CylNumObserver?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="WheelSpeedSensorVoter?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="ThrottleController?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="APedVoter?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="BaseFuelMass?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="ThrottleActuator?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="TotalFuelMass?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="TransientFuelMass?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="InjectionTimeActuation?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="IgnitionTiming?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="IgnitionTimeActuation?type=Runnable"/>
+        </items>
+      </activityGraph>
+    </tasks>
+    <tasks xmi:id="Task_20MS?type=Task" name="Task_20MS" stimuli="Timer_20MS?type=PeriodicStimulus" preemption="preemptive" multipleTaskActivationLimit="10">
+      <activityGraph>
+        <items xsi:type="am:Group" name="CallSequence" ordered="true">
+          <items xsi:type="am:RunnableCall" runnable="BrakeForceArbiter?type=Runnable"/>
+        </items>
+      </activityGraph>
+    </tasks>
+    <tasks xmi:id="Task_5MS?type=Task" name="Task_5MS" stimuli="Timer_5MS?type=PeriodicStimulus" preemption="preemptive" multipleTaskActivationLimit="10">
+      <activityGraph>
+        <items xsi:type="am:Group" name="CallSequence" ordered="true">
+          <items xsi:type="am:RunnableCall" runnable="EcuBrakeActuator?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="EcuStopLightActuator?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="EcuBrakePedalSensor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="EcuDecelerationSensor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="EcuVehicleSpeedSensor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="EcuWheelSpeedSensor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="APedSensor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="ThrottleSensor?type=Runnable"/>
+          <items xsi:type="am:RunnableCall" runnable="MassAirFlowSensor?type=Runnable"/>
+        </items>
+      </activityGraph>
+    </tasks>
+    <runnables xmi:id="ABSCalculation?type=Runnable" name="ABSCalculation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="VotedDecelerationRate?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="VotedVehicleSpeed?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="VotedWheelSpeed?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="ArbitratedBrakeForce?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="ABSActivation?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="ABSMode?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="APedSensor?type=Runnable" name="APedSensor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="APedSensor1Voltage?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="APedSensor2Voltage?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="APedPosition1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="APedPosition2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="APedVoter?type=Runnable" name="APedVoter" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="APedPosition1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="APedPosition2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="VotedAPedPosition?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BaseFuelMass?type=Runnable" name="BaseFuelMass" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="MassAirFlow?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BaseFuelMassPerStroke?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="MAFRate?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakeActuator?type=Runnable" name="BrakeActuator" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="CaliperPosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BrakeForceVoltage?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakeActuatorMonitor?type=Runnable" name="BrakeActuatorMonitor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakeForce?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeForceFeedback?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakeForceActuation?type=Runnable" name="BrakeForceActuation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="ABSActivation?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="ABSMode?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BrakeForce?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeForceCurrent?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakeForceArbiter?type=Runnable" name="BrakeForceArbiter" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="CalculatedBrakeForce?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeSafetyState?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="ArbitratedBrakeForce?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakeForceCalculation?type=Runnable" name="BrakeForceCalculation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeForceFeedback?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="ArbitratedDiagnosisRequest?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="MonitoredVehicleState?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeSafetyLevel?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="CalculatedBrakeForce?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeMonitorLevel?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakePedalSensorDiagnosis?type=Runnable" name="BrakePedalSensorDiagnosis" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPositionVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPositionVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakePedalSensorTranslation?type=Runnable" name="BrakePedalSensorTranslation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPositionVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPositionVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPosition1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPosition2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakePedalSensorVoter?type=Runnable" name="BrakePedalSensorVoter" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPosition1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPosition2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="VotedBrakePedalPosition?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="BrakeSafetyMonitor?type=Runnable" name="BrakeSafetyMonitor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeForceFeedback?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="ArbitratedDiagnosisRequest?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="MonitoredVehicleState?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeMonitorLevel?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BrakeSafetyLevel?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeSafetyState?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="CaliperPositionCalculation?type=Runnable" name="CaliperPositionCalculation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="CaliperPosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakeForceCurrent?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="CaliperPosition?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="CheckPlausability?type=Runnable" name="CheckPlausability" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="VotedBrakePedalPosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPosition?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="CylNumObserver?type=Runnable" name="CylNumObserver" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="CylinderNumber?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="TriggeredCylinderNumber?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="DecelerationSensorDiagnosis?type=Runnable" name="DecelerationSensorDiagnosis" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="DecelerationVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="DecelerationVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="DecelerationSensorTranslation?type=Runnable" name="DecelerationSensorTranslation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="DecelerationVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="DecelerationVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="DecelerationRate1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="DecelerationRate2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="DecelerationSensorVoter?type=Runnable" name="DecelerationSensorVoter" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="DecelerationRate1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="DecelerationRate2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="VotedDecelerationRate?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="DiagnosisArbiter?type=Runnable" name="DiagnosisArbiter" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="ArbitratedDiagnosisRequest?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="EcuBrakeActuator?type=Runnable" name="EcuBrakeActuator" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakeForceVoltage?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="EcuBrakePedalSensor?type=Runnable" name="EcuBrakePedalSensor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="144000" upperBound="176000" average="160000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPositionVoltage1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="BrakePedalPositionVoltage2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="EcuDecelerationSensor?type=Runnable" name="EcuDecelerationSensor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="144000" upperBound="176000" average="160000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="DecelerationVoltage1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="DecelerationVoltage2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="EcuStopLightActuator?type=Runnable" name="EcuStopLightActuator" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BrakeApplication?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="EcuVehicleSpeedSensor?type=Runnable" name="EcuVehicleSpeedSensor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeedVoltage1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeedVoltage2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="EcuWheelSpeedSensor?type=Runnable" name="EcuWheelSpeedSensor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="WheelSpeedVoltage1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="WheelSpeedVoltage2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="IgnitionTimeActuation?type=Runnable" name="IgnitionTimeActuation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="TriggeredCylinderNumber?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime3?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime4?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime5?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime6?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime7?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime8?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="IgnitionTiming?type=Runnable" name="IgnitionTiming" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="MAFRate?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="IgnitionTime?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="InjectionTimeActuation?type=Runnable" name="InjectionTimeActuation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="TriggeredCylinderNumber?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="TotalFuelMassPerStroke?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime3?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime4?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime5?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime6?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime7?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="InjectionTime8?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="MassAirFlowSensor?type=Runnable" name="MassAirFlowSensor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="MAFSensorVoltage?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="MassAirFlow?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="StopLightActuator?type=Runnable" name="StopLightActuator" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="ArbitratedBrakeForce?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="BrakeApplication?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="ThrottleActuator?type=Runnable" name="ThrottleActuator" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="DesiredThrottlePosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="DesiredThrottlePositionVoltage?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="ThrottleController?type=Runnable" name="ThrottleController" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="VotedAPedPosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="ThrottlePosition?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="DesiredThrottlePosition?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="ThrottleSensor?type=Runnable" name="ThrottleSensor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="ThrottleSensor1Voltage?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="ThrottleSensor2Voltage?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="ThrottlePosition?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="TotalFuelMass?type=Runnable" name="TotalFuelMass" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="TransientFuelMassPerStroke?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="TotalFuelMassPerStroke?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="TransientFuelMass?type=Runnable" name="TransientFuelMass" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="BaseFuelMassPerStroke?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="TransientFuelMassPerStroke?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="VehicleSpeedSensorDiagnosis?type=Runnable" name="VehicleSpeedSensorDiagnosis" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeedVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeedVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="VehicleSpeedSensorTranslation?type=Runnable" name="VehicleSpeedSensorTranslation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeedVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeedVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeed1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeed2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="VehicleSpeedSensorVoter?type=Runnable" name="VehicleSpeedSensorVoter" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeed1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="VehicleSpeed2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="VotedVehicleSpeed?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="VehicleStateMonitor?type=Runnable" name="VehicleStateMonitor" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="MonitoredVehicleState?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="WheelSpeedSensorDiagnosis?type=Runnable" name="WheelSpeedSensorDiagnosis" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="WheelSpeedVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="WheelSpeedVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="WheelSpeedSensorTranslation?type=Runnable" name="WheelSpeedSensorTranslation" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="WheelSpeedVoltage1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="WheelSpeedVoltage2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="WheelSpeed1?type=Label" access="write" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="WheelSpeed2?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <runnables xmi:id="WheelSpeedSensorVoter?type=Runnable" name="WheelSpeedSensorVoter" callback="false" service="false">
+      <activityGraph>
+        <items xsi:type="am:LabelAccess" data="WheelSpeed1?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:LabelAccess" data="WheelSpeed2?type=Label" access="read" dataStability="inherited"/>
+        <items xsi:type="am:Ticks">
+          <default xsi:type="am:DiscreteValueWeibullEstimatorsDistribution" lowerBound="72000" upperBound="88000" average="80000.0" pRemainPromille="0.5"/>
+        </items>
+        <items xsi:type="am:LabelAccess" data="VotedWheelSpeed?type=Label" access="write" dataStability="inherited"/>
+      </activityGraph>
+    </runnables>
+    <labels xmi:id="ABSActivation?type=Label" name="ABSActivation" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="ABSMode?type=Label" name="ABSMode" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="APedPosition1?type=Label" name="APedPosition1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="APedPosition2?type=Label" name="APedPosition2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="APedSensor1Voltage?type=Label" name="APedSensor1Voltage" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="APedSensor2Voltage?type=Label" name="APedSensor2Voltage" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="ArbitratedBrakeForce?type=Label" name="ArbitratedBrakeForce" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="ArbitratedDiagnosisRequest?type=Label" name="ArbitratedDiagnosisRequest" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BaseFuelMassPerStroke?type=Label" name="BaseFuelMassPerStroke" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeApplication?type=Label" name="BrakeApplication" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeForce?type=Label" name="BrakeForce" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeForceCurrent?type=Label" name="BrakeForceCurrent" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeForceFeedback?type=Label" name="BrakeForceFeedback" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeForceVoltage?type=Label" name="BrakeForceVoltage" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeMonitorLevel?type=Label" name="BrakeMonitorLevel" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakePedalPosition?type=Label" name="BrakePedalPosition" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakePedalPosition1?type=Label" name="BrakePedalPosition1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakePedalPosition2?type=Label" name="BrakePedalPosition2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakePedalPositionVoltage1?type=Label" name="BrakePedalPositionVoltage1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakePedalPositionVoltage2?type=Label" name="BrakePedalPositionVoltage2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeSafetyLevel?type=Label" name="BrakeSafetyLevel" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="BrakeSafetyState?type=Label" name="BrakeSafetyState" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="CalculatedBrakeForce?type=Label" name="CalculatedBrakeForce" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="CaliperPosition?type=Label" name="CaliperPosition" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="CylinderNumber?type=Label" name="CylinderNumber" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="DecelerationRate1?type=Label" name="DecelerationRate1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="DecelerationRate2?type=Label" name="DecelerationRate2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="DecelerationVoltage1?type=Label" name="DecelerationVoltage1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="DecelerationVoltage2?type=Label" name="DecelerationVoltage2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="DesiredThrottlePosition?type=Label" name="DesiredThrottlePosition" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="DesiredThrottlePositionVoltage?type=Label" name="DesiredThrottlePositionVoltage" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime?type=Label" name="IgnitionTime" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime1?type=Label" name="IgnitionTime1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime2?type=Label" name="IgnitionTime2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime3?type=Label" name="IgnitionTime3" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime4?type=Label" name="IgnitionTime4" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime5?type=Label" name="IgnitionTime5" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime6?type=Label" name="IgnitionTime6" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime7?type=Label" name="IgnitionTime7" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="IgnitionTime8?type=Label" name="IgnitionTime8" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime1?type=Label" name="InjectionTime1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime2?type=Label" name="InjectionTime2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime3?type=Label" name="InjectionTime3" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime4?type=Label" name="InjectionTime4" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime5?type=Label" name="InjectionTime5" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime6?type=Label" name="InjectionTime6" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime7?type=Label" name="InjectionTime7" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="InjectionTime8?type=Label" name="InjectionTime8" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="MAFRate?type=Label" name="MAFRate" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="MAFSensorVoltage?type=Label" name="MAFSensorVoltage" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="MassAirFlow?type=Label" name="MassAirFlow" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="MonitoredVehicleState?type=Label" name="MonitoredVehicleState" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="ThrottlePosition?type=Label" name="ThrottlePosition" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="ThrottleSensor1Voltage?type=Label" name="ThrottleSensor1Voltage" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="ThrottleSensor2Voltage?type=Label" name="ThrottleSensor2Voltage" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="TotalFuelMassPerStroke?type=Label" name="TotalFuelMassPerStroke" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="TransientFuelMassPerStroke?type=Label" name="TransientFuelMassPerStroke" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="TriggeredCylinderNumber?type=Label" name="TriggeredCylinderNumber" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="VehicleSpeed1?type=Label" name="VehicleSpeed1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="VehicleSpeed2?type=Label" name="VehicleSpeed2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="VehicleSpeedVoltage1?type=Label" name="VehicleSpeedVoltage1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="VehicleSpeedVoltage2?type=Label" name="VehicleSpeedVoltage2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="VotedAPedPosition?type=Label" name="VotedAPedPosition" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="VotedBrakePedalPosition?type=Label" name="VotedBrakePedalPosition" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="VotedDecelerationRate?type=Label" name="VotedDecelerationRate" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="VotedVehicleSpeed?type=Label" name="VotedVehicleSpeed" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="VotedWheelSpeed?type=Label" name="VotedWheelSpeed" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="WheelSpeed1?type=Label" name="WheelSpeed1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="WheelSpeed2?type=Label" name="WheelSpeed2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="8" unit="bit"/>
+    </labels>
+    <labels xmi:id="WheelSpeedVoltage1?type=Label" name="WheelSpeedVoltage1" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+    <labels xmi:id="WheelSpeedVoltage2?type=Label" name="WheelSpeedVoltage2" constant="false" bVolatile="false" dataStability="noProtection">
+      <size value="16" unit="bit"/>
+    </labels>
+  </swModel>
+  <hwModel>
+    <definitions xsi:type="am:ProcessingUnitDefinition" xmi:id="DefaultCore?type=ProcessingUnitDefinition" name="DefaultCore" puType="CPU" features="Instructions/IPC_1?type=HwFeature"/>
+    <definitions xsi:type="am:MemoryDefinition" xmi:id="DefaultMemory?type=MemoryDefinition" name="DefaultMemory">
+      <size value="4" unit="MB"/>
+      <accessLatency xsi:type="am:DiscreteValueConstant" value="2"/>
+    </definitions>
+    <featureCategories xmi:id="Instructions?type=HwFeatureCategory" name="Instructions" featureType="performance">
+      <features xmi:id="Instructions/IPC_1?type=HwFeature" name="IPC_1" value="1.0"/>
+    </featureCategories>
+    <structures xmi:id="Democar?type=HwStructure" name="Democar" structureType="System">
+      <structures xmi:id="ECU_1?type=HwStructure" name="ECU_1" structureType="ECU">
+        <structures xmi:id="Microcontroller_1?type=HwStructure" name="Microcontroller_1" structureType="Microcontroller">
+          <modules xsi:type="am:Memory" xmi:id="Mem_1?type=Memory" name="Mem_1" frequencyDomain="FrequencyDomain_1?type=FrequencyDomain" definition="DefaultMemory?type=MemoryDefinition">
+            <ports xmi:id="Mem_1/port?type=HwPort" name="port" bitWidth="32" priority="0" portType="responder"/>
+          </modules>
+          <modules xsi:type="am:ProcessingUnit" xmi:id="Core_1?type=ProcessingUnit" name="Core_1" frequencyDomain="FrequencyDomain_1?type=FrequencyDomain" definition="DefaultCore?type=ProcessingUnitDefinition">
+            <ports xmi:id="Core_1/port?type=HwPort" name="port" bitWidth="32" priority="0" portType="initiator"/>
+          </modules>
+          <connections xmi:id="Microcontroller_1/con1?type=HwConnection" name="con1" port1="Core_1/port?type=HwPort" port2="Mem_1/port?type=HwPort"/>
+        </structures>
+      </structures>
+    </structures>
+    <domains xsi:type="am:FrequencyDomain" xmi:id="FrequencyDomain_1?type=FrequencyDomain" name="FrequencyDomain_1" clockGating="false">
+      <defaultValue value="200.0" unit="MHz"/>
+    </domains>
+  </hwModel>
+  <osModel>
+    <operatingSystems name="OperatingSystem">
+      <taskSchedulers xmi:id="Task_Scheduler_Core_1?type=TaskScheduler" name="Task_Scheduler_Core_1">
+        <schedulingAlgorithm xsi:type="am:OSEK"/>
+      </taskSchedulers>
+    </operatingSystems>
+  </osModel>
+  <stimuliModel>
+    <stimuli xsi:type="am:PeriodicStimulus" xmi:id="Timer_10MS?type=PeriodicStimulus" name="Timer_10MS">
+      <recurrence value="10" unit="ms"/>
+      <offset value="0" unit="ms"/>
+    </stimuli>
+    <stimuli xsi:type="am:PeriodicStimulus" xmi:id="Timer_20MS?type=PeriodicStimulus" name="Timer_20MS">
+      <recurrence value="20" unit="ms"/>
+      <offset value="0" unit="ms"/>
+    </stimuli>
+    <stimuli xsi:type="am:PeriodicStimulus" xmi:id="Timer_5MS?type=PeriodicStimulus" name="Timer_5MS">
+      <recurrence value="5" unit="ms"/>
+      <offset value="0" unit="ms"/>
+    </stimuli>
+  </stimuliModel>
+  <constraintsModel>
+    <requirements xsi:type="am:ProcessRequirement" name="Deadline_05" severity="Critical" process="Task_5MS?type=Task">
+      <limit xsi:type="am:TimeRequirementLimit" limitType="UpperLimit" metric="ResponseTime">
+        <limitValue value="5" unit="ms"/>
+      </limit>
+    </requirements>
+    <requirements xsi:type="am:ProcessRequirement" name="Deadline_10" severity="Critical" process="Task_10MS?type=Task">
+      <limit xsi:type="am:TimeRequirementLimit" limitType="UpperLimit" metric="ResponseTime">
+        <limitValue value="10" unit="ms"/>
+      </limit>
+    </requirements>
+    <requirements xsi:type="am:ProcessRequirement" name="Deadline_20" severity="Critical" process="Task_20MS?type=Task">
+      <limit xsi:type="am:TimeRequirementLimit" limitType="UpperLimit" metric="ResponseTime">
+        <limitValue value="20" unit="ms"/>
+      </limit>
+    </requirements>
+  </constraintsModel>
+  <mappingModel>
+    <schedulerAllocation scheduler="Task_Scheduler_Core_1?type=TaskScheduler" responsibility="Core_1?type=ProcessingUnit" executingPU="Core_1?type=ProcessingUnit"/>
+    <taskAllocation task="Task_10MS?type=Task" scheduler="Task_Scheduler_Core_1?type=TaskScheduler">
+      <schedulingParameters priority="10"/>
+    </taskAllocation>
+    <taskAllocation task="Task_5MS?type=Task" scheduler="Task_Scheduler_Core_1?type=TaskScheduler">
+      <schedulingParameters priority="5"/>
+    </taskAllocation>
+    <taskAllocation task="Task_20MS?type=Task" scheduler="Task_Scheduler_Core_1?type=TaskScheduler">
+      <schedulingParameters priority="20"/>
+    </taskAllocation>
+  </mappingModel>
+  <componentsModel>
+    <components xmi:id="SwcEngineController?type=Component" name="SwcEngineController" runnables="APedVoter?type=Runnable BaseFuelMass?type=Runnable IgnitionTiming?type=Runnable ThrottleActuator?type=Runnable ThrottleController?type=Runnable TotalFuelMass?type=Runnable TransientFuelMass?type=Runnable"/>
+    <components xmi:id="SwcActuators?type=Component" name="SwcActuators" runnables="EcuBrakeActuator?type=Runnable EcuStopLightActuator?type=Runnable"/>
+    <components xmi:id="SwcBrakeForceArbiter?type=Component" name="SwcBrakeForceArbiter" runnables="BrakeForceArbiter?type=Runnable"/>
+    <components xmi:id="SwcABSCalculation?type=Component" name="SwcABSCalculation" runnables="ABSCalculation?type=Runnable BrakeActuator?type=Runnable BrakeForceActuation?type=Runnable CaliperPositionCalculation?type=Runnable StopLightActuator?type=Runnable"/>
+    <components xmi:id="SwcSensors?type=Component" name="SwcSensors" runnables="EcuBrakePedalSensor?type=Runnable EcuDecelerationSensor?type=Runnable EcuVehicleSpeedSensor?type=Runnable EcuWheelSpeedSensor?type=Runnable"/>
+    <components xmi:id="SwcSensorPostprocessing?type=Component" name="SwcSensorPostprocessing" runnables="BrakePedalSensorDiagnosis?type=Runnable BrakePedalSensorTranslation?type=Runnable BrakePedalSensorVoter?type=Runnable DecelerationSensorDiagnosis?type=Runnable DecelerationSensorTranslation?type=Runnable DecelerationSensorVoter?type=Runnable VehicleSpeedSensorDiagnosis?type=Runnable VehicleSpeedSensorTranslation?type=Runnable VehicleSpeedSensorVoter?type=Runnable WheelSpeedSensorDiagnosis?type=Runnable WheelSpeedSensorTranslation?type=Runnable WheelSpeedSensorVoter?type=Runnable"/>
+    <components xmi:id="SwcCylNumObserver?type=Component" name="SwcCylNumObserver" runnables="CylNumObserver?type=Runnable"/>
+    <components xmi:id="SwcBrakeForceCalculation?type=Component" name="SwcBrakeForceCalculation" runnables="BrakeActuatorMonitor?type=Runnable BrakeForceCalculation?type=Runnable BrakeSafetyMonitor?type=Runnable CheckPlausability?type=Runnable DiagnosisArbiter?type=Runnable VehicleStateMonitor?type=Runnable"/>
+    <components xmi:id="SwcEngineSensors?type=Component" name="SwcEngineSensors" runnables="APedSensor?type=Runnable MassAirFlowSensor?type=Runnable ThrottleSensor?type=Runnable"/>
+    <components xmi:id="SwcInjIgnActuation?type=Component" name="SwcInjIgnActuation" runnables="IgnitionTimeActuation?type=Runnable InjectionTimeActuation?type=Runnable"/>
+  </componentsModel>
+</am:Amalthea>
