@@ -13,6 +13,10 @@ public class SimTask extends SimProcess {
 	private int offset;
 	private SimModel model;
 
+	public SimTask(Model arg0, String arg1, boolean arg2) {
+		super(arg0, arg1, arg2);
+	}
+
 	public SimTask(String name, int executionTime, int deadline, int period, int offset, Model model) {
 		super(model, name, false);
 		this.name = name;

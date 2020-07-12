@@ -16,6 +16,7 @@ import org.eclipse.app4mc.amalthea.model.Stimulus;
 import org.eclipse.app4mc.amalthea.model.Task;
 import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.amalthea.model.TimeUnit;
+import org.eclipse.app4mc.amalthea.model.util.RuntimeUtil.TimeType;
 import org.eclipse.app4mc.amalthea.model.util.TimeUtil;
 
 public class TimingUtils {
@@ -25,6 +26,8 @@ public class TimingUtils {
 	public static final Map<TimeUnit, Integer> TIME_TO_CONSTANT_MAP = getTimeToConstantMap();
 
 	public static final Map<String, TimeUnit> TIME_UNIT_STRING_TO_TIME_MAP = getTimeUnitStringToTimeMap();
+
+	public static final Map<String, TimeType> ETM_TO_TIME_TYPE_MAP = getETMToTimeTypeMap();
 
 	private static Comparator<TimeUnit> timeUnitComparator = new Comparator<TimeUnit>() {
 		@Override
@@ -186,6 +189,22 @@ public class TimingUtils {
 		map.put(Constants.TIME_UNIT_OPTIONS[1], TimeUnit.US);
 		map.put(Constants.TIME_UNIT_OPTIONS[2], TimeUnit.MS);
 		map.put(Constants.TIME_UNIT_OPTIONS[3], TimeUnit.S);
+		return map;
+	}
+
+	/**
+	 * Create a map of String literals of time units to the equivalent
+	 * {@link TimeType}. Relies on {@link Constants#ETM_OPTIONS}.
+	 * 
+	 * @return The map
+	 * @see Constants#ETM_OPTIONS
+	 */
+	private static HashMap<String, TimeType> getETMToTimeTypeMap() {
+		HashMap<String, TimeType> map = new HashMap<>();
+		map.put(Constants.ETM_OPTIONS[0], TimeType.BCET);
+		map.put(Constants.ETM_OPTIONS[1], TimeType.ACET);
+		map.put(Constants.ETM_OPTIONS[2], TimeType.WCET);
+		map.put(Constants.ETM_OPTIONS[3], TimeType.WCET);
 		return map;
 	}
 

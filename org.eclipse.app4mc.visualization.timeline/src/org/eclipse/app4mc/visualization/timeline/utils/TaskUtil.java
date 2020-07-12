@@ -1,6 +1,6 @@
 package org.eclipse.app4mc.visualization.timeline.utils;
 
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -11,8 +11,14 @@ import org.eclipse.app4mc.amalthea.model.PeriodicStimulus;
 import org.eclipse.app4mc.amalthea.model.Process;
 import org.eclipse.app4mc.amalthea.model.ProcessingUnit;
 import org.eclipse.app4mc.amalthea.model.Task;
+import org.eclipse.app4mc.amalthea.model.TimeUnit;
+import org.eclipse.app4mc.amalthea.model.util.ConstraintsUtil;
 import org.eclipse.app4mc.amalthea.model.util.DeploymentUtil;
 import org.eclipse.app4mc.amalthea.model.util.HardwareUtil;
+import org.eclipse.app4mc.amalthea.model.util.RuntimeUtil;
+import org.eclipse.app4mc.amalthea.model.util.RuntimeUtil.TimeType;
+import org.eclipse.app4mc.amalthea.model.util.TimeUtil;
+import org.eclipse.app4mc.visualization.timeline.simulation.SimTaskParams;
 
 public class TaskUtil {
 
@@ -70,37 +76,60 @@ public class TaskUtil {
 		return processorNameToTaskNameList;
 	}
 
-	public static BigInteger calcLCM(List<BigInteger> periodList) {
+	/**
+	 * Converts a list of {@link Task} to a list of {@link SimTaskParams}
+	 * 
+	 * @param taskList
+	 * @param timeUnit
+	 * @param timeType
+	 * @return
+	 */
+	public static List<SimTaskParams> amaltheaTaskToSimTaskConverter(List<Task> taskList, TimeUnit timeUnit,
+			TimeType timeType) {
 
-		BigInteger lcm = periodList.get(0);
-		for (boolean flag = true; flag;) {
-			for (BigInteger x : periodList) {
-				if (lcm.mod(x) != BigInteger.ZERO) {
-					flag = true;
-					break;
-				}
-				flag = false;
-			}
-			lcm = flag ? lcm.add(BigInteger.ONE) : lcm;
+		List<SimTaskParams> simTaskList = new ArrayList<>();
+
+		for (Task task : taskList) {
+			SimTaskParams sTask = new SimTaskParams();
+			PeriodicStimulus stimulus = (PeriodicStimulus) task.getStimuli().get(0);
+			int offset = TimeUtil.convertToTimeUnit(stimulus.getOffset(), timeUnit).getValue().intValue();
+			int period = TimeUtil.convertToTimeUnit(stimulus.getRecurrence(), timeUnit).getValue().intValue();
+			int executionTime = TimeUtil
+					.convertToTimeUnit(RuntimeUtil.getExecutionTimeForProcess(task, null, timeType), timeUnit)
+					.getValue().intValue();
+			int deadline = TimeUtil.convertToTimeUnit(ConstraintsUtil.getDeadline(task), timeUnit).getValue()
+					.intValue();
+
+			sTask.setOffset(offset);
+			sTask.setPeriod(period);
+			sTask.setExecutionTime(executionTime);
+			sTask.setDeadline(deadline);
+
+			simTaskList.add(sTask);
 		}
 
-		return lcm;
+		return simTaskList;
 	}
 
-	public static int calcLCM(int... periodList) {
+	/**
+	 * Converts a map of {@link Task} to a map of {@link SimTaskParams}
+	 * 
+	 * @param map
+	 * @param timeUnit
+	 * @param etmValue
+	 * @return
+	 */
+	public static LinkedHashMap<String, List<SimTaskParams>> getProcessorToSimTaskMap(
+			LinkedHashMap<String, List<Task>> map, TimeUnit timeUnit, String etmValue) {
 
-		int lcm = periodList[0];
-		for (boolean flag = true; flag;) {
-			for (int x : periodList) {
-				if (lcm % x != 0) {
-					flag = true;
-					break;
-				}
-				flag = false;
-			}
-			lcm = flag ? lcm += 1 : lcm;
-		}
+		LinkedHashMap<String, List<SimTaskParams>> simTaskMap = new LinkedHashMap<>();
+		TimeType timeType = TimingUtils.ETM_TO_TIME_TYPE_MAP.get(etmValue);
 
-		return lcm;
+		map.forEach((key, value) -> {
+			simTaskMap.put(key, TaskUtil.amaltheaTaskToSimTaskConverter(value, timeUnit, timeType));
+		});
+
+		return simTaskMap;
 	}
+
 }
