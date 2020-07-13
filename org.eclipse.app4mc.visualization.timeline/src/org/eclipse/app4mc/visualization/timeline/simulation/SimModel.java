@@ -33,11 +33,11 @@ public class SimModel extends Model {
 		processor = new Processor(this, "Processor", true, new EDFScheduler());
 		processor.activate();
 
-		SimTask task1 = new SimTask("Task1", 9, 9, 10, 0, this);
+		SimTask task1 = new SimTask("Task1", 6, 9, 10, 0, this);
 		task1.activate();
-		SimTask task2 = new SimTask("Task2", 3, 4, 5, 0, this);
+		SimTask task2 = new SimTask("Task2", 2, 4, 5, 0, this);
 		task2.activate();
-		SimTask task3 = new SimTask("Task3", 3, 3, 4, 5, this);
+		SimTask task3 = new SimTask("Task3", 3, 3, 6, 5, this);
 		task3.activate();
 	}
 

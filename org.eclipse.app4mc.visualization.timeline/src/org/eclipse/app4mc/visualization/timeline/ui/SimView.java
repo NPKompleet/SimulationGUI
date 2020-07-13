@@ -1,6 +1,7 @@
 package org.eclipse.app4mc.visualization.timeline.ui;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -10,6 +11,7 @@ import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.DownArrowAntFigure;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.UpArrowAntFigure;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimJobSlice;
+import org.eclipse.app4mc.visualization.timeline.simulation.SimTask;
 import org.eclipse.app4mc.visualization.timeline.utils.Constants;
 import org.eclipse.app4mc.visualization.timeline.utils.SWTResourceManager;
 import org.eclipse.app4mc.visualization.ui.registry.Visualization;
@@ -376,42 +378,38 @@ public class SimView implements Visualization, ISimView {
 
 		timelineControl.getRootFigure().clear();
 
-		final ITimelineEvent event = ITimelineFactory.eINSTANCE.createTimelineEvent();
-		event.setStartTimestamp(100, TimeUnit.MILLISECONDS);
-		event.setDuration(400, TimeUnit.MILLISECONDS);
-		event.setMessage("The best event ever");
+		trackSize = processedJobList.size();
 
-		final ITimelineEvent event2 = ITimelineFactory.eINSTANCE.createTimelineEvent();
-		event2.setStartTimestamp(200, TimeUnit.MILLISECONDS);
-		event2.setDuration(150, TimeUnit.MILLISECONDS);
-		event2.setMessage("Evet 2");
+		LinkedHashMap<String, LaneFigure> trackMap = new LinkedHashMap<>();
+		for (SimJobSlice jobslice : processedJobList) {
+			SimTask task = jobslice.getParentTask();
+			String taskName = task.getName();
+			if (!trackMap.containsKey(taskName)) {
+				final TrackFigure track = timelineControl.getRootFigure().createTrackFigure(taskName);
+				final LaneFigure lane = timelineControl.getRootFigure().createLaneFigure(track);
 
-		IAnnotationFigure antFigure = new UpArrowAntFigure(150, TimeUnit.MILLISECONDS,
-				timelineControl.getRootFigure().getStyleProvider());
-		IAnnotationFigure antFigure2 = new DownArrowAntFigure(550, TimeUnit.MILLISECONDS,
-				timelineControl.getRootFigure().getStyleProvider());
-		IAnnotationFigure antFigure3 = new DownArrowAntFigure(250, TimeUnit.MILLISECONDS,
-				timelineControl.getRootFigure().getStyleProvider());
-		IAnnotationFigure antFigure4 = new UpArrowAntFigure(350, TimeUnit.MILLISECONDS,
-				timelineControl.getRootFigure().getStyleProvider());
-		IAnnotationFigure antFigure5 = new DownArrowAntFigure(350, TimeUnit.MILLISECONDS,
-				timelineControl.getRootFigure().getStyleProvider());
+				for (int i = task.getOffset(); i <= 30; i += task.getPeriod()) {
+					IAnnotationFigure arrivalFigure = new UpArrowAntFigure(i, TimeUnit.MILLISECONDS,
+							timelineControl.getRootFigure().getStyleProvider());
+					timelineControl.getRootFigure().addAnnotationFigure(lane, arrivalFigure);
+				}
 
-		final TrackFigure track1 = timelineControl.getRootFigure().createTrackFigure("Task 1");
-		final LaneFigure lane1 = timelineControl.getRootFigure().createLaneFigure(track1);
-		final TrackFigure track2 = timelineControl.getRootFigure().createTrackFigure("Task 2");
-		final LaneFigure lane2 = timelineControl.getRootFigure().createLaneFigure(track2);
-		timelineControl.getRootFigure().createEventFigure(lane1, event);
-		timelineControl.getRootFigure().createEventFigure(lane2, event2);
-//		timelineControl.getRootFigure().addAnnotationFigure(lane1, antFigure);
-//		timelineControl.getRootFigure().addAnnotationFigure(lane1, antFigure2);
-//		timelineControl.getRootFigure().addAnnotationFigure(lane2, antFigure3);
-//		timelineControl.getRootFigure().addAnnotationFigure(lane2, antFigure4);
-//		timelineControl.getRootFigure().addAnnotationFigure(lane2, antFigure5);
-		timelineControl.getRootFigure().zoom(0.000001, 0);
+				for (int j = task.getOffset() + task.getDeadline(); j <= 30; j += task.getPeriod()) {
+					IAnnotationFigure deadlineFigure = new DownArrowAntFigure(j, TimeUnit.MILLISECONDS,
+							timelineControl.getRootFigure().getStyleProvider());
+					timelineControl.getRootFigure().addAnnotationFigure(lane, deadlineFigure);
+				}
 
-		trackSize = 2;
+				trackMap.put(taskName, lane);
+			}
 
+			final ITimelineEvent jobEvent = ITimelineFactory.eINSTANCE.createTimelineEvent();
+			jobEvent.setStartTimestamp(jobslice.getActivationTime(), TimeUnit.MILLISECONDS);
+			jobEvent.setDuration(jobslice.getExecutionTime(), TimeUnit.MILLISECONDS);
+			jobEvent.setMessage(jobslice.getName());
+			timelineControl.getRootFigure().createEventFigure(trackMap.get(taskName), jobEvent);
+			timelineControl.getRootFigure().zoom(0.000001, 0);
+		}
 //		timelineControl.redraw();
 
 	}

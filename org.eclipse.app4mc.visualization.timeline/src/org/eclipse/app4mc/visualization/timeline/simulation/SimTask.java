@@ -34,15 +34,16 @@ public class SimTask extends SimProcess {
 		// Activation time for first job
 		int activationTime = offset;
 		// Deadline for first job
-		deadline += offset;
+		int jobDeadline = deadline;
+		jobDeadline += offset;
 
 		while (true) {
-			SimJob job = new SimJob(this, name + "_job", activationTime, executionTime, deadline, model);
+			SimJob job = new SimJob(this, name + "_job", activationTime, executionTime, jobDeadline, model);
 			job.activate();
 			hold(new TimeSpan(period));
 			activationTime += period;
 			// Use absolute deadline for subsequent jobs
-			deadline += period;
+			jobDeadline += period;
 		}
 	}
 
@@ -55,4 +56,11 @@ public class SimTask extends SimProcess {
 		return name;
 	}
 
+	public int getOffset() {
+		return offset;
+	}
+
+	public int getDeadline() {
+		return deadline;
+	}
 }

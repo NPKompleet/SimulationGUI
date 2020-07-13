@@ -93,7 +93,7 @@ public class Controller {
 		SimModel simModel = new SimModel(null, "Simple Sim", true, true);
 		Experiment experiment = new Experiment("SimExperiment");
 		simModel.connectToExperiment(experiment);
-		experiment.setShowProgressBar(true);
+		experiment.setShowProgressBar(false);
 		experiment.stop(new TimeInstant(30));
 		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
 		experiment.start();
