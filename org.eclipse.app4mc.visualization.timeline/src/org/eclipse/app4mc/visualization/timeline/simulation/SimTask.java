@@ -6,7 +6,7 @@ import desmoj.core.simulator.SimProcess;
 import desmoj.core.simulator.TimeSpan;
 
 public class SimTask extends SimProcess {
-	String name;
+	private String name;
 	private int executionTime;
 	private int deadline;
 	private int period;
@@ -48,6 +48,11 @@ public class SimTask extends SimProcess {
 
 	public int getPeriod() {
 		return period;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }

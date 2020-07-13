@@ -10,10 +10,15 @@ import org.eclipse.app4mc.amalthea.model.SWModel;
 import org.eclipse.app4mc.amalthea.model.Task;
 import org.eclipse.app4mc.amalthea.model.Time;
 import org.eclipse.app4mc.amalthea.model.TimeUnit;
+import org.eclipse.app4mc.visualization.timeline.simulation.SimJobSlice;
+import org.eclipse.app4mc.visualization.timeline.simulation.SimModel;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimTaskParams;
 import org.eclipse.app4mc.visualization.timeline.utils.TaskUtil;
 import org.eclipse.app4mc.visualization.timeline.utils.TimingUtils;
 import org.eclipse.app4mc.visualization.timeline.utils.UnalignedPeriodException;
+
+import desmoj.core.simulator.Experiment;
+import desmoj.core.simulator.TimeInstant;
 
 public class Controller {
 	Amalthea model;
@@ -85,19 +90,26 @@ public class Controller {
 				.getProcessorToSimTaskMap(processorToTaskMap, simTimeUnit, etmValue);
 
 		// Simulation
-//		SimModel simModel = new SimModel(null, "Simple Sim", true, true);
-//		Experiment experiment = new Experiment("SimExperiment");
-//		simModel.connectToExperiment(experiment);
-//		experiment.setShowProgressBar(true);
-//		experiment.stop(new TimeInstant(30));
-//		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
-//		experiment.start();
-//		experiment.report();
-//		experiment.finish();
+		SimModel simModel = new SimModel(null, "Simple Sim", true, true);
+		Experiment experiment = new Experiment("SimExperiment");
+		simModel.connectToExperiment(experiment);
+		experiment.setShowProgressBar(true);
+		experiment.stop(new TimeInstant(30));
+		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
+		experiment.start();
+		experiment.report();
+		experiment.finish();
+		simModel.finalize(simModel.presentTime());
+
+		createVisualization(simModel.getProcessor().getProcessedJobList());
 
 		filterData = TaskUtil.getProcessNameToTaskNameMap(processorToTaskMap);
 		System.out.println(filterData.size());
 		viewer.enableFiltering();
+	}
+
+	private void createVisualization(List<SimJobSlice> processedJobList) {
+		viewer.createVisualization(processedJobList);
 	}
 
 	public LinkedHashMap<String, List<String>> getFilterData() {

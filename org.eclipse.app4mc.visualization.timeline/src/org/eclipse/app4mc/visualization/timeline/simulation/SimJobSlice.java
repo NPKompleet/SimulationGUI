@@ -1,23 +1,26 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
 public class SimJobSlice {
-	private String parentTask;
+	private SimTask parentTask;
 	private int activationTime;
 	private int executionTime;
 	private String name;
 
-	public SimJobSlice(String parentTask, String name, int activationTime, int executionTime) {
+	public SimJobSlice() {
+	}
+
+	public SimJobSlice(SimTask parentTask, String name, int activationTime, int executionTime) {
 		this.parentTask = parentTask;
 		this.activationTime = activationTime;
 		this.name = name;
 		this.executionTime = executionTime;
 	}
 
-	public String getParentTask() {
+	public SimTask getParentTask() {
 		return parentTask;
 	}
 
-	public void setParentTask(String parentTask) {
+	public void setParentTask(SimTask parentTask) {
 		this.parentTask = parentTask;
 	}
 

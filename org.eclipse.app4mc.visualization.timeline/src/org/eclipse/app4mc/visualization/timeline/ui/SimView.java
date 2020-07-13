@@ -9,6 +9,7 @@ import javax.annotation.PreDestroy;
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.DownArrowAntFigure;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.UpArrowAntFigure;
+import org.eclipse.app4mc.visualization.timeline.simulation.SimJobSlice;
 import org.eclipse.app4mc.visualization.timeline.utils.Constants;
 import org.eclipse.app4mc.visualization.timeline.utils.SWTResourceManager;
 import org.eclipse.app4mc.visualization.ui.registry.Visualization;
@@ -27,7 +28,6 @@ import org.eclipse.nebula.widgets.timeline.TimelineComposite;
 import org.eclipse.nebula.widgets.timeline.figures.detail.track.TrackFigure;
 import org.eclipse.nebula.widgets.timeline.figures.detail.track.lane.LaneFigure;
 import org.eclipse.nebula.widgets.timeline.figures.detail.track.lane.annotation.IAnnotationFigure;
-import org.eclipse.nebula.widgets.timeline.jface.TimelineViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
@@ -35,7 +35,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -63,6 +62,7 @@ public class SimView implements Visualization, ISimView {
 	private Controller controller;
 	private SimViewParameters simViewParams;
 	private Button btnFilter;
+	private TimelineComposite timelineControl;
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -82,11 +82,10 @@ public class SimView implements Visualization, ISimView {
 	public void dispose() {
 	}
 
-	public Control createTimelineControl(Composite parent) {
-		TimelineViewer timelineViewer = new TimelineViewer(parent, SWT.NULL);
-		timelineViewer.setStyleProvider(new StyleProvider(JFaceResources.getResources()));
+	public TimelineComposite createTimelineControl(Composite parent) {
 
-		final TimelineComposite control = timelineViewer.getControl();
+		final TimelineComposite control = new TimelineComposite(parent, SWT.NONE);
+		control.getRootFigure().setStyleProvider(new StyleProvider(JFaceResources.getResources()));
 		final ITimelineEvent event = ITimelineFactory.eINSTANCE.createTimelineEvent();
 		event.setStartTimestamp(100, TimeUnit.MILLISECONDS);
 		event.setDuration(400, TimeUnit.MILLISECONDS);
@@ -98,15 +97,15 @@ public class SimView implements Visualization, ISimView {
 		event2.setMessage("Evet 2");
 
 		IAnnotationFigure antFigure = new UpArrowAntFigure(150, TimeUnit.MILLISECONDS,
-				timelineViewer.getStyleProvider());
+				control.getRootFigure().getStyleProvider());
 		IAnnotationFigure antFigure2 = new DownArrowAntFigure(550, TimeUnit.MILLISECONDS,
-				timelineViewer.getStyleProvider());
+				control.getRootFigure().getStyleProvider());
 		IAnnotationFigure antFigure3 = new DownArrowAntFigure(250, TimeUnit.MILLISECONDS,
-				timelineViewer.getStyleProvider());
+				control.getRootFigure().getStyleProvider());
 		IAnnotationFigure antFigure4 = new UpArrowAntFigure(350, TimeUnit.MILLISECONDS,
-				timelineViewer.getStyleProvider());
+				control.getRootFigure().getStyleProvider());
 		IAnnotationFigure antFigure5 = new DownArrowAntFigure(350, TimeUnit.MILLISECONDS,
-				timelineViewer.getStyleProvider());
+				control.getRootFigure().getStyleProvider());
 
 		final TrackFigure track1 = control.getRootFigure().createTrackFigure("Task 1");
 		final LaneFigure lane1 = control.getRootFigure().createLaneFigure(track1);
@@ -123,7 +122,7 @@ public class SimView implements Visualization, ISimView {
 
 		trackSize = 2;
 
-		return timelineViewer.getControl();
+		return control;
 	}
 
 	public void createSimulationControls(Amalthea model, Composite parent) {
@@ -139,7 +138,7 @@ public class SimView implements Visualization, ISimView {
 		scrolledComposite_1.setExpandHorizontal(true);
 		scrolledComposite_1.setExpandVertical(true);
 
-		Control control = createTimelineControl(scrolledComposite);
+		timelineControl = createTimelineControl(scrolledComposite);
 
 		Group grpParameters = new Group(scrolledComposite_1, SWT.NONE);
 		grpParameters.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
@@ -273,7 +272,7 @@ public class SimView implements Visualization, ISimView {
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 
-		scrolledComposite.setContent(control);
+		scrolledComposite.setContent(timelineControl);
 		scrolledComposite.setMinSize(-1, trackSize * 70);
 		System.out.println("Size is> " + trackSize);
 		scrolledComposite_1.setContent(grpParameters);
@@ -344,7 +343,12 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	private void startSimulation() {
-		controller.startSimulation(simViewParams);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				controller.startSimulation(simViewParams);
+			}
+		});
 	}
 
 	@Override
@@ -365,6 +369,51 @@ public class SimView implements Visualization, ISimView {
 	@Override
 	public void enableFiltering() {
 		btnFilter.setEnabled(true);
+	}
+
+	@Override
+	public void createVisualization(java.util.List<SimJobSlice> processedJobList) {
+
+		timelineControl.getRootFigure().clear();
+
+		final ITimelineEvent event = ITimelineFactory.eINSTANCE.createTimelineEvent();
+		event.setStartTimestamp(100, TimeUnit.MILLISECONDS);
+		event.setDuration(400, TimeUnit.MILLISECONDS);
+		event.setMessage("The best event ever");
+
+		final ITimelineEvent event2 = ITimelineFactory.eINSTANCE.createTimelineEvent();
+		event2.setStartTimestamp(200, TimeUnit.MILLISECONDS);
+		event2.setDuration(150, TimeUnit.MILLISECONDS);
+		event2.setMessage("Evet 2");
+
+		IAnnotationFigure antFigure = new UpArrowAntFigure(150, TimeUnit.MILLISECONDS,
+				timelineControl.getRootFigure().getStyleProvider());
+		IAnnotationFigure antFigure2 = new DownArrowAntFigure(550, TimeUnit.MILLISECONDS,
+				timelineControl.getRootFigure().getStyleProvider());
+		IAnnotationFigure antFigure3 = new DownArrowAntFigure(250, TimeUnit.MILLISECONDS,
+				timelineControl.getRootFigure().getStyleProvider());
+		IAnnotationFigure antFigure4 = new UpArrowAntFigure(350, TimeUnit.MILLISECONDS,
+				timelineControl.getRootFigure().getStyleProvider());
+		IAnnotationFigure antFigure5 = new DownArrowAntFigure(350, TimeUnit.MILLISECONDS,
+				timelineControl.getRootFigure().getStyleProvider());
+
+		final TrackFigure track1 = timelineControl.getRootFigure().createTrackFigure("Task 1");
+		final LaneFigure lane1 = timelineControl.getRootFigure().createLaneFigure(track1);
+		final TrackFigure track2 = timelineControl.getRootFigure().createTrackFigure("Task 2");
+		final LaneFigure lane2 = timelineControl.getRootFigure().createLaneFigure(track2);
+		timelineControl.getRootFigure().createEventFigure(lane1, event);
+		timelineControl.getRootFigure().createEventFigure(lane2, event2);
+//		timelineControl.getRootFigure().addAnnotationFigure(lane1, antFigure);
+//		timelineControl.getRootFigure().addAnnotationFigure(lane1, antFigure2);
+//		timelineControl.getRootFigure().addAnnotationFigure(lane2, antFigure3);
+//		timelineControl.getRootFigure().addAnnotationFigure(lane2, antFigure4);
+//		timelineControl.getRootFigure().addAnnotationFigure(lane2, antFigure5);
+		timelineControl.getRootFigure().zoom(0.000001, 0);
+
+		trackSize = 2;
+
+//		timelineControl.redraw();
+
 	}
 
 }

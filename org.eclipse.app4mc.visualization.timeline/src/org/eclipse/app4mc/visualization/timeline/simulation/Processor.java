@@ -1,5 +1,7 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
@@ -15,11 +17,14 @@ public class Processor extends SimProcess {
 	private Scheduler scheduler;
 	SimJob currentJob;
 	protected boolean isBusy;
+	protected List<SimJobSlice> processedJobList;
+	protected SimJobSlice jobSlice;
 
 	public Processor(Model model, String name, boolean showInTrace, Scheduler scheduler) {
 		super(model, name, showInTrace);
 		this.model = (SimModel) model;
 		this.scheduler = scheduler;
+		this.processedJobList = new ArrayList<>();
 	}
 
 	@Override
@@ -40,6 +45,11 @@ public class Processor extends SimProcess {
 				currentJob = model.jobQueue.pollFirst();
 				TimeInstant startTime = presentTime();
 
+				jobSlice = new SimJobSlice();
+				jobSlice.setParentTask(currentJob.getParentTask());
+				jobSlice.setName(currentJob.getQuotedName());
+				jobSlice.setActivationTime((int) startTime.getTimeAsDouble());
+
 				// Execute the Job
 				TimeSpan executionTime = new TimeSpan(currentJob.getExecutionTime());
 				hold(executionTime);
@@ -52,6 +62,12 @@ public class Processor extends SimProcess {
 				if (isInterrupted()) {
 					sendTraceNote("interrupted!! " + currentJob.getQuotedName() + " " + startTime + " "
 							+ model.presentTime());
+
+					TimeSpan processingTime = TimeOperations.diff(presentTime(), startTime);
+					jobSlice.setExecutionTime((int) processingTime.getTimeAsDouble());
+					processedJobList.add(jobSlice);
+					jobSlice = null;
+
 					executionTime = TimeOperations.diff(executionTime, TimeOperations.diff(presentTime(), startTime));
 					sendTraceNote("interrupted!! exe " + executionTime);
 					currentJob.setExecutionTime((int) (executionTime.getTimeAsDouble()));
@@ -59,6 +75,10 @@ public class Processor extends SimProcess {
 					model.jobQueue = scheduler.schedule(model.jobQueue);
 					this.clearInterruptCode();
 				} else {
+					jobSlice.setExecutionTime((int) (executionTime.getTimeAsDouble()));
+					processedJobList.add(jobSlice);
+					jobSlice = null;
+
 					currentJob.activate();
 					isBusy = false;
 				}
@@ -71,6 +91,10 @@ public class Processor extends SimProcess {
 				.orElseThrow(NoSuchElementException::new))
 			return true;
 		return false;
+	}
+
+	public List<SimJobSlice> getProcessedJobList() {
+		return processedJobList;
 	}
 
 }

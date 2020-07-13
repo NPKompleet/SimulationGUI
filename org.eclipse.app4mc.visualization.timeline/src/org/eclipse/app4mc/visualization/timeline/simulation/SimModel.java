@@ -7,6 +7,7 @@ import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
 import desmoj.core.simulator.InterruptCode;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.ProcessQueue;
+import desmoj.core.simulator.TimeInstant;
 
 public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
@@ -49,6 +50,19 @@ public class SimModel extends Model {
 
 	protected synchronized void setNextSchedule(boolean state) {
 		doSchedule = state;
+	}
+
+	public Processor getProcessor() {
+		return processor;
+	}
+
+	public void finalize(TimeInstant instant) {
+		if (processor.jobSlice != null) {
+			processor.jobSlice
+					.setExecutionTime((int) instant.getTimeAsDouble() - processor.jobSlice.getActivationTime());
+			processor.processedJobList.add(processor.jobSlice);
+			processor.jobSlice = null;
+		}
 	}
 
 //	public static void main(String[] args) {
