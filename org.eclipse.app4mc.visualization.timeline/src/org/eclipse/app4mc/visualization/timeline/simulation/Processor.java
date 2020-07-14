@@ -64,8 +64,11 @@ public class Processor extends SimProcess {
 							+ model.presentTime());
 
 					TimeSpan processingTime = TimeOperations.diff(presentTime(), startTime);
-					jobSlice.setExecutionTime((int) processingTime.getTimeAsDouble());
-					processedJobList.add(jobSlice);
+					int processingTimeValue = (int) processingTime.getTimeAsDouble();
+					if (processingTimeValue > 0) {
+						jobSlice.setExecutionTime(processingTimeValue);
+						processedJobList.add(jobSlice);
+					}
 					jobSlice = null;
 
 					executionTime = TimeOperations.diff(executionTime, TimeOperations.diff(presentTime(), startTime));
