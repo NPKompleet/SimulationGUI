@@ -90,7 +90,8 @@ public class Processor extends SimProcess {
 	}
 
 	public boolean checkIsPriority(SimJob job) {
-		if (currentJob != null && job == Stream.of(job, currentJob).min(scheduler.getComparator())
+		if (currentJob != null && job == Stream.of(job, currentJob)
+				.min(scheduler.getComparator().thenComparing(SimJob::getActivationTime))
 				.orElseThrow(NoSuchElementException::new))
 			return true;
 		return false;
