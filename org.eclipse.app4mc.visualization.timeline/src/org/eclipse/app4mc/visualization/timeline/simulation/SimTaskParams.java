@@ -1,7 +1,7 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
 public class SimTaskParams {
-	String name;
+	private String name;
 	private int executionTime;
 	private int deadline;
 	private int period;

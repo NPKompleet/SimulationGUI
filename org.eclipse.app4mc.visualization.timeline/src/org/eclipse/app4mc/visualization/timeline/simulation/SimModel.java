@@ -1,7 +1,11 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.stream.Collectors;
 
+import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
 import org.eclipse.app4mc.visualization.timeline.schedulers.RMScheduler;
 
 import desmoj.core.simulator.InterruptCode;
@@ -18,6 +22,8 @@ public class SimModel extends Model {
 	protected Processor processor;
 	protected InterruptCode priorityJobCode;
 	protected String preemptiveness = "PREEMPTIVE";
+	LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap;
+	Scheduler scheduler;
 
 	public SimModel(Model model, String name, boolean showInReport, boolean showInTrace) {
 		super(model, name, showInReport, showInTrace);
@@ -30,15 +36,30 @@ public class SimModel extends Model {
 
 	@Override
 	public void doInitialSchedules() {
-		processor = new Processor(this, "Processor", true, new RMScheduler());
+//		processor = new Processor(this, "Processor", true, new RMScheduler());
+//		processor.activate();
+//
+//		SimTask task1 = new SimTask("Task1", 6, 9, 10, 0, this);
+//		task1.activate();
+//		SimTask task2 = new SimTask("Task2", 2, 4, 5, 0, this);
+//		task2.activate();
+//		SimTask task3 = new SimTask("Task3", 3, 3, 6, 5, this);
+//		task3.activate();
+
+		List<String> processorList = processorToSimTaskMap.keySet().stream().collect(Collectors.toList());
+		List<SimTaskParams> taskParamsList = processorToSimTaskMap.values().stream().collect(Collectors.toList())
+				.get(0);
+
+		processor = new Processor(this, processorList.get(0), true, scheduler);
 		processor.activate();
 
-		SimTask task1 = new SimTask("Task1", 6, 9, 10, 0, this);
-		task1.activate();
-		SimTask task2 = new SimTask("Task2", 2, 4, 5, 0, this);
-		task2.activate();
-		SimTask task3 = new SimTask("Task3", 3, 3, 6, 5, this);
-		task3.activate();
+		for (SimTaskParams tParams : taskParamsList) {
+			System.out.println(tParams.getName());
+			System.out.println(tParams.getExecutionTime());
+			SimTask task = new SimTask(tParams, this);
+			task.activate();
+		}
+
 	}
 
 	@Override
@@ -62,6 +83,30 @@ public class SimModel extends Model {
 					.setExecutionTime((int) instant.getTimeAsDouble() - processor.jobSlice.getActivationTime());
 			processor.processedJobList.add(processor.jobSlice);
 			processor.jobSlice = null;
+		}
+	}
+
+	public void setProcessorToSimTaskMap(LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap) {
+		this.processorToSimTaskMap = processorToSimTaskMap;
+	}
+
+	public Scheduler getScheduleStrategy() {
+		return scheduler;
+	}
+
+	public void setScheduleStrategy(String strategy) {
+		switch (strategy) {
+		case "EDF":
+			this.scheduler = new EDFScheduler();
+			break;
+
+		case "RM":
+			this.scheduler = new RMScheduler();
+			break;
+
+		default:
+			this.scheduler = new EDFScheduler();
+			break;
 		}
 	}
 

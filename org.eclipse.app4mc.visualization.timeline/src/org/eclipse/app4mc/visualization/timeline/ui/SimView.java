@@ -380,7 +380,7 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	@Override
-	public void createVisualization(java.util.List<SimJobSlice> processedJobList) {
+	public void createVisualization(java.util.List<SimJobSlice> processedJobList, int simTime) {
 
 		timelineControl.getRootFigure().clear();
 
@@ -395,13 +395,13 @@ public class SimView implements Visualization, ISimView {
 				final TrackFigure track = timelineControl.getRootFigure().createTrackFigure(taskName);
 				final LaneFigure lane = timelineControl.getRootFigure().createLaneFigure(track);
 
-				for (int i = task.getOffset(); i <= 30; i += task.getPeriod()) {
+				for (int i = task.getOffset(); i <= simTime; i += task.getPeriod()) {
 					IAnnotationFigure arrivalFigure = new UpArrowAntFigure(i, TimeUnit.MILLISECONDS,
 							timelineControl.getRootFigure().getStyleProvider());
 					timelineControl.getRootFigure().addAnnotationFigure(lane, arrivalFigure);
 				}
 
-				for (int j = task.getOffset() + task.getDeadline(); j <= 30; j += task.getPeriod()) {
+				for (int j = task.getOffset() + task.getDeadline(); j <= simTime; j += task.getPeriod()) {
 					IAnnotationFigure deadlineFigure = new DownArrowAntFigure(j, TimeUnit.MILLISECONDS,
 							timelineControl.getRootFigure().getStyleProvider());
 					timelineControl.getRootFigure().addAnnotationFigure(lane, deadlineFigure);

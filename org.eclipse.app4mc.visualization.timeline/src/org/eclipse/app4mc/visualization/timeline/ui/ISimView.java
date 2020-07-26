@@ -13,5 +13,5 @@ public interface ISimView {
 
 	public void enableFiltering();
 
-	public void createVisualization(List<SimJobSlice> processedJobList);
+	public void createVisualization(List<SimJobSlice> processedJobList, int simTime);
 }

@@ -27,6 +27,16 @@ public class SimTask extends SimProcess {
 		this.model = (SimModel) model;
 	}
 
+	public SimTask(SimTaskParams taskParams, Model model) {
+		super(model, taskParams.getName(), false);
+		this.name = taskParams.getName();
+		this.executionTime = taskParams.getExecutionTime();
+		this.deadline = taskParams.getDeadline();
+		this.period = taskParams.getPeriod();
+		this.offset = taskParams.getOffset();
+		this.model = (SimModel) model;
+	}
+
 	@Override
 	public void lifeCycle() throws SuspendExecution {
 

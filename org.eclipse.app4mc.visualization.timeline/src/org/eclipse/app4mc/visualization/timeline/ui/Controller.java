@@ -91,25 +91,28 @@ public class Controller {
 
 		// Simulation
 		SimModel simModel = new SimModel(null, "Simple Sim", true, true);
+		simModel.setScheduleStrategy(strategy);
+		simModel.setProcessorToSimTaskMap(processorToSimTaskMap);
+
 		Experiment experiment = new Experiment("SimExperiment");
 		simModel.connectToExperiment(experiment);
 		experiment.setShowProgressBar(false);
-		experiment.stop(new TimeInstant(30));
-		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(30));
+		experiment.stop(new TimeInstant(simTimeValue));
+		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(simTimeValue));
 		experiment.start();
 		experiment.report();
 		experiment.finish();
 		simModel.finalize(simModel.presentTime());
 
-		createVisualization(simModel.getProcessor().getProcessedJobList());
+		createVisualization(simModel.getProcessor().getProcessedJobList(), simTimeValue);
 
 		filterData = TaskUtil.getProcessNameToTaskNameMap(processorToTaskMap);
 		System.out.println(filterData.size());
 		viewer.enableFiltering();
 	}
 
-	private void createVisualization(List<SimJobSlice> processedJobList) {
-		viewer.createVisualization(processedJobList);
+	private void createVisualization(List<SimJobSlice> processedJobList, int simTime) {
+		viewer.createVisualization(processedJobList, simTime);
 	}
 
 	public LinkedHashMap<String, List<String>> getFilterData() {

@@ -100,6 +100,7 @@ public class TaskUtil {
 			int deadline = TimeUtil.convertToTimeUnit(ConstraintsUtil.getDeadline(task), timeUnit).getValue()
 					.intValue();
 
+			sTask.setName(task.getName());
 			sTask.setOffset(offset);
 			sTask.setPeriod(period);
 			sTask.setExecutionTime(executionTime);
