@@ -89,22 +89,37 @@ public class Controller {
 		LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap = TaskUtil
 				.getProcessorToSimTaskMap(processorToTaskMap, simTimeUnit, etmValue);
 
-		// Simulation
-		SimModel simModel = new SimModel(null, "Simple Sim", true, true);
-		simModel.setScheduleStrategy(strategy);
-		simModel.setProcessorToSimTaskMap(processorToSimTaskMap);
+//		List<String> processorList = processorToSimTaskMap.keySet().stream().collect(Collectors.toList());
+//		List<SimTaskParams> taskParamsList = processorToSimTaskMap.values().stream().collect(Collectors.toList())
+//				.get(0);
 
-		Experiment experiment = new Experiment("SimExperiment");
-		simModel.connectToExperiment(experiment);
-		experiment.setShowProgressBar(false);
-		experiment.stop(new TimeInstant(simTimeValue));
-		experiment.tracePeriod(new TimeInstant(0), new TimeInstant(simTimeValue));
-		experiment.start();
-		experiment.report();
-		experiment.finish();
-		simModel.finalize(simModel.presentTime());
+		LinkedHashMap<String, List<SimJobSlice>> processedJobMap = new LinkedHashMap<>();
 
-		createVisualization(simModel.getProcessor().getProcessedJobList(), simTimeValue);
+		for (String key : processorToSimTaskMap.keySet()) {
+			List<SimTaskParams> taskParamsList = processorToSimTaskMap.get(key);
+
+			// Simulation
+			SimModel simModel = new SimModel(null, "Simple Sim", true, true);
+			simModel.setScheduleStrategy(strategy);
+			simModel.setTaskParamsList(taskParamsList);
+			simModel.setPreemptiveness(preemption);
+			simModel.setProcessorName("Processor");
+
+			Experiment experiment = new Experiment("SimExperiment");
+			simModel.connectToExperiment(experiment);
+			experiment.setShowProgressBar(false);
+			experiment.stop(new TimeInstant(simTimeValue));
+			experiment.tracePeriod(new TimeInstant(0), new TimeInstant(simTimeValue));
+			experiment.start();
+			experiment.report();
+			experiment.finish();
+			simModel.finalize(simModel.presentTime());
+
+			processedJobMap.put(key, simModel.getProcessor().getProcessedJobList());
+		}
+
+		String key = processorToSimTaskMap.keySet().stream().collect(Collectors.toList()).get(0);
+		createVisualization(processedJobMap.get(key), simTimeValue);
 
 		filterData = TaskUtil.getProcessNameToTaskNameMap(processorToTaskMap);
 		System.out.println(filterData.size());

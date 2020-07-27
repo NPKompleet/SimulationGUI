@@ -1,9 +1,7 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.stream.Collectors;
 
 import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
 import org.eclipse.app4mc.visualization.timeline.schedulers.RMScheduler;
@@ -21,9 +19,10 @@ public class SimModel extends Model {
 	protected boolean doSchedule = false;
 	protected Processor processor;
 	protected InterruptCode priorityJobCode;
-	protected String preemptiveness = "PREEMPTIVE";
-	LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap;
-	Scheduler scheduler;
+	protected String preemptiveness;
+	private List<SimTaskParams> taskParamsList;
+	private String processorName;
+	private Scheduler scheduler;
 
 	public SimModel(Model model, String name, boolean showInReport, boolean showInTrace) {
 		super(model, name, showInReport, showInTrace);
@@ -46,11 +45,7 @@ public class SimModel extends Model {
 //		SimTask task3 = new SimTask("Task3", 3, 3, 6, 5, this);
 //		task3.activate();
 
-		List<String> processorList = processorToSimTaskMap.keySet().stream().collect(Collectors.toList());
-		List<SimTaskParams> taskParamsList = processorToSimTaskMap.values().stream().collect(Collectors.toList())
-				.get(0);
-
-		processor = new Processor(this, processorList.get(0), true, scheduler);
+		processor = new Processor(this, processorName, true, scheduler);
 		processor.activate();
 
 		for (SimTaskParams tParams : taskParamsList) {
@@ -86,8 +81,8 @@ public class SimModel extends Model {
 		}
 	}
 
-	public void setProcessorToSimTaskMap(LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap) {
-		this.processorToSimTaskMap = processorToSimTaskMap;
+	public void setTaskParamsList(List<SimTaskParams> taskParamsList) {
+		this.taskParamsList = taskParamsList;
 	}
 
 	public Scheduler getScheduleStrategy() {
@@ -108,6 +103,22 @@ public class SimModel extends Model {
 			this.scheduler = new EDFScheduler();
 			break;
 		}
+	}
+
+	public String getPreemptiveness() {
+		return preemptiveness;
+	}
+
+	public void setPreemptiveness(String preemptiveness) {
+		this.preemptiveness = preemptiveness;
+	}
+
+	public String getProcessorName() {
+		return processorName;
+	}
+
+	public void setProcessorName(String processorName) {
+		this.processorName = processorName;
 	}
 
 //	public static void main(String[] args) {

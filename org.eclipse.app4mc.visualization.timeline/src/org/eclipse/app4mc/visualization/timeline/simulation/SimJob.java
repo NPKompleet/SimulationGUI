@@ -1,5 +1,7 @@
 package org.eclipse.app4mc.visualization.timeline.simulation;
 
+import org.eclipse.app4mc.visualization.timeline.utils.Constants;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;
@@ -36,7 +38,7 @@ public class SimJob extends SimProcess {
 
 			assignedProcessor.activate();
 		} else {
-			if (model.preemptiveness.equals("PREEMPTIVE") && model.processor.checkIsPriority(this)) {
+			if (model.preemptiveness.equals(Constants.PREEMPTION_OPTIONS[0]) && model.processor.checkIsPriority(this)) {
 				model.processor.interrupt(model.priorityJobCode);
 			}
 		}
