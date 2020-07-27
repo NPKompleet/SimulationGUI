@@ -118,16 +118,17 @@ public class Controller {
 			processedJobMap.put(key, simModel.getProcessor().getProcessedJobList());
 		}
 
-		String key = processorToSimTaskMap.keySet().stream().collect(Collectors.toList()).get(0);
-		createVisualization(processedJobMap.get(key), simTimeValue);
+//		String key = processorToSimTaskMap.keySet().stream().collect(Collectors.toList()).get(0);
+//		createVisualization(processedJobMap.get(key), simTimeValue);
+		createVisualization(processedJobMap, simTimeValue);
 
 		filterData = TaskUtil.getProcessNameToTaskNameMap(processorToTaskMap);
 		System.out.println(filterData.size());
 		viewer.enableFiltering();
 	}
 
-	private void createVisualization(List<SimJobSlice> processedJobList, int simTime) {
-		viewer.createVisualization(processedJobList, simTime);
+	private void createVisualization(LinkedHashMap<String, List<SimJobSlice>> processedJobMap, int simTime) {
+		viewer.createVisualization(processedJobMap, simTime);
 	}
 
 	public LinkedHashMap<String, List<String>> getFilterData() {

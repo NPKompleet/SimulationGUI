@@ -51,7 +51,14 @@ public class SimModel extends Model {
 		for (SimTaskParams tParams : taskParamsList) {
 			System.out.println(tParams.getName());
 			System.out.println(tParams.getExecutionTime());
+
 			SimTask task = new SimTask(tParams, this);
+//			SimJobSlice jobSlice = new SimJobSlice();
+//			jobSlice.setParentTask(task);
+//			jobSlice.setName(task.getName());
+//			jobSlice.setActivationTime(0);
+//			jobSlice.setExecutionTime(0);
+//			processor.processedJobList.add(jobSlice);
 			task.activate();
 		}
 
@@ -79,6 +86,17 @@ public class SimModel extends Model {
 			processor.processedJobList.add(processor.jobSlice);
 			processor.jobSlice = null;
 		}
+		for (SimTaskParams tParams : taskParamsList) {
+
+			SimTask task = new SimTask(tParams, this);
+			SimJobSlice jobSlice = new SimJobSlice();
+			jobSlice.setParentTask(task);
+			jobSlice.setName(task.getName());
+			jobSlice.setActivationTime((int) presentTime().getTimeAsDouble());
+			jobSlice.setExecutionTime(0);
+			processor.processedJobList.add(jobSlice);
+		}
+
 	}
 
 	public void setTaskParamsList(List<SimTaskParams> taskParamsList) {
