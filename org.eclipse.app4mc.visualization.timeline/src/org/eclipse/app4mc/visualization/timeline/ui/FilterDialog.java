@@ -53,7 +53,9 @@ public class FilterDialog extends Dialog {
 		Label text = new Label(container, SWT.NONE);
 		text.setText("Select the cores/tasks whose simulation you want to view:");
 		tree = new Tree(container, SWT.CHECK | SWT.BORDER);
-		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridData treeData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		treeData.heightHint = 80;
+		tree.setLayoutData(treeData);
 
 		// Make sure that if a tree item is checked
 		// all its children are checked too

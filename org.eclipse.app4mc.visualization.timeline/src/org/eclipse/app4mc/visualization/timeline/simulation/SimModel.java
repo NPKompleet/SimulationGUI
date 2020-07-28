@@ -86,6 +86,7 @@ public class SimModel extends Model {
 			processor.processedJobList.add(processor.jobSlice);
 			processor.jobSlice = null;
 		}
+
 		for (SimTaskParams tParams : taskParamsList) {
 
 			SimTask task = new SimTask(tParams, this);
