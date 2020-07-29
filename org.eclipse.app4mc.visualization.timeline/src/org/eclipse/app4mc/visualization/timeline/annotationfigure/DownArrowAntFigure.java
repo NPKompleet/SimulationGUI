@@ -23,19 +23,17 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.nebula.widgets.timeline.figures.detail.track.lane.annotation.AnnotationFigure;
 import org.eclipse.nebula.widgets.timeline.jface.ITimelineStyleProvider;
 
-
-public class DownArrowAntFigure extends AnnotationFigure{
+public class DownArrowAntFigure extends AnnotationFigure {
 
 	private static final int ANNOTATOR_WIDTH = 13;
 	private static final int TRIANGLE_SIZE = 6;
 	private final RectangleFigure fLineFigure = new RectangleFigure();
 
-
 	public DownArrowAntFigure(long timeStamp, ITimelineStyleProvider styleProvider) {
 		super(timeStamp, styleProvider);
 		makeFigure();
 	}
-	
+
 	public DownArrowAntFigure(long timeStamp, TimeUnit timeUnit, ITimelineStyleProvider styleProvider) {
 		super(timeStamp, timeUnit, styleProvider);
 		makeFigure();
@@ -43,7 +41,7 @@ public class DownArrowAntFigure extends AnnotationFigure{
 
 	private void makeFigure() {
 		setLayoutManager(new AnnotationFigureLayout());
-	
+
 		final Triangle topTriangle = new Triangle();
 		topTriangle.setSize(TRIANGLE_SIZE, TRIANGLE_SIZE);
 		topTriangle.setOpaque(true);
@@ -58,8 +56,7 @@ public class DownArrowAntFigure extends AnnotationFigure{
 	public Dimension getPreferredSize(int wHint, int hHint) {
 		return new Dimension(ANNOTATOR_WIDTH, hHint);
 	}
-	
-	
+
 	@Override
 	public double getAnnotatorWidth() {
 		return ANNOTATOR_WIDTH;
@@ -75,8 +72,12 @@ public class DownArrowAntFigure extends AnnotationFigure{
 			bounds.performTranslate((bounds.width() / 2), 0);
 			bounds.setWidth(1);
 			bounds.setY(0);
-			bounds.setHeight(container.getBounds().height() + 200);
+			bounds.setHeight(container.getBounds().height());
 		}
 	}
 
+	@Override
+	protected boolean useLocalCoordinates() {
+		return true;
+	}
 }
