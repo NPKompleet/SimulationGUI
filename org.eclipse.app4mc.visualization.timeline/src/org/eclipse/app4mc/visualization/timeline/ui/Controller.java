@@ -89,10 +89,6 @@ public class Controller {
 		LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap = TaskUtil
 				.getProcessorToSimTaskMap(processorToTaskMap, simTimeUnit, etmValue);
 
-//		List<String> processorList = processorToSimTaskMap.keySet().stream().collect(Collectors.toList());
-//		List<SimTaskParams> taskParamsList = processorToSimTaskMap.values().stream().collect(Collectors.toList())
-//				.get(0);
-
 		LinkedHashMap<String, List<SimJobSlice>> processedJobMap = new LinkedHashMap<>();
 
 		for (String key : processorToSimTaskMap.keySet()) {
@@ -118,17 +114,15 @@ public class Controller {
 			processedJobMap.put(key, simModel.getProcessor().getProcessedJobList());
 		}
 
-//		String key = processorToSimTaskMap.keySet().stream().collect(Collectors.toList()).get(0);
-//		createVisualization(processedJobMap.get(key), simTimeValue);
-		createVisualization(processedJobMap, simTimeValue);
+		createVisualization(processedJobMap, simTimeValue, TimingUtils.AMALTHEA_TO_JAVA_TIME_MAP.get(simTimeUnit));
 
 		filterData = TaskUtil.getProcessNameToTaskNameMap(processorToTaskMap);
-		System.out.println(filterData.size());
 		viewer.enableFiltering();
 	}
 
-	private void createVisualization(LinkedHashMap<String, List<SimJobSlice>> processedJobMap, int simTime) {
-		viewer.createVisualization(processedJobMap, simTime);
+	private void createVisualization(LinkedHashMap<String, List<SimJobSlice>> processedJobMap, int simTime,
+			java.util.concurrent.TimeUnit simTimeUnit) {
+		viewer.createVisualization(processedJobMap, simTime, simTimeUnit);
 	}
 
 	public LinkedHashMap<String, List<String>> getFilterData() {

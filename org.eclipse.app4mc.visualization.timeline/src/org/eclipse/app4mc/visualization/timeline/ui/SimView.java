@@ -71,6 +71,7 @@ public class SimView implements Visualization, ISimView {
 	private Button btnFilter;
 	private TimelineComposite timelineControl;
 	private ScrolledComposite scrolledComposite;
+	private Map<String, Color> laneColorMap = new HashMap<>();
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -94,41 +95,6 @@ public class SimView implements Visualization, ISimView {
 
 		final TimelineComposite control = new TimelineComposite(parent, SWT.NONE);
 		control.getRootFigure().setStyleProvider(new StyleProvider(JFaceResources.getResources()));
-//		final ITimelineEvent event = ITimelineFactory.eINSTANCE.createTimelineEvent();
-//		event.setStartTimestamp(100, TimeUnit.MILLISECONDS);
-//		event.setDuration(400, TimeUnit.MILLISECONDS);
-//		event.setMessage("The best event ever");
-//
-//		final ITimelineEvent event2 = ITimelineFactory.eINSTANCE.createTimelineEvent();
-//		event2.setStartTimestamp(200, TimeUnit.MILLISECONDS);
-//		event2.setDuration(150, TimeUnit.MILLISECONDS);
-//		event2.setMessage("Evet 2");
-//
-//		IAnnotationFigure antFigure = new UpArrowAntFigure(150, TimeUnit.MILLISECONDS,
-//				control.getRootFigure().getStyleProvider());
-//		IAnnotationFigure antFigure2 = new DownArrowAntFigure(550, TimeUnit.MILLISECONDS,
-//				control.getRootFigure().getStyleProvider());
-//		IAnnotationFigure antFigure3 = new DownArrowAntFigure(250, TimeUnit.MILLISECONDS,
-//				control.getRootFigure().getStyleProvider());
-//		IAnnotationFigure antFigure4 = new UpArrowAntFigure(350, TimeUnit.MILLISECONDS,
-//				control.getRootFigure().getStyleProvider());
-//		IAnnotationFigure antFigure5 = new DownArrowAntFigure(350, TimeUnit.MILLISECONDS,
-//				control.getRootFigure().getStyleProvider());
-//
-//		final TrackFigure track1 = control.getRootFigure().createTrackFigure("Task 1");
-//		final LaneFigure lane1 = control.getRootFigure().createLaneFigure(track1);
-//		final TrackFigure track2 = control.getRootFigure().createTrackFigure("Task 2");
-//		final LaneFigure lane2 = control.getRootFigure().createLaneFigure(track2);
-//		control.getRootFigure().createEventFigure(lane1, event);
-//		control.getRootFigure().createEventFigure(lane2, event2);
-//		control.getRootFigure().addAnnotationFigure(lane1, antFigure);
-//		control.getRootFigure().addAnnotationFigure(lane1, antFigure2);
-//		control.getRootFigure().addAnnotationFigure(lane2, antFigure3);
-//		control.getRootFigure().addAnnotationFigure(lane2, antFigure4);
-//		control.getRootFigure().addAnnotationFigure(lane2, antFigure5);
-//		control.getRootFigure().zoom(0.000001, 0);
-
-		trackSize = 2;
 
 		return control;
 	}
@@ -282,7 +248,7 @@ public class SimView implements Visualization, ISimView {
 
 		scrolledComposite.setContent(timelineControl);
 		scrolledComposite.setMinSize(-1, trackSize * 70);
-		System.out.println("Size is> " + trackSize);
+
 		scrolledComposite_1.setContent(grpParameters);
 		scrolledComposite_1.setMinSize(grpParameters.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
@@ -380,11 +346,11 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	@Override
-	public void createVisualization(LinkedHashMap<String, java.util.List<SimJobSlice>> processedJobMap, int simTime) {
+	public void createVisualization(LinkedHashMap<String, java.util.List<SimJobSlice>> processedJobMap, int simTime,
+			TimeUnit simTimeUnit) {
 
 		timelineControl.getRootFigure().clear();
 		LinkedHashMap<String, LaneFigure> trackMap = new LinkedHashMap<>();
-		Map<String, Color> laneColorMap = new HashMap<>();
 		java.util.List<ITimelineEvent> jobEventList = new ArrayList<>();
 
 		for (String key : processedJobMap.keySet()) {
@@ -393,18 +359,22 @@ public class SimView implements Visualization, ISimView {
 			for (SimJobSlice jobslice : processedJobList) {
 				SimTask task = jobslice.getParentTask();
 				String taskName = task.getName();
+
 				if (!trackMap.containsKey(taskName)) {
 					final TrackFigure track = timelineControl.getRootFigure().createTrackFigure(taskName);
 					final LaneFigure lane = timelineControl.getRootFigure().createLaneFigure(track);
 
+					// Create the arrival time and deadline annotations in the visualization
+					// The UpArrowAntFigure class and DownArrowAntFigure class represents
+					// arrival and deadline respectively.
 					for (int i = task.getOffset(); i <= simTime; i += task.getPeriod()) {
-						IAnnotationFigure arrivalFigure = new UpArrowAntFigure(i, TimeUnit.MILLISECONDS,
+						IAnnotationFigure arrivalFigure = new UpArrowAntFigure(i, simTimeUnit,
 								timelineControl.getRootFigure().getStyleProvider());
 						timelineControl.getRootFigure().addAnnotationFigure(lane, arrivalFigure);
 					}
 
 					for (int j = task.getOffset() + task.getDeadline(); j <= simTime; j += task.getPeriod()) {
-						IAnnotationFigure deadlineFigure = new DownArrowAntFigure(j, TimeUnit.MILLISECONDS,
+						IAnnotationFigure deadlineFigure = new DownArrowAntFigure(j, simTimeUnit,
 								timelineControl.getRootFigure().getStyleProvider());
 						timelineControl.getRootFigure().addAnnotationFigure(lane, deadlineFigure);
 					}
@@ -412,23 +382,28 @@ public class SimView implements Visualization, ISimView {
 					trackMap.put(taskName, lane);
 				}
 
+				// Create the job execution visualization for the task.
 				final ITimelineEvent jobEvent = ITimelineFactory.eINSTANCE.createTimelineEvent();
-				jobEvent.setStartTimestamp(jobslice.getActivationTime(), TimeUnit.MILLISECONDS);
-				jobEvent.setDuration(jobslice.getExecutionTime(), TimeUnit.MILLISECONDS);
+				jobEvent.setStartTimestamp(jobslice.getActivationTime(), simTimeUnit);
+				jobEvent.setDuration(jobslice.getExecutionTime(), simTimeUnit);
 				jobEvent.setMessage(jobslice.getName());
-
-//			System.out.println("job exe: " + jobslice.getExecutionTime());
 
 				EventFigure eFigure = timelineControl.getRootFigure().createEventFigure(trackMap.get(taskName),
 						jobEvent);
-//			System.out.println(eFigure.getEventColor().toString());
 
 				jobEvent.setMessage(taskName);
 				jobEventList.add(jobEvent);
-				laneColorMap.put(taskName, eFigure.getEventColor());
 
+				if (laneColorMap.containsKey(taskName)) {
+					eFigure.setEventColor(laneColorMap.get(taskName));
+				} else {
+					laneColorMap.put(taskName, eFigure.getEventColor());
+				}
 			}
-//		timelineControl.redraw();
+
+			// Create the processor track visualization showing all the jobs
+			// executed on the processor using the same color used for the
+			// events in their own tracks.
 			final TrackFigure track = timelineControl.getRootFigure().createTrackFigure(key);
 			final LaneFigure lane = timelineControl.getRootFigure().createLaneFigure(track);
 			for (ITimelineEvent jobEvent : jobEventList) {
