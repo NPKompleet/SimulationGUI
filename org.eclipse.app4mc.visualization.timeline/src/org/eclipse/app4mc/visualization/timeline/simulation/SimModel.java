@@ -3,9 +3,6 @@ package org.eclipse.app4mc.visualization.timeline.simulation;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
-import org.eclipse.app4mc.visualization.timeline.schedulers.RMScheduler;
-
 import desmoj.core.simulator.InterruptCode;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.ProcessQueue;
@@ -15,7 +12,7 @@ public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
 	protected LinkedBlockingDeque<SimJob> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
-	protected double schedulerOverhead = 0.005;
+	protected double schedulerOverhead = 0.0001;
 //	protected boolean doSchedule = false;
 	protected Processor processor;
 	protected InterruptCode priorityJobCode;
@@ -53,12 +50,6 @@ public class SimModel extends Model {
 			System.out.println(tParams.getExecutionTime());
 
 			SimTask task = new SimTask(tParams, this);
-//			SimJobSlice jobSlice = new SimJobSlice();
-//			jobSlice.setParentTask(task);
-//			jobSlice.setName(task.getName());
-//			jobSlice.setActivationTime(0);
-//			jobSlice.setExecutionTime(0);
-//			processor.processedJobList.add(jobSlice);
 			task.activate();
 		}
 
@@ -109,19 +100,7 @@ public class SimModel extends Model {
 	}
 
 	public void setScheduleStrategy(String strategy) {
-		switch (strategy) {
-		case "EDF":
-			this.scheduler = new EDFScheduler();
-			break;
-
-		case "RM":
-			this.scheduler = new RMScheduler();
-			break;
-
-		default:
-			this.scheduler = new EDFScheduler();
-			break;
-		}
+		this.scheduler = Scheduler.getScheduler(strategy);
 	}
 
 	public String getPreemptiveness() {

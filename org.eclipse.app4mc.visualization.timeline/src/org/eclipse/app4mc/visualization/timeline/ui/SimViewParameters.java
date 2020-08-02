@@ -5,14 +5,15 @@ import static org.eclipse.app4mc.visualization.timeline.utils.Constants.DEFAULT_
 import static org.eclipse.app4mc.visualization.timeline.utils.Constants.DEFAULT_PREEMPTN_INDEX;
 import static org.eclipse.app4mc.visualization.timeline.utils.Constants.DEFAULT_SIM_TIME;
 import static org.eclipse.app4mc.visualization.timeline.utils.Constants.DEFAULT_STEP_SIZE;
-import static org.eclipse.app4mc.visualization.timeline.utils.Constants.DEFAULT_STRATEGY;
 import static org.eclipse.app4mc.visualization.timeline.utils.Constants.DEFAULT_UNIT_INDEX;
 import static org.eclipse.app4mc.visualization.timeline.utils.Constants.ETM_OPTIONS;
 import static org.eclipse.app4mc.visualization.timeline.utils.Constants.PREEMPTION_OPTIONS;
 import static org.eclipse.app4mc.visualization.timeline.utils.Constants.TIME_UNIT_OPTIONS;
 
+import org.eclipse.app4mc.visualization.timeline.simulation.Scheduler.SchedulerStrategy;
+
 public class SimViewParameters {
-	private String strategy = DEFAULT_STRATEGY;
+	private String strategy = SchedulerStrategy.DEFAULT.name();
 
 	private String simTime = DEFAULT_SIM_TIME;
 

@@ -13,6 +13,7 @@ import javax.annotation.PreDestroy;
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.DownArrowAntFigure;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.UpArrowAntFigure;
+import org.eclipse.app4mc.visualization.timeline.simulation.Scheduler.SchedulerStrategy;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimJobSlice;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimTask;
 import org.eclipse.app4mc.visualization.timeline.utils.Constants;
@@ -125,18 +126,18 @@ public class SimView implements Visualization, ISimView {
 		lblAlgorithm.setText("Strategy:");
 
 		btnEdf = new Button(grpParameters, SWT.RADIO);
-		btnEdf.setText("EDF");
+		btnEdf.setText(SchedulerStrategy.EDF.name());
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 
 		btnRms = new Button(grpParameters, SWT.RADIO);
-		btnRms.setText("RM");
+		btnRms.setText(SchedulerStrategy.RM.name());
 		new Label(grpParameters, SWT.NONE);
 		new Label(grpParameters, SWT.NONE);
 
 		btnDefault = new Button(grpParameters, SWT.RADIO);
 		btnDefault.setSelection(true);
-		btnDefault.setText(Constants.DEFAULT_STRATEGY);
+		btnDefault.setText(SchedulerStrategy.DEFAULT.name());
 		new Label(grpParameters, SWT.NONE);
 
 		Label lblSimTime = new Label(grpParameters, SWT.NONE);
