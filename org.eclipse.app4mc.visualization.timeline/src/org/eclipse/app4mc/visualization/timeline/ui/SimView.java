@@ -52,6 +52,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
+/**
+ * This class is responsible for creating the user interface. It is where all
+ * the inputs and visualization of the simulation happens.
+ * 
+ * @author Philip Okonkwo.
+ *
+ */
 @Component(property = { "id=SimView", "name=Model Visualization", "description=Model visualization" })
 public class SimView implements Visualization, ISimView {
 	int trackSize;
@@ -73,6 +80,7 @@ public class SimView implements Visualization, ISimView {
 	private TimelineComposite timelineControl;
 	private ScrolledComposite scrolledComposite;
 	private Map<String, Color> laneColorMap = new HashMap<>();
+	private StyleProvider styleProvider;
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -95,7 +103,8 @@ public class SimView implements Visualization, ISimView {
 	public TimelineComposite createTimelineControl(Composite parent) {
 
 		final TimelineComposite control = new TimelineComposite(parent, SWT.NONE);
-		control.getRootFigure().setStyleProvider(new StyleProvider(JFaceResources.getResources()));
+		styleProvider = new StyleProvider(JFaceResources.getResources());
+		control.getRootFigure().setStyleProvider(styleProvider);
 
 		return control;
 	}
@@ -412,10 +421,11 @@ public class SimView implements Visualization, ISimView {
 				eFigure.setEventColor(laneColorMap.get(jobEvent.getMessage()));
 			}
 			jobEventList.clear();
+			styleProvider.resetColorIndex();
 		}
 		timelineControl.getRootFigure().zoom(0.000001, 0);
 		trackSize = trackMap.size() + processedJobMap.size();
-		scrolledComposite.setMinSize(-1, trackSize * 70);
+		scrolledComposite.setMinSize(-1, trackSize * 60);
 	}
 
 }
