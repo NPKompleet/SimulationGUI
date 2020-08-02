@@ -15,8 +15,8 @@ public class SimModel extends Model {
 	protected static int NUM_OF_PROCESSORS = 1;
 	protected LinkedBlockingDeque<SimJob> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
-	protected int schedulerOverhead = 0;
-	protected boolean doSchedule = false;
+	protected double schedulerOverhead = 0.005;
+//	protected boolean doSchedule = false;
 	protected Processor processor;
 	protected InterruptCode priorityJobCode;
 	protected String preemptiveness;
@@ -71,9 +71,9 @@ public class SimModel extends Model {
 		priorityJobCode = new InterruptCode("priority job arrived");
 	}
 
-	protected synchronized void setNextSchedule(boolean state) {
-		doSchedule = state;
-	}
+//	protected synchronized void setNextSchedule(boolean state) {
+//		doSchedule = state;
+//	}
 
 	public Processor getProcessor() {
 		return processor;

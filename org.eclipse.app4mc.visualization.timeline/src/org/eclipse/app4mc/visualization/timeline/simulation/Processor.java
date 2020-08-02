@@ -16,7 +16,7 @@ public class Processor extends SimProcess {
 	private SimModel model;
 	private Scheduler scheduler;
 	SimJob currentJob;
-	protected boolean isBusy;
+//	protected boolean isBusy;
 	protected List<SimJobSlice> processedJobList;
 	protected SimJobSlice jobSlice;
 
@@ -32,16 +32,17 @@ public class Processor extends SimProcess {
 		while (true) {
 			if (model.jobQueue.isEmpty()) {
 				model.processorQueue.insert(this);
-				isBusy = false;
+//				isBusy = false;
 				passivate();
 			} else {
-				if (model.doSchedule) {
-					model.jobQueue = scheduler.schedule(model.jobQueue);
-					model.setNextSchedule(false);
-					hold(new TimeSpan(model.schedulerOverhead));
-					sendTraceNote("A Schedule!!!");
-				}
-				isBusy = true;
+//				if (model.doSchedule) {
+				hold(new TimeSpan(model.schedulerOverhead));
+				model.jobQueue = scheduler.schedule(model.jobQueue);
+//				model.setNextSchedule(false);
+
+				sendTraceNote("A Schedule!!!");
+//				}
+//				isBusy = true;
 				currentJob = model.jobQueue.pollFirst();
 				TimeInstant startTime = presentTime();
 
@@ -75,6 +76,8 @@ public class Processor extends SimProcess {
 					sendTraceNote("interrupted!! exe " + executionTime);
 					currentJob.setExecutionTime((int) (executionTime.getTimeAsDouble()));
 					model.jobQueue.addFirst(currentJob);
+//					currentJob = null;
+					hold(new TimeSpan(0.005));
 					model.jobQueue = scheduler.schedule(model.jobQueue);
 					this.clearInterruptCode();
 				} else {
@@ -83,7 +86,7 @@ public class Processor extends SimProcess {
 					jobSlice = null;
 
 					currentJob.activate();
-					isBusy = false;
+//					isBusy = false;
 				}
 			}
 		}
