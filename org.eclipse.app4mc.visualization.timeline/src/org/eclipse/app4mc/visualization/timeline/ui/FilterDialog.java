@@ -1,10 +1,16 @@
 package org.eclipse.app4mc.visualization.timeline.ui;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
+import org.eclipse.app4mc.visualization.timeline.simulation.SimJobSlice;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -35,12 +41,12 @@ import org.eclipse.swt.widgets.TreeItem;
  *
  */
 public class FilterDialog extends Dialog {
-	Map<String, List<String>> dataMap;
+	private Controller controller;
 	private Tree tree;
 
 	protected FilterDialog(Controller controller, Shell parentShell) {
 		super(parentShell);
-		this.dataMap = controller.getFilterData();
+		this.controller = controller;
 	}
 
 	@Override
@@ -66,10 +72,22 @@ public class FilterDialog extends Dialog {
 					TreeItem item = (TreeItem) evt.item;
 					boolean isChecked = item.getChecked();
 					Arrays.asList(item.getItems()).stream().forEach(child -> child.setChecked(isChecked));
+
+					// Ensure parent item is checked when a child item is checked
+					// and ensure a parent item is unchecked when all child items
+					// are unchecked.
+					TreeItem parentItem = item.getParentItem();
+					if (isChecked && parentItem != null) {
+						parentItem.setChecked(isChecked);
+					} else if (!isChecked && parentItem != null
+							&& !Stream.of(parentItem.getItems()).anyMatch(i -> i.getChecked() == !isChecked)) {
+						parentItem.setChecked(isChecked);
+					}
 				}
 			}
 		});
 
+		Map<String, List<String>> dataMap = controller.getFilterData();
 		for (Map.Entry<String, List<String>> entry : dataMap.entrySet()) {
 			TreeItem coreItem = new TreeItem(tree, SWT.NULL);
 			coreItem.setText(entry.getKey());
@@ -123,8 +141,36 @@ public class FilterDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		// TODO Auto-generated method stub
+		LinkedHashMap<String, List<SimJobSlice>> filteredProcessedJobMap = new LinkedHashMap<>();
+		LinkedHashMap<String, List<SimJobSlice>> processedJobMap = controller.getProcessedJobMap();
+
+		// Goes through the tree and checks only selected items and adds
+		// only the cores and tasks which are selected to which are selected
+		// to the filteredProcessedJobMap. This will be use create a filtered
+		// visualization.
+		for (TreeItem coreItem : tree.getItems()) {
+			if (coreItem.getChecked()) {
+				String coreName = coreItem.getText();
+
+				Set<String> taskNameSet = new HashSet<>();
+				for (TreeItem taskItem : coreItem.getItems()) {
+					if (taskItem.getChecked()) {
+						taskNameSet.add(taskItem.getText());
+					}
+				}
+
+				List<SimJobSlice> filteredJobSlice = new ArrayList<>();
+				for (SimJobSlice jSlice : processedJobMap.get(coreName)) {
+					if (taskNameSet.contains(jSlice.getParentTask().getName())) {
+						filteredJobSlice.add(jSlice);
+					}
+				}
+				filteredProcessedJobMap.put(coreName, filteredJobSlice);
+			}
+		}
+
 		super.okPressed();
+		controller.filterVisualization(filteredProcessedJobMap);
 	}
 
 	@Override

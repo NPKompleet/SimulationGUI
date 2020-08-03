@@ -24,6 +24,9 @@ public class Controller {
 	Amalthea model;
 	ISimView viewer;
 	private LinkedHashMap<String, List<String>> filterData;
+	private LinkedHashMap<String, List<SimJobSlice>> processedJobMap;
+	private int simTimeValue;
+	private java.util.concurrent.TimeUnit timeUnit;
 
 	public Controller(Amalthea model, ISimView viewer) {
 		this.model = model;
@@ -66,7 +69,7 @@ public class Controller {
 
 	public void startSimulation(SimViewParameters simParams) {
 		String strategy = simParams.getStrategy();
-		int simTimeValue = Integer.valueOf(simParams.getSimTime());
+		simTimeValue = Integer.valueOf(simParams.getSimTime());
 		TimeUnit simTimeUnit = getTimeUnitFromString(simParams.getSimTimeUnit());
 
 		// The simulation time unit is the reference time unit
@@ -89,7 +92,7 @@ public class Controller {
 		LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap = TaskUtil
 				.getProcessorToSimTaskMap(processorToTaskMap, simTimeUnit, etmValue);
 
-		LinkedHashMap<String, List<SimJobSlice>> processedJobMap = new LinkedHashMap<>();
+		processedJobMap = new LinkedHashMap<>();
 
 		for (String key : processorToSimTaskMap.keySet()) {
 			List<SimTaskParams> taskParamsList = processorToSimTaskMap.get(key);
@@ -114,7 +117,8 @@ public class Controller {
 			processedJobMap.put(key, simModel.getProcessor().getProcessedJobList());
 		}
 
-		createVisualization(processedJobMap, simTimeValue, TimingUtils.AMALTHEA_TO_JAVA_TIME_MAP.get(simTimeUnit));
+		timeUnit = TimingUtils.AMALTHEA_TO_JAVA_TIME_MAP.get(simTimeUnit);
+		createVisualization(processedJobMap, simTimeValue, timeUnit);
 
 		filterData = TaskUtil.getProcessNameToTaskNameMap(processorToTaskMap);
 		viewer.enableFiltering();
@@ -127,6 +131,14 @@ public class Controller {
 
 	public LinkedHashMap<String, List<String>> getFilterData() {
 		return filterData;
+	}
+
+	public LinkedHashMap<String, List<SimJobSlice>> getProcessedJobMap() {
+		return processedJobMap;
+	}
+
+	public void filterVisualization(LinkedHashMap<String, List<SimJobSlice>> filteredProcessedJobMap) {
+		createVisualization(filteredProcessedJobMap, simTimeValue, timeUnit);
 	}
 
 }
