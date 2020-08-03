@@ -82,7 +82,7 @@ public class Controller {
 		int overheadValue = Integer.valueOf(simParams.getOverhead());
 		TimeUnit overheadUnit = getTimeUnitFromString(simParams.getOverheadUnit());
 		if (overheadUnit != simTimeUnit)
-			stepSizeValue = TimingUtils.convertTimeUnit(overheadValue, overheadUnit, simTimeUnit).intValue();
+			overheadValue = TimingUtils.convertTimeUnit(overheadValue, overheadUnit, simTimeUnit).intValue();
 
 		String etmValue = simParams.getEtm();
 		String preemption = simParams.getPreemption();
@@ -102,6 +102,7 @@ public class Controller {
 			simModel.setScheduleStrategy(strategy);
 			simModel.setTaskParamsList(taskParamsList);
 			simModel.setPreemptiveness(preemption);
+			simModel.setSchedulerOverhead(overheadValue);
 			simModel.setProcessorName("Processor");
 
 			Experiment experiment = new Experiment("SimExperiment");

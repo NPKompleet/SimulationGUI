@@ -119,6 +119,11 @@ public class SimModel extends Model {
 		this.processorName = processorName;
 	}
 
+	public void setSchedulerOverhead(int schedulerOverhead) {
+		if (schedulerOverhead != 0)
+			this.schedulerOverhead = schedulerOverhead;
+	}
+
 //	public static void main(String[] args) {
 //		SimModel model = new SimModel(null, "Simple Sim", true, true);
 //		Experiment experiment = new Experiment("SimExperiment");
