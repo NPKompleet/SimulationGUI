@@ -49,6 +49,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.component.annotations.Component;
 
@@ -77,10 +78,12 @@ public class SimView implements Visualization, ISimView {
 	private Controller controller;
 	private SimViewParameters simViewParams;
 	private Button btnFilter;
+	private Button btnSimulate;
 	private TimelineComposite timelineControl;
 	private ScrolledComposite scrolledComposite;
 	private Map<String, Color> laneColorMap = new HashMap<>();
 	private StyleProvider styleProvider;
+	private Composite parent;
 
 	private static Listener textListener = new Listener() {
 		public void handleEvent(Event e) {
@@ -91,6 +94,7 @@ public class SimView implements Visualization, ISimView {
 
 	@PostConstruct
 	public void createVisualization(Amalthea model, Composite parent) throws IOException {
+		this.parent = parent;
 		controller = new Controller(model, SimView.this);
 		simViewParams = new SimViewParameters();
 		createSimulationControls(model, parent);
@@ -234,7 +238,7 @@ public class SimView implements Visualization, ISimView {
 			}
 		});
 
-		Button btnSimulate = new Button(grpParameters, SWT.NONE);
+		btnSimulate = new Button(grpParameters, SWT.NONE);
 		btnSimulate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnSimulate.setText("Simulate");
 		btnSimulate.addListener(SWT.Selection, new Listener() {
@@ -426,6 +430,19 @@ public class SimView implements Visualization, ISimView {
 		timelineControl.getRootFigure().zoom(0.000001, 0);
 		trackSize = trackMap.size() + processedJobMap.size();
 		scrolledComposite.setMinSize(-1, trackSize * 60);
+	}
+
+	@Override
+	public void disableSimulation() {
+		btnSimulate.setEnabled(false);
+	}
+
+	@Override
+	public void showMessage(String title, String message) {
+		MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.ABORT);
+		messageBox.setText(title);
+		messageBox.setMessage(message);
+		messageBox.open();
 	}
 
 }

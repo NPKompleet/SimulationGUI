@@ -13,6 +13,7 @@ import org.eclipse.app4mc.amalthea.model.TimeUnit;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimJobSlice;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimModel;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimTaskParams;
+import org.eclipse.app4mc.visualization.timeline.utils.GlobalSchedulingException;
 import org.eclipse.app4mc.visualization.timeline.utils.TaskUtil;
 import org.eclipse.app4mc.visualization.timeline.utils.TimingUtils;
 import org.eclipse.app4mc.visualization.timeline.utils.UnalignedPeriodException;
@@ -87,7 +88,14 @@ public class Controller {
 		String etmValue = simParams.getEtm();
 		String preemption = simParams.getPreemption();
 
-		LinkedHashMap<String, List<Task>> processorToTaskMap = TaskUtil.getAlmatheaProcessorToTaskMap(model);
+		LinkedHashMap<String, List<Task>> processorToTaskMap = null;
+		try {
+			processorToTaskMap = TaskUtil.getAlmatheaProcessorToTaskMap(model);
+		} catch (GlobalSchedulingException e) {
+			viewer.disableSimulation();
+			viewer.showMessage(e.toString(), e.getMessage());
+			return;
+		}
 
 		LinkedHashMap<String, List<SimTaskParams>> processorToSimTaskMap = TaskUtil
 				.getProcessorToSimTaskMap(processorToTaskMap, simTimeUnit, etmValue);

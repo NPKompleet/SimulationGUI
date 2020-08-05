@@ -3,12 +3,10 @@ package org.eclipse.app4mc.visualization.timeline.utils;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.amalthea.model.PeriodicStimulus;
-import org.eclipse.app4mc.amalthea.model.Process;
 import org.eclipse.app4mc.amalthea.model.ProcessingUnit;
 import org.eclipse.app4mc.amalthea.model.Task;
 import org.eclipse.app4mc.amalthea.model.TimeUnit;
@@ -42,17 +40,24 @@ public class TaskUtil {
 	 * @param model The Amalthea model to get the task mapping from.
 	 * @return A LinkedHashMap of processing unit names to periodic tasks.
 	 */
-	public static LinkedHashMap<String, List<Task>> getAlmatheaProcessorToTaskMap(Amalthea model) {
+	public static LinkedHashMap<String, List<Task>> getAlmatheaProcessorToTaskMap(Amalthea model)
+			throws GlobalSchedulingException {
 		List<ProcessingUnit> processorList = getProcessorsFromModel(model);
 		LinkedHashMap<String, List<Task>> processorToTaskMap = new LinkedHashMap<>();
 
 		for (ProcessingUnit core : processorList) {
-			Set<Process> set = DeploymentUtil.getProcessesMappedToCore(core, model);
-			List<Task> taskProcessList = set.stream().filter(p -> p instanceof Task).map(t -> (Task) t)
+			List<Task> taskProcessList = DeploymentUtil.getTasksMappedToCore(core, model).stream()
 					.filter(t -> t.getStimuli().get(0) instanceof PeriodicStimulus).collect(Collectors.toList());
+
 			// Only add entry is list is not empty
-			if (!taskProcessList.isEmpty())
+			if (!taskProcessList.isEmpty()) {
+				// Throw an exception if the model uses a global scheduler
+				if (taskProcessList.stream()
+						.anyMatch(t -> DeploymentUtil.getAssignedCoreForProcess(t, model).size() > 1))
+					throw new GlobalSchedulingException();
+
 				processorToTaskMap.put(core.getName(), taskProcessList);
+			}
 		}
 		return processorToTaskMap;
 	}

@@ -17,4 +17,8 @@ public interface ISimView {
 
 	public void createVisualization(LinkedHashMap<String, List<SimJobSlice>> processedJobMap, int simTime,
 			TimeUnit simTimeUnit);
+
+	public void disableSimulation();
+
+	public void showMessage(String tiltle, String message);
 }
