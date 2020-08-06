@@ -323,12 +323,12 @@ public class SimView implements Visualization, ISimView {
 	}
 
 	private void updateWidgetData(Amalthea model) {
-		Display.getDefault().asyncExec(new Runnable() {
+		new Thread() {
 			@Override
 			public void run() {
 				controller.populateView();
 			}
-		});
+		}.start();
 	}
 
 	private void startSimulation() {
@@ -345,17 +345,32 @@ public class SimView implements Visualization, ISimView {
 
 	@Override
 	public void setSimTimeValue(String value) {
-		txtSimTime.setText(value);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				txtSimTime.setText(value);
+			}
+		});
 	}
 
 	@Override
 	public void setSimTimeUnitIndex(int index) {
-		cmbSTimeUnit.select(index);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				cmbSTimeUnit.select(index);
+			}
+		});
 	}
 
 	@Override
 	public void setPeriodicTasks(java.util.List<String> taskList) {
-		listViewer.setInput(taskList);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				listViewer.setInput(taskList);
+			}
+		});
 	}
 
 	@Override
@@ -450,15 +465,26 @@ public class SimView implements Visualization, ISimView {
 
 	@Override
 	public void disableSimulation() {
-		btnSimulate.setEnabled(false);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				sDialog.close();
+				btnSimulate.setEnabled(false);
+			}
+		});
 	}
 
 	@Override
 	public void showMessage(String title, String message) {
-		MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.ABORT);
-		messageBox.setText(title);
-		messageBox.setMessage(message);
-		messageBox.open();
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.ABORT);
+				messageBox.setText(title);
+				messageBox.setMessage(message);
+				messageBox.open();
+			}
+		});
 	}
 
 }
