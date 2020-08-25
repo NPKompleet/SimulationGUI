@@ -7,8 +7,12 @@ The platform enables the creation and management of complex tool chains includin
 As an open platform, proven in the automotive sector by Bosch and their partners, it supports interoperability 
 and extensibility and unifies data exchange in cross-organizational projects. [1]_
 
-.. image:: images/system-model.png
+.. figure:: images/system-model.png
    :alt: APP4MC system
+   :align: center
+   
+   AMALTHEA Model for APP4MC
 
+It has been a  part of Eclipse Project since 2015.
 
 .. [1] Eclipse APP4MC homepage: https://www.eclipse.org/app4mc/.

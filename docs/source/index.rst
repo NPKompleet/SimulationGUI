@@ -5,6 +5,14 @@
 
 Welcome to SimulationGUI's documentation!
 =========================================
+This project involves the development of an Eclipse plug-in to enable
+easy visualization of task scheduling simulation in Eclipse APP4MC.
+
+It was developed by `Philip Okonkwo <https://github.com/NPKompleet>`_ 
+as a Google Summer of Code 2020 project for the Eclipse Foundation. 
+The mentors for this project are Lukas Krawcyzk and Dirk Fauth.
+
+.. note:: If you are just looking to download the project please go to :ref:`AccessingTheProject`.
 
 .. toctree::
    :maxdepth: 3
@@ -14,14 +22,8 @@ Welcome to SimulationGUI's documentation!
 
    contents/introduction.rst
    contents/what-is-app4mc.rst
-   contents/gsoc-contribution.rst
+   contents/user-interface.rst
+   contents/simulation.rst
+   contents/schedulers.rst
    contents/accessing-the-project.rst
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   contents/limit-and-future.rst
