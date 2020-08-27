@@ -479,7 +479,8 @@ public class SimView implements Visualization, ISimView {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				sDialog.close();
+				if (sDialog != null)
+					sDialog.close();
 				btnSimulate.setEnabled(false);
 			}
 		});

@@ -48,7 +48,16 @@ public class Controller {
 	public void populateView() {
 		SWModel swModel = model.getSwModel();
 		// To be moved to its own method or class
-		LinkedHashMap<String, Time> taskPeriodMap = TimingUtils.getPeriodMap(swModel);
+		LinkedHashMap<String, Time> taskPeriodMap = null;
+		try {
+			taskPeriodMap = TimingUtils.getPeriodMap(swModel);
+		} catch (Exception e) {
+			viewer.disableSimulation();
+			String message = "This model does not seem to have elements that can be used in the simulation. "
+					+ "Please check the model again.";
+			viewer.showMessage("Incomplete Model", message);
+			return;
+		}
 		java.util.List<Time> periodList = taskPeriodMap.values().stream().collect(Collectors.toList());
 		org.eclipse.app4mc.amalthea.model.TimeUnit unit = TimingUtils.getMaximumTimeUnit(periodList);
 
