@@ -10,7 +10,10 @@ event simulation. For this project, the process oriented style was best
 suited so that is what is used.
 
 To learn more about discrete event simulation using DESMO-J, you can check 
-`this tutorial <http://desmoj.sourceforge.net/tutorial/index.html>`_.
+`the DESMO-J tutorial <http://desmoj.sourceforge.net/tutorial/index.html>`_.
+
+The simulation classes discussed in this section are found under the ``og.eclipse.app4mc.visualization.timeline.simulation``
+package in the main project folder.
 
 ----------------
 Simulating Tasks
@@ -23,6 +26,8 @@ release a job every period.
    :align: center
    
    SimTask Acivity Diagram
+
+.. _SimulatingJobs:
 
 ---------------
 Simulating Jobs
@@ -42,6 +47,8 @@ is busy and the scheduling is preemptive, it checks to see if the job currently 
 priority than the new job. If the priority of the new job is higher, the new
 interrupts the processor. Else it stays in the job queue and waits for the 
 processor to execute it and be notified of the end of its execution.
+
+.. _SimulatingCores:
 
 ----------------
 Simulating Cores
@@ -68,6 +75,15 @@ and sets the execution time of the current job to the remaining execution
 time then puts the job back on the job queue and schedules the jobs in the
 job queue again and executes the first scheduled job.
 
------------
-SimJobSlice
------------
+-------------
+The Job Slice
+-------------
+A job slice is used to indicate the whole or part of a ``SimJob`` that has been executed on 
+the processor. Its execution time can be equal to or less than the execution 
+time of the job it is derived from depending on whether or not the job was 
+interrupted by another job of higher priority during the execution by the 
+processor. 
+
+It is represented by the ``SimJobSlice`` class and it is what is used in the UI 
+for visualization of the exection on processors. It is represented in the UI as an 
+event in the lane of the Nebula timeline widget.

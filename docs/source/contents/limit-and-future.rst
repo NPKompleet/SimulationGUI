@@ -21,6 +21,8 @@ attempt at simulation.
 Future Extensions
 -----------------
 Possible future extensions considered for this project includes:
+
     -   Support for models with global schedulers.
+    
     -   Possibility of moving the simulation engine to the cloud to 
         support simulation using web technologies.

@@ -1,8 +1,8 @@
-Grachical User Interface
+Graphical User Interface
 ========================
 
-This project was started as a Google Summmer of Code 2020 project.
-All current code was written during the GSoC 2020 coding exercise.
+The user interface and controller classes discussed in this section are found under the 
+``org.eclipse.app4mc.visualization.timeline.ui`` package in the main project folder.
 
 ********************
 Software Development 
@@ -23,11 +23,14 @@ The software development for this project includes:
         connecting the model to the simulation back end and rendering
         the results on the GUI.
 
+The architecture used is similar to the MVC architecture with the user interface
+as the view, a contoller and the simulation model itself as the Model.
+
 **************
 User Interface
 **************
 The user interface is built on the visualization framework for Eclipse
-APP4MC created by Dirk Fauth. It uses SWT and Jface for the UI components
+APP4MC. It uses SWT and Jface for the UI components
 and it also uses OSGi Declarative Services.
 
 ----------------
@@ -66,16 +69,48 @@ The visualization view has 3 buttons in the toolbar:
 The whole area within the red box in the picture above is what is 
 used to render the visualization in Eclipse APP4MC.
 
+.. note:: To learn more about the Visualization framework in Eclipse APP4MC read
+            **Model Visualization** sections under the **User Guide** and the 
+            **Developer Guide** of the Eclipse APP4MC Documentation.
+
 ----------------
 Implementation
 ----------------
+The user interface is reprensented by the ``SimView`` class and was built using SWT, Jface and the Eclipse Nebula timeline
+widget. When the model is clicked, the user interface is displayed and populated
+with the hyperperiod of all the periodic tasks in the model by the :ref:`TheController`.
+
+The user interface has inputs for entering the simulation time, the step size of
+simulation, and the over head of the scheduler used as well as their corresponding
+time units. It also has inputs for the execution time model and the preemption style
+used in the simulation and buttons for starting the simulation as well as for filtering
+the visualization of the simulation.
+
+.. figure:: images/ui-before-sim.png
+   :alt: ui-before-sim
+   :align: center
+
+   The User Interface before simulation.
+
+After the simulation is done, the result is displayed using the Nebula timeline widget 
+and showing the arrival time and deadline of each job of each task as well as how the 
+task was executed on the processor. Each task is reprensented a lane in the timeline
+widget. Each processor is also reprensented by its own lane and all the jobs executed
+on it are shown in sequence.
+
+.. figure:: images/ui-after-sim.png
+   :alt: ui-after-sim
+   :align: center
+
+   The User Interface after simulation.
+
 
 --------------------
 Creating Annotations
 --------------------
 Annotations were created to indicate arrival time and deadlines of
 tasks in the visualization. An up-pointing arrow and a down-pointing
-arrows were used to represent arrival and deadline respectively.
+arrow are used to represent arrival and deadline respectively.
 
 .. image:: images/tmarrows.png
    :alt: arrows
@@ -88,6 +123,20 @@ To create a new annotation, the ``AnnotationFigure`` class of the Timeline widge
 be extended. The class has been created specifically for that
 purpose. Only on rare occasions should one extend the ``IAnnotationFigure``
 interface directly.
+
+.. _TheController:
+
+--------------
+Controller
+--------------
+The controller is represented by the ``Controller`` class. It is responsible for 
+communication between the user interface and the simulation. It takes the UI 
+parameters and puts them in a form compatible with the simulation then starts
+the simulation when the **Simulate** button is clicked on the UI.
+
+After the simuation is done, it sends the list of processors as well as the processed 
+jobs to the user interface to be displayed.
+
 
 .. [1] The need for this has been briefly highted in the :ref:`Dependencies` section.
 

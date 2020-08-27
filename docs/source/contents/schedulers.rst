@@ -3,7 +3,12 @@ Schedulers
 **********
 All schedulers used in the project must inherit from the abstract class 
 **Scheduler.java** and override its ``getComparator()`` method to implement its 
-own specific form of scheduling priority.
+own specific form of scheduling priority. The ``Scheduler.java`` class has a
+method ``schelude()`` that is used by the processor discussed in the :ref:`SimulatingCores` section
+to schedule jobs (see :ref:`SimulatingJobs`) to be executed on the processor.
+
+The classes discussed in this section are found under the ``org.eclipse.app4mc.visualization.timeline.schedulers``
+package in the main project folder.
 
 -----------------
 Scheduler Example

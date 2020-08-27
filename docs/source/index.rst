@@ -9,10 +9,10 @@ This project involves the development of an Eclipse plug-in to enable
 easy visualization of task scheduling simulation in Eclipse APP4MC.
 
 It was developed by `Philip Okonkwo <https://github.com/NPKompleet>`_ 
-as a Google Summer of Code 2020 project for the Eclipse Foundation. 
-The mentors for this project are Lukas Krawcyzk and Dirk Fauth.
+as a `Google Summer of Code 2020 project <https://summerofcode.withgoogle.com/projects/#4648063622184960>`_ for The Eclipse Foundation. 
+The mentors for this project are Lukas Krawczyk and Dirk Fauth.
 
-.. note:: If you are just looking to download the project please go to :ref:`AccessingTheProject`.
+.. note:: If you are just looking to see the source code or download the project please go to :ref:`AccessingTheProject`.
 
 .. toctree::
    :maxdepth: 3
