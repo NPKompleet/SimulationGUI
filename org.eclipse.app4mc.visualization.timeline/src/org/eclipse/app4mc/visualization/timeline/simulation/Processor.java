@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
+import org.eclipse.app4mc.visualization.timeline.schedulers.Scheduler;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimProcess;

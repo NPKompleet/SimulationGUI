@@ -24,7 +24,7 @@ import javax.annotation.PreDestroy;
 import org.eclipse.app4mc.amalthea.model.Amalthea;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.DownArrowAntFigure;
 import org.eclipse.app4mc.visualization.timeline.annotationfigure.UpArrowAntFigure;
-import org.eclipse.app4mc.visualization.timeline.simulation.Scheduler.SchedulerStrategy;
+import org.eclipse.app4mc.visualization.timeline.schedulers.Scheduler.SchedulerStrategy;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimJobSlice;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimTask;
 import org.eclipse.app4mc.visualization.timeline.utils.Constants;

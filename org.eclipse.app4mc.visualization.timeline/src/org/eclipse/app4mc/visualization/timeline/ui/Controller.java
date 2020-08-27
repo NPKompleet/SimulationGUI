@@ -128,9 +128,9 @@ public class Controller {
 			simModel.connectToExperiment(experiment);
 			experiment.setShowProgressBar(false);
 			experiment.stop(new TimeInstant(simTimeValue));
-			experiment.tracePeriod(new TimeInstant(0), new TimeInstant(simTimeValue));
+//			experiment.tracePeriod(new TimeInstant(0), new TimeInstant(simTimeValue));
 			experiment.start();
-			experiment.report();
+//			experiment.report();
 			experiment.finish();
 			simModel.finalize(simModel.presentTime());
 

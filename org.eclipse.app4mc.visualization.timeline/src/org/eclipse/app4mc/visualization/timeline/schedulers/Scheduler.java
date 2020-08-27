@@ -9,16 +9,14 @@
  * Contributors:
  *     Philip Okonkwo - initial API and implementation
  *******************************************************************************/
-package org.eclipse.app4mc.visualization.timeline.simulation;
+package org.eclipse.app4mc.visualization.timeline.schedulers;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
-import org.eclipse.app4mc.visualization.timeline.schedulers.DefaultScheduler;
-import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
-import org.eclipse.app4mc.visualization.timeline.schedulers.RMScheduler;
+import org.eclipse.app4mc.visualization.timeline.simulation.SimJob;
 
 /**
  * <p>

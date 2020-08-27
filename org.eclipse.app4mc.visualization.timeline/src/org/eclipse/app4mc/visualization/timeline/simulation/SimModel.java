@@ -14,6 +14,8 @@ package org.eclipse.app4mc.visualization.timeline.simulation;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import org.eclipse.app4mc.visualization.timeline.schedulers.Scheduler;
+
 import desmoj.core.simulator.InterruptCode;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.ProcessQueue;
@@ -24,7 +26,6 @@ public class SimModel extends Model {
 	protected LinkedBlockingDeque<SimJob> jobQueue;
 	protected ProcessQueue<Processor> processorQueue;
 	protected double schedulerOverhead = 0.0001;
-//	protected boolean doSchedule = false;
 	protected Processor processor;
 	protected InterruptCode priorityJobCode;
 	protected String preemptiveness;
@@ -73,10 +74,6 @@ public class SimModel extends Model {
 		priorityJobCode = new InterruptCode("priority job arrived");
 	}
 
-//	protected synchronized void setNextSchedule(boolean state) {
-//		doSchedule = state;
-//	}
-
 	public Processor getProcessor() {
 		return processor;
 	}
@@ -89,6 +86,12 @@ public class SimModel extends Model {
 			processor.jobSlice = null;
 		}
 
+		// This makes sure all tasks are visualized by making them visible
+		// because a SimJobSlice of zero execution time is added at the end of
+		// the simulation to make sure at least one job slice is created for
+		// visualization even if the task was never executed on the processor.
+		// It appears as a straight line of no length at the end of the
+		// visualization lane for the task in the UI.
 		for (SimTaskParams tParams : taskParamsList) {
 
 			SimTask task = new SimTask(tParams, this);

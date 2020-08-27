@@ -39,10 +39,6 @@ public class SimJob extends SimProcess {
 	public void lifeCycle() throws SuspendExecution {
 		model.jobQueue.addLast(this);
 
-//		if (model.jobQueue.size() > 1) {
-//			model.setNextSchedule(true);
-//		}
-
 		if (!model.processorQueue.isEmpty()) {
 			Processor assignedProcessor = model.processorQueue.first();
 			model.processorQueue.remove(assignedProcessor);

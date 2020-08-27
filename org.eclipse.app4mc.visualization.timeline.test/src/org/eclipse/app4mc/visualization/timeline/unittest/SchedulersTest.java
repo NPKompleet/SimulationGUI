@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import org.eclipse.app4mc.visualization.timeline.schedulers.EDFScheduler;
 import org.eclipse.app4mc.visualization.timeline.schedulers.RMScheduler;
-import org.eclipse.app4mc.visualization.timeline.simulation.Scheduler;
+import org.eclipse.app4mc.visualization.timeline.schedulers.Scheduler;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimJob;
 import org.eclipse.app4mc.visualization.timeline.simulation.SimTask;
 import org.junit.Before;
