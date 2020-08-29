@@ -13,6 +13,10 @@ and extensibility and unifies data exchange in cross-organizational projects. [1
    
    AMALTHEA Model for APP4MC
 
-It has been a  part of Eclipse Project since 2015.
+The goal of the APP4MC project is the development of a consistent, open, expandable tool platform for embedded software 
+engineering. It is based on the model driven approach as basic engineering methodology. The main focus is the 
+optimization of embedded multi-core systems. The result of the project is an open tool platform in different aspects. 
+On the one hand it is published under the Eclipse Public License (EPL) and on the other hand it is open to be 
+integrated with existing or new tools either on a company individual basis or with commercially available tools.
 
 .. [1] Eclipse APP4MC homepage: https://www.eclipse.org/app4mc/.

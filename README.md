@@ -11,7 +11,7 @@ The aim of this project is to visualize the execution trace of a simulated APP4M
 
 
 ## GSoC Project Details
-**Contributor:** Philip Okonkwo ([Twitter](twitter.com/@npkompleet), [LinkedIn](https://www.linkedin.com/in/philip-okonkwo-201aa163/))
+**Contributor:** Philip Okonkwo ([Twitter](https://twitter.com/npkompleet), [LinkedIn](https://www.linkedin.com/in/philip-okonkwo-201aa163/))
 
 **Project Name:** A Simulation-Visualizer For Eclipse APP4MC.
 
@@ -20,7 +20,7 @@ The aim of this project is to visualize the execution trace of a simulated APP4M
 **Mentors:** Lukas Krawczyk, Dirk Fauth.
 
 
-## Contributions
+### Contributions
 *   Extending the [Eclipse Nebula timeline widget](https://www.eclipse.org/nebula/widgets/timeline/timeline.php) to include the possibility of adding annotations that indicate arrival time and deadlines of tasks in the timeline view.
 
 *   Creating a user interface for visualization of the simulation.
@@ -33,7 +33,7 @@ The aim of this project is to visualize the execution trace of a simulated APP4M
 
 
 ## Documentation
-The documentation and more details for this project is hosted on ReadTheDocs and the link is [here](https://simulationgui.readthedocs.io/en/latest/#).
+The documentation and more details for this project is hosted on ReadTheDocs and the link [is here](https://simulationgui.readthedocs.io/en/latest/). The document provides detail about how the whole application works and provides understanding on how to use it and extend it in the future.
 
 
 ## Building and Running The Project
@@ -43,10 +43,12 @@ To be able to build and use this project, you will need Eclipse APP4MC version 0
 
 2.  Open Eclipse APP4MC version 0.9.8, create a new workspace and add all the plugin project directories using **File**...**Open Project From File System**.
 
-3. Double click the MANIFEST.MF file in the **META-INF** folder of the `org.eclipse.app4mc.timeline` plugin project. Under the _Overview_ tab, find the _Testing_ section and click on the __Launch an Eclipse Application__ link. A new Eclipse APP4MC instance is started.
+3. Double click the MANIFEST.MF file in the **META-INF** folder of the `org.eclipse.app4mc.visualization.timeline` plugin project. Under the _Overview_ tab, find the _Testing_ section and click on the __Launch an Eclipse Application__ link. A new Eclipse APP4MC instance is started.
 
 4.  In the new APP4MC instance, open any APP4MC model project. A quick way to add a project might be using some of the APP4MC model examples bundled with Eclipse APP4MC, e.g the Democar example, using **File**...**New**...**Examples**...**APP4MC AMALTHEA Model Examples**.
 
 5. Double click the model file and the AMALTHEA Contents Tree window is opened. 
 
 6.  In the AMALTHEA Contents Tree window, right click the AMALTHEA Model and select __Open APP4MC Visualization__ in the popup menu. A visualization panel is opened under the contents tree and you can see the user interface to use to run the simulation and visualization.
+
+>**Note:** Steps _5._ and _6._ described in the list above can be seen in the beginning of the gif image included at the start of this README document.

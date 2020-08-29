@@ -78,7 +78,7 @@ Implementation
 ----------------
 The user interface is reprensented by the ``SimView`` class and was built using SWT, Jface and the Eclipse Nebula timeline
 widget. When the model is clicked, the user interface is displayed and populated
-with the hyperperiod of all the periodic tasks in the model by the :ref:`TheController`.
+by the :ref:`TheController`. The Simulation Time field is filled with the hyperperiod of all the periodic tasks in the model.
 
 The user interface has inputs for entering the simulation time, the step size of
 simulation, and the over head of the scheduler used as well as their corresponding
@@ -112,7 +112,7 @@ Annotations were created to indicate arrival time and deadlines of
 tasks in the visualization. An up-pointing arrow and a down-pointing
 arrow are used to represent arrival and deadline respectively.
 
-.. image:: images/tmarrows.png
+.. image:: images/tmarrows.PNG
    :alt: arrows
    :align: center
 
