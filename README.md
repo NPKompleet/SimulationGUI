@@ -41,9 +41,9 @@ To be able to build and use this project, you will need Eclipse APP4MC version 0
 
 1.  Download this repository or clone it.
 
-2.  Open Eclipse APP4MC version 0.9.8, create a new workspace and add all the plugin project directories using **File**...**Open Project From File System**.
+2.  Open Eclipse APP4MC version 0.9.8, create a new workspace and add all the plugin project directories using **File**...**Open Project From File System**. You can exclude the `org.eclipse.app4mc.visualization.timeline.test` project folder as it is not required for the application to work but if you decide to add it and run it, be sure to install the required libraries on Eclipse APP4MC, _e.g. Mockito_, using **Help**...**Install New Software**.
 
-3. Double click the MANIFEST.MF file in the **META-INF** folder of the `org.eclipse.app4mc.visualization.timeline` plugin project. Under the _Overview_ tab, find the _Testing_ section and click on the __Launch an Eclipse Application__ link. A new Eclipse APP4MC instance is started.
+3. Double click the MANIFEST.MF file in the **META-INF** folder of the `org.eclipse.app4mc.visualization.timeline` plugin project. Under the _Dependencies_ tab, add `javax.annotations` to **Required Plug-ins** (_this is needed especially for some Linux users. Windows users may not need to do this_). Under the _Overview_ tab, find the _Testing_ section and click on the __Launch an Eclipse Application__ link. A new Eclipse APP4MC instance is started.
 
 4.  In the new APP4MC instance, open any APP4MC model project. A quick way to add a project might be using some of the APP4MC model examples bundled with Eclipse APP4MC, e.g the Democar example, using **File**...**New**...**Examples**...**APP4MC AMALTHEA Model Examples**.
 
